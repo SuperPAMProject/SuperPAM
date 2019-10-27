@@ -1,0 +1,136 @@
+#:import utils kivy.utils
+#:import c colors
+#:import f fonts
+MainMenuLayout:
+
+<PAMButton>:
+    background_color:  utils.get_color_from_hex(self.h_color) if self.highlighted else utils.get_color_from_hex(self.d_color)
+    font: f.getFont("normal")
+
+<PAMActionButton>:
+    size_hint_x: None
+    size_hint_y: None
+    background_color: 0, 0, 0, 0
+    canvas:
+        Rectangle:
+            size: (45, 45)
+            pos: (self.pos[0]+self.size[0]/2.0) - 20, (self.pos[1]+self.size[1]/2.0) - 20
+            source: self.default_image
+
+<SideBarTab>:
+    size_hint: 0.5, 0.2
+    pos: self.parent.pos
+
+<SideBar>:
+    size_hint_y: 0.5
+    pos_y: self.parent.top
+    
+
+<GameTitle>:
+    size_hint_y: 0.15
+    text_size: self.size
+    font_size: 24
+    bold: True
+    font: f.getFont("bold")
+    halign: 'center'
+    valign: 'top'
+
+<GameInfo>:
+    size_hint_x: 0.5
+    size_hint_y: 0.15
+    text_size: self.size
+    font: f.getFont("normal")
+    font_size: 20 
+    halign: 'left'   
+    valign: 'top'
+
+<ControlBar>:
+    orientation: 'horizontal'
+    size_hint_y: 0.1
+    size_hint_x: 1
+    spacing: 0
+    canvas:
+        Color:
+            rgb: utils.get_color_from_hex(c.getColor("primary"))
+            
+        Rectangle:
+            pos: self.pos
+            size: self.size 
+
+<MainMenuLayout>:
+    sidebar: sidebar
+    games: games
+    actionbtns: actionbtns
+    
+    BoxLayout:
+        orientation: 'vertical'
+        BoxLayout:
+            orientation:'horizontal'
+            spacing: 20
+            SideBar:
+                id: sidebar
+                active: True
+                orientation: 'vertical'
+                rightGroup: games
+                on_parent: self.setLayout()
+                spacing: 20
+                
+                SideBarTab:
+                    text: 'MULTIPLAYER'
+                    on_press: self.press_action()
+                SideBarTab:
+                    text: 'OPTIONS'
+                SideBarTab:
+                    text: 'POWER'
+
+            PAMButtonGroup:
+                id: games
+                leftGroup: sidebar
+                rightGroup: actionbtns
+                orientation: 'vertical'
+                on_parent: self.setLayout()
+                GameCarouselItem:
+                    text: 'PONG'
+                GameCarouselItem:
+                    text: 'SPACE INVADERS'
+                GameCarouselItem:
+                    text: 'MORTAL KOMBAT'
+                GameCarouselItem:
+                    text: 'PAC-MAN'
+            
+
+            BoxLayout:
+                orientation: 'vertical'
+                PAMVideo:
+                GameDescriptionArea:
+                    orientation: 'vertical'
+                    GameTitle:
+                        text: "Title"
+                    GameInfo:
+                        text: "Developer:"
+                    GameInfo:
+                        text: "Publisher:"
+                    GameInfo:
+                        text: "Year:"
+                    GameInfo:
+                        text: "Description:"
+                PAMButtonGroup:
+                    id: actionbtns
+                    leftGroup: games
+                    orientation: 'horizontal'
+                    on_parent: self.setLayout()
+                    PAMPlayButton:
+
+                    PAMSaveButton:
+
+                    PAMFavButton:
+
+        ControlBar:
+            Label:
+                text:"Select"
+            Label:
+                text: "Back"
+            Label:
+                text: "Play"
+            Label:
+                text: "Favorite"
