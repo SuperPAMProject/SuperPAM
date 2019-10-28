@@ -1,4 +1,5 @@
 import includes
+import pamWidgets
 import os
 
 # This class will contain all the data needed to write to all the labels
@@ -7,8 +8,10 @@ class mainMenu:
 
     # Set up menu buttons/game carousel/game info
     # Populate lists from files
-    def __init__(self, display):
-        print(display)
+    def __init__(self, sidebar, games, actionbtns):
+        print(sidebar)
+        print(games)
+        print(actionbtns)
         self.tabsList = [];
         self.gameList = [];
         self.favoriteList = [];
@@ -18,58 +21,41 @@ class mainMenu:
         self.g_i = 0; # Games
         self.o_i = 0; # Game Options
         self.f_i = 0; # Favorites
-        self.populateMenus(display);
-        #self.populateGameLibrary();
+        self.populateMenus(sidebar);
+        print(self.tabsList)
+        self.populateGameLibrary(games)
+        print(games.children)
         #self.populateFavorites();
-        self.populateGameOptions(display);
+        self.populateGameOptions(actionbtns);
         
 
     # sets up the menus labels so that they can be displayed
-    def populateMenus(self, display):
+    def populateMenus(self, sidebar):
 
-        def populateMenu(self, widget):
-
-            # if we come across a MenuTab, add it to the list
-            if 'MenuTab' in widget.name:
-                self.tabsList.append(widget);
-                return;
-                
-            for child in widget.children:
-                populateMenu(self, child);
-                #newTab.subTabList.append(child);
-            
-        for child in display.children:
-            populateMenu(self, child);
-            
+        for child in sidebar.children:
+            self.tabsList.append(child)
+            print(child)
+        
         print("populated tabs list");
 
 
     # reads from a folder all the game data
     # then stores the data for use at a later time
-    def populateGameLibrary(self, display):
-        with open(display.game_titles, 'r') as handle:
+    def populateGameLibrary(self, games):
+        with open(includes.game_titles, 'r') as handle:
             for line in handle:
-                newGame = config.Game()
-                newGame.gameName = line
-                #self.game_lib.add_widget(myLabel)
+                newGame = pamWidgets.GameCarouselItem()
+                newGame.text = line
+                games.add_widget(newGame)
                 self.gameList.append(newGame);
                 
+
     # sets up the game options so that they can be displayed
-    def populateGameOptions(self, display):
-
-        def populateOption(self, widget):
-
-            # if we come across an ActionButton, add it to the list
-            if 'ActionButton' in widget.name:
-                self.optionsList.append(widget);
-                return;
-                
-            for child in widget.children:
-                populateOption(self, child);
-                #newTab.subTabList.append(child);
+    def populateGameOptions(self, actionbtns):
             
-        for child in display.children:
-            populateOption(self, child);
+        for child in actionbtns.children:
+            self.optionsList.append(child)
+            print(child)
             
         print("populated options list");
 

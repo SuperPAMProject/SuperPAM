@@ -6,16 +6,23 @@ MainMenuLayout:
 <PAMButton>:
     background_color:  utils.get_color_from_hex(self.h_color) if self.highlighted else utils.get_color_from_hex(self.d_color)
     font: f.getFont("normal")
+    highlighted: False
+    selected: False
 
 <PAMActionButton>:
     size_hint_x: None
     size_hint_y: None
     background_color: 0, 0, 0, 0
+    d_action: ''
+    h_action: ''
+    s_action: ''
     canvas:
+        Color:
+            rgba: (1,1,0,1)
         Rectangle:
-            size: (45, 45)
+            size: (90, 90)
             pos: (self.pos[0]+self.size[0]/2.0) - 20, (self.pos[1]+self.size[1]/2.0) - 20
-            source: self.default_image
+            source: self.d_action
 
 <SideBarTab>:
     size_hint: 0.5, 0.2
@@ -72,15 +79,18 @@ MainMenuLayout:
                 active: True
                 orientation: 'vertical'
                 rightGroup: games
-                on_parent: self.setLayout()
+                #on_parent: self.setLayout()
                 spacing: 20
                 
                 SideBarTab:
+                    id: sidebartab1
                     text: 'MULTIPLAYER'
                     on_press: self.press_action()
                 SideBarTab:
+                    id: sidebartab2
                     text: 'OPTIONS'
                 SideBarTab:
+                    id: sidebartab3
                     text: 'POWER'
 
             PAMButtonGroup:
@@ -88,15 +98,15 @@ MainMenuLayout:
                 leftGroup: sidebar
                 rightGroup: actionbtns
                 orientation: 'vertical'
-                on_parent: self.setLayout()
-                GameCarouselItem:
-                    text: 'PONG'
-                GameCarouselItem:
-                    text: 'SPACE INVADERS'
-                GameCarouselItem:
-                    text: 'MORTAL KOMBAT'
-                GameCarouselItem:
-                    text: 'PAC-MAN'
+                #on_parent: self.setLayout()
+                #GameCarouselItem:
+                #    text: 'PONG'
+                #GameCarouselItem:
+                #    text: 'SPACE INVADERS'
+                #GameCarouselItem:
+                #    text: 'MORTAL KOMBAT'
+                #GameCarouselItem:
+                #    text: 'PAC-MAN'
             
 
             BoxLayout:
@@ -118,12 +128,22 @@ MainMenuLayout:
                     id: actionbtns
                     leftGroup: games
                     orientation: 'horizontal'
-                    on_parent: self.setLayout()
-                    PAMPlayButton:
-
-                    PAMSaveButton:
-
-                    PAMFavButton:
+                    #on_parent: self.setLayout()
+                    PAMActionButton:
+                        background_normal: '' # default image
+                        d_action: ''
+                        h_action: ''
+                        s_action: ''
+                    PAMActionButton:
+                        background_normal: '' # default image
+                        d_action: ''
+                        h_action: ''
+                        s_action: ''
+                    PAMActionButton:
+                        background_normal: '' # default image
+                        d_action: ''
+                        h_action: ''
+                        s_action: ''
 
         ControlBar:
             Label:

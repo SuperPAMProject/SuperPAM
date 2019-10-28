@@ -41,6 +41,7 @@ DI_DOWN = '2'
 
 # Global Variables
 isLoading = False; # may not need this
+game_titles = "games.txt"
 
 
 # See about putting these enums and class definitions into a separate file.

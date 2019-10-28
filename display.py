@@ -54,11 +54,11 @@ def SetupDisplay():
     print("Set up")
     return HomeMenuApp()
 
-
-menu_app = HomeMenuApp()
-Window.clearcolor = get_color_from_hex(colors.getColor("background"))
-LabelBase.register(
-    name='Roboto',
-    fn_regular='fonts/Roboto-Light.ttf',
-    fn_bold='fonts/Roboto-Bold.ttf')
-menu_app.run()
+if __name__ == "__main__":
+    menu_app = HomeMenuApp()
+    Window.clearcolor = get_color_from_hex(colors.getColor("background"))
+    LabelBase.register(
+        name='Roboto',
+        fn_regular='fonts/Roboto-Light.ttf',
+        fn_bold='fonts/Roboto-Bold.ttf')
+    menu_app.run()

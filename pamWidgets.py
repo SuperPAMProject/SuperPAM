@@ -19,7 +19,6 @@ from kivy.uix.video import Video
 from kivy.uix.slider import Slider
 from kivy.uix.boxlayout import BoxLayout
 from kivy.properties import *
-import keyboard
 import controls
 import fonts
 import colors
@@ -27,7 +26,7 @@ from kivy.utils import get_color_from_hex
 from enum import Enum
 
 
-player = "player1" # for testing purposes with the 'controls' module
+# player = "player1" # for testing purposes with the 'controls' module
 
 
 #MISC. CLASSES
@@ -64,24 +63,15 @@ class Highlighter(Widget):
 #----PAMBUTTON - The base for all other buttons. The button's colors are organized by
 #    d for default, h for highlight and s for selected
 class PAMButton(Button):
-    highlighted = BooleanProperty(False)
-    selected = BooleanProperty(False)
     enabled = BooleanProperty(True)
     btnTxt = StringProperty("NOT SELECTED")
-    highlighter = Highlighter()
     background_normal = "img/button_bg.png"
     d_color = colors.getColor("primary")
     h_color = colors.getColor("secondary")
     s_color = colors.getColor("accent")
 
-
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        #keyboard.on_press(self.press_action)
-
-    def press_action(self, *args):
-        if keyboard.is_pressed(controls.getInput(player, "select")) and self.highlighted:
-            print("pressed")
 
     #Called when user navigates onto this button
     def setHighlight(self):
@@ -94,7 +84,6 @@ class PAMButton(Button):
 #----PAM ACTION BUTTON - base for the action buttons. Action buttons have their own icons.
 #    Their default color is set to the background, so that there is no colored block around the icons.
 class PAMActionButton(PAMButton):
-    background_normal = ''
     d_color = colors.getColor("background")
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -266,7 +255,6 @@ class PAMButtonGroup(BoxLayout):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        keyboard.on_press(self.on_press)
 
 
     def setLayout(self):
