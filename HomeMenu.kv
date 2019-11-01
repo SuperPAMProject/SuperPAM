@@ -12,8 +12,10 @@ MainMenuLayout:
     size_hint_y: None
     background_color: 0, 0, 0, 0
     canvas:
+       # Color:
+          #  rgba: 1, 0, 0, 0.4
         Rectangle:
-            size: (45, 45)
+            size: (90, 90)
             pos: (self.pos[0]+self.size[0]/2.0) - 20, (self.pos[1]+self.size[1]/2.0) - 20
             source: self.default_image
 
@@ -25,7 +27,6 @@ MainMenuLayout:
     size_hint_y: 0.5
     pos_y: self.parent.top
     
-
 <GameTitle>:
     size_hint_y: 0.15
     text_size: self.size
@@ -120,10 +121,13 @@ MainMenuLayout:
                     orientation: 'horizontal'
                     on_parent: self.setLayout()
                     PAMPlayButton:
+                        func_id: 'play'
 
                     PAMSaveButton:
+                        func_id: 'save'
 
                     PAMFavButton:
+                        func_id: 'fav'
 
         ControlBar:
             Label:

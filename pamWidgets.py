@@ -2,7 +2,7 @@
 #The purpose of this module is to contain and define all custom widgets for the Super PAM.
 #The widgets come in four groups: BUTTON, LABEL, GROUP, and MISC.
 
-#BUTTONS - interactoive widgets that respond to the user pressing the 'select' input
+#BUTTONS - interactive widgets that respond to the user pressing the 'select' input
 #LABELS - non-interactive, texttual, responds to input from BUTTONS, GROUPS, or MISC. widgets
 #GROUPS - containers of other widgets. Used to iterate over groups and issue commands to them
 #MISC. - No clear category. Typically non-interactive and experimental. 
@@ -13,6 +13,7 @@ from kivy.core.window import Window
 from kivy.clock import Clock
 from kivy.uix.widget import Widget
 from kivy.uix.button import Button
+from kivy.uix.accordion import Accordion, AccordionItem
 from kivy.uix.behaviors import ButtonBehavior
 from kivy.uix.label import Label
 from kivy.uix.video import Video
@@ -25,10 +26,11 @@ import fonts
 import colors
 from kivy.utils import get_color_from_hex
 from enum import Enum
+import pamFunctions
 
 
 player = "player1" # for testing purposes with the 'controls' module
-
+    
 
 #MISC. CLASSES
 #These classes don't fit into any of the other categories.
@@ -73,6 +75,7 @@ class PAMButton(Button):
     d_color = colors.getColor("primary")
     h_color = colors.getColor("secondary")
     s_color = colors.getColor("accent")
+    func_id = ''
 
 
     def __init__(self, **kwargs):
@@ -102,6 +105,7 @@ class PAMActionButton(PAMButton):
 #----PLAY BUTTON - Starts currently highlighted game  
 class PAMPlayButton(PAMActionButton):
     default_image = 'img/UI_PLAY_ICON.png'
+    #func_id = 'play'
     
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -308,7 +312,7 @@ class PAMButtonGroup(BoxLayout):
 
 
     def on_press(self, event):
-        if self.active and event.event_type == keyboard.KEY_UP:
+        if self.active and event.event_type == keyboard.KEY_DOWN:
             print(event.name + " " + event.event_type)
             #This shit is a mess. Just don't bother with it right now.
             if event.name == self.leftGroupPos and self.checkForGroup(self.leftGroup):
@@ -334,7 +338,9 @@ class PAMButtonGroup(BoxLayout):
             if event.name == controls.getInput(player, "select"):
                 #self.children[self.currentIndex].selected = BooleanProperty(True)
                 self.children[self.currentIndex].btnTxt = "SELECTED"
-                self.children[self.currentIndex].press_action()
+                #self.children[self.currentIndex].press_action()
+                pamFunctions.current_game = "games/Castlevania Adventure, The (U) [!].gb"
+                f = pamFunctions.getFunction(self.children[self.currentIndex])
 
 
 class PAMLabelGroup(BoxLayout):
