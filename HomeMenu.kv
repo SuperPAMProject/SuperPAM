@@ -17,8 +17,8 @@ MainMenuLayout:
     h_action: ''
     s_action: ''
     canvas:
-        Color:
-            rgba: (1,1,0,1)
+       # Color:
+          #  rgba: 1, 0, 0, 0.4
         Rectangle:
             size: (90, 90)
             pos: (self.pos[0]+self.size[0]/2.0) - 20, (self.pos[1]+self.size[1]/2.0) - 20
@@ -32,7 +32,6 @@ MainMenuLayout:
     size_hint_y: 0.5
     pos_y: self.parent.top
     
-
 <GameTitle>:
     size_hint_y: 0.15
     text_size: self.size
@@ -144,6 +143,7 @@ MainMenuLayout:
                         d_action: ''
                         h_action: ''
                         s_action: ''
+                        func_id: 'play'
 
         ControlBar:
             Label:
