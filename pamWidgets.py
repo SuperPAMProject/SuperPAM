@@ -20,7 +20,9 @@ from kivy.uix.video import Video
 from kivy.uix.slider import Slider
 from kivy.uix.boxlayout import BoxLayout
 from kivy.properties import *
+from kivy.graphics.vertex_instructions import Rectangle
 import controls
+import keyboard
 import fonts
 import colors
 from kivy.utils import get_color_from_hex
@@ -28,7 +30,7 @@ from enum import Enum
 import pamFunctions
 
 
-# player = "player1" # for testing purposes with the 'controls' module
+#player = "player1" # for testing purposes with the 'controls' module
     
 
 #MISC. CLASSES
@@ -76,13 +78,12 @@ class PAMButton(Button):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-    #Called when user navigates onto this button
     def setHighlight(self):
         self.highlighted = not self.highlighted
 
-    #Called when user navigates to a different button
     def unHighlight(self):
         self.highlighted = False
+
 
 #----PAM ACTION BUTTON - base for the action buttons. Action buttons have their own icons.
 #    Their default color is set to the background, so that there is no colored block around the icons.
@@ -90,6 +91,12 @@ class PAMActionButton(PAMButton):
     d_color = colors.getColor("background")
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+        print(self.properties)
+        self.d_action = ''
+        self.h_action = ''
+        self.s_action = ''
+        with self.canvas:
+            self.rect = Rectangle(size=(90, 90), pos=((self.pos[0]+self.size[0]/2.0) - 20, (self.pos[1]+self.size[1]/2.0) - 20), source=self.d_action)
 
 #----PLAY BUTTON - Starts currently highlighted game  
 class PAMPlayButton(PAMActionButton):
@@ -259,6 +266,7 @@ class PAMButtonGroup(BoxLayout):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+       # keyboard.on_press(self.on_press)
 
 
     def setLayout(self):
@@ -382,7 +390,8 @@ class SideBarTab(PAMButtonGroup, PAMButton):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.tab_item_list: SideBarTabItem
-        self.collapsed = True
+        self.collapse = True
+
 
 
 class SideBar(PAMButtonGroup):
@@ -390,6 +399,7 @@ class SideBar(PAMButtonGroup):
         super().__init__(**kwargs)
         self.item_list: SideBarTab
         self.active = False
+        
 
     def collapseAll(self):
         pass

@@ -7,6 +7,7 @@ import mainMenu
 import display
 import pamWidgets
 from kivy.uix.boxlayout import BoxLayout
+from kivy.graphics.vertex_instructions import Rectangle
 
 
 
@@ -28,7 +29,7 @@ class PAM:
         print(self.layout.ids["sidebar"])
         print("hello")
         self.MM = mainMenu.mainMenu(self.layout.ids["sidebar"], self.layout.ids["games"], self.layout.ids["actionbtns"]);
-        #self.inputHook = keyboard.hook(self.readInputs)
+        self.inputHook = keyboard.hook(self.readInputs)
         self.currentInputs = [];
         self.updateState();
         
@@ -47,97 +48,97 @@ class PAM:
     # Reads all current button inputs. Because keyboard can't suppress inputs in Linux,
     # editing of the emulator's input reading may be necessary.
     def readInputs(self, event):
-        if not isLoading:
-            if event.event_type == KEY_DOWN:
+        if True: #not isLoading:
+            if event.event_type == keyboard.KEY_DOWN:
 
                 # Anti Turbo
-                if(event.name in self.currentInputs and event.name != DI_UP and event.name != DI_DOWN and event.name != DI_LEFT and event.name != DI_RIGHT):
+                if(event.name in self.currentInputs and event.name != includes.DI_UP and event.name != includes.DI_DOWN and event.name != includes.DI_LEFT and event.name != includes.DI_RIGHT):
                     return;
                 else:
                     self.currentInputs.append(event.name);
 
 
-                if event.name == BUTTON_1:
+                if event.name == includes.BUTTON_1:
                     # Accept button
                     if self.currentState == includes.CurrentState.MAIN_MENU_STATE:
-                        if self.MM.CurrentSection() == TABS:
+                        if self.MM.currentSection == includes.Section.TABS:
                             currentTab = self.MM.CurrentTab()
                             # do stuff with the current tab
-                        elif self.MM.CurrrentSection() == includes.CurrentState.GAMES:
+                        elif self.MM.currrentSection == includes.Section.GAMES:
                             currentGame = self.MM.GetGame()
                             # do stuff with the current game
-                        elif self.MM.CurrentSection() == includes.CurrentState.GAME_OPTIONS:
+                        elif self.MM.currentSection == includes.Section.GAME_OPTIONS:
                             currentOption = self.MM.CurrentOption()
                             # do stuff with the current option
                     print(event.name)
                     
-                elif event.name == BUTTON_2:
+                elif event.name == includes.BUTTON_2:
                     print(event.name)
 
-                elif event.name == BUTTON_3:
+                elif event.name == includes.BUTTON_3:
                     print(event.name)
 
-                elif event.name == BUTTON_4:
+                elif event.name == includes.BUTTON_4:
                     print(event.name)
 
-                elif event.name == BUTTON_5:
+                elif event.name == includes.BUTTON_5:
                     print(event.name)
 
-                elif event.name == BUTTON_6:
+                elif event.name == includes.BUTTON_6:
                     print(event.name)
 
-                elif event.name == BUTTON_7:
+                elif event.name == includes.BUTTON_7:
                     print(event.name)
 
-                elif event.name == BUTTON_8:
+                elif event.name == includes.BUTTON_8:
                     print(event.name)
 
-                elif event.name == HOME_BUTTON:
+                elif event.name == includes.HOME_BUTTON:
                     print(event.name)
 
-                elif event.name == COIN_BUTTON:
+                elif event.name == includes.COIN_BUTTON:
                     print(event.name)
 
-                elif event.name == DI_UP:
+                elif event.name == includes.DI_UP:
                     if self.currentState == includes.CurrentState.MAIN_MENU_STATE:
-                        if self.MM.currentSection == Section.TABS:
+                        if self.MM.currentSection == includes.Section.TABS:
                             
                             # if not at the beginning of the list and not inside a tab
-                            if self.MM.t_i > 0 and self.MM.currentTab().collapse:
-                                self.MM.CurrentTab().is_selected = False
+                            if self.MM.t_i > 0 and self.MM.CurrentTab().collapse:
+                                self.MM.CurrentTab().highlighted = False
                                 self.MM.t_i -= 1
                                 if self.MM.CurrentTab().collapse:
-                                    self.MM.CurrentTab().is_selected = True
+                                    self.MM.CurrentTab().highlighted = True
                                 else:
                                     currentTab = self.MM.CurrentTab()
-                                    currentTab.children[len(currentTab.children) - 1].is_selected = True
+                                    currentTab.children[len(currentTab.children) - 1].highlighted = True
 
                             # if not at the beginning and tab not collapsed
                             elif self.MM.t_i > 0 and not self.MM.CurrentTab().collapse:
-                                if self.MM.CurrentTab().is_selected:
-                                    self.MM.CurrentTab().is_selected = False
+                                if self.MM.CurrentTab().highlighted:
+                                    self.MM.CurrentTab().highlighted = False
                                     self.MM.t_i -= 1
                                     if self.MM.CurrentTab().collapse:
-                                        self.MM.CurrentTab().is_selected = True
+                                        self.MM.CurrentTab().highlighted = True
                                     else:
                                         currentTab = self.MM.CurrentTab()
-                                        currentTab.children[len(currentTab.children) - 1].is_selected = True
+                                        currentTab.children[len(currentTab.children) - 1].highlighted = True
 
                                 else:
                                     for i in range(len(self.MM.CurrentTab().children)):
-                                        if self.MM.CurrentTab().children[i].is_selected:
-                                            self.MM.CurrentTab().children[i].is_selected = False;
+                                        if self.MM.CurrentTab().children[i].highlighted:
+                                            self.MM.CurrentTab().children[i].highlighted = False;
 
                                             if i == 0:
-                                                self.MM.CurrentTab().is_selected = True;
+                                                self.MM.CurrentTab().highlighted = True;
                                             else:
-                                                currentTab.children[i - 1].is_selected = True;
+                                                currentTab.children[i - 1].highlighted = True;
 
                                             break;
                             else:
                                 print("DEBUG: Potentially unaccounted-for case in the Tabs section")
 
-                        elif self.MM.currentSection == Section.GAMES:
+                        elif self.MM.currentSection == includes.Section.GAMES:
                             print("Cycle through games")
                             # Cycle through games
 
@@ -154,41 +155,41 @@ class PAM:
                     print(event.name)
 
 
-                elif event.name == DI_DOWN:
+                elif event.name == includes.DI_DOWN:
                     if self.currentState == includes.CurrentState.MAIN_MENU_STATE:
-                        if self.MM.currentSection == Section.TABS:
+                        if self.MM.currentSection == includes.Section.TABS:
                             # if not on the last tab and the current tab is collapsed
-                            if self.MM.t_i < len(self.MM.tabsList) - 1 and self.MM.currentTab().collapse:
-                                self.MM.CurrentTab().is_selected = False
+                            if self.MM.t_i < len(self.MM.tabsList) - 1 and self.MM.CurrentTab().collapse:
+                                self.MM.CurrentTab().highlighted = False
                                 self.MM.t_i += 1
-                                self.MM.CurrentTab().is_selected = True
+                                self.MM.CurrentTab().highlighted = True
 
 
                             # if on any tab and the tab is not collapsed
                             elif not self.MM.CurrentTab().collapse:
-                                if self.MM.CurrentTab().is_selected:
-                                    self.MM.CurrentTab().is_selected = False                                    
-                                    self.MM.CurrentTab().children[0].is_selected = True
+                                if self.MM.CurrentTab().highlighted:
+                                    self.MM.CurrentTab().highlighted = False                                    
+                                    self.MM.CurrentTab().children[0].highlighted = True
                                 
                                 else: # find the child that is selected 
                                     for i in range(len(self.MM.CurrentTab().children)):
-                                        if self.MM.CurrentTab().children[i].is_selected: # once you find it
+                                        if self.MM.CurrentTab().children[i].highlighted: # once you find it
                                             
 
                                             if (i == (len(self.MM.CurrentTab().children) - 1)) and self.MM.t_i < (len(self.MM.tabsList) - 1): # if it's the last item in a sub tab and there is a next tab
-                                                self.MM.CurrentTab().children[i].is_selected = False;
+                                                self.MM.CurrentTab().children[i].highlighted = False;
                                                 self.MM.t_i += 1
-                                                self.MM.CurrentTab().is_selected = True;
+                                                self.MM.CurrentTab().highlighted = True;
                                             else:
-                                                self.MM.CurrentTab().children[i].is_selected = False;
-                                                currentTab.children[i + 1].is_selected = True;
+                                                self.MM.CurrentTab().children[i].highlighted = False;
+                                                currentTab.children[i + 1].highlighted = True;
 
                                             break;
                             else:
                                 print("DEBUG: Potentially unaccounted-for case in the Tabs section")
 
 
-                        elif self.MM.currentSection == Section.GAMES:
+                        elif self.MM.currentSection == includes.Section.GAMES:
                             print("Cycle through games")
                             # Cycle through games
 
@@ -206,13 +207,13 @@ class PAM:
                     
 
                 # move towards the left side of the screen
-                elif event.name == DI_LEFT:
+                elif event.name == includes.DI_LEFT:
                     if self.currentState == includes.CurrentState.MAIN_MENU_STATE:
-                        if self.MM.currentSection == Section.GAME_OPTIONS and self.MM.o_i > PLAY:
-                            self.MM.CurrentOption().is_selected = False
+                        if self.MM.currentSection == includes.Section.GAME_OPTIONS and self.MM.o_i > includes.GameOptions.PLAY:
+                            self.MM.CurrentOption().highlighted = False
                             self.MM.o_i -= 1 
-                            self.MM.CurrentOption().is_selected = True
-                        elif self.MM.currentSection > Section.TABS:
+                            self.MM.CurrentOption().highlighted = True
+                        elif self.MM.currentSection > includes.Section.TABS:
                             self.MM.currentSection -= 1
                             
                         else:
@@ -229,14 +230,14 @@ class PAM:
                     
 
                 # move towards the right side of the screen
-                elif event.name == DI_RIGHT:
+                elif event.name == includes.DI_RIGHT:
                     if self.currentState == includes.CurrentState.MAIN_MENU_STATE:
-                        if self.MM.currentSection == Section.GAME_OPTIONS and self.MM.o_i < FAVORITE:
-                            self.MM.CurrentOption().is_selected = False
+                        if self.MM.currentSection == includes.Section.GAME_OPTIONS and self.MM.o_i < includes.GameOptions.FAVORITE:
+                            self.MM.CurrentOption().highlighted = False
                             self.MM.o_i += 1
-                            self.MM.CurrentOption().is_selected = True
+                            self.MM.CurrentOption().highlighted = True
                             
-                        elif self.MM.currentSection < Section.GAME_OPTIONS:
+                        elif self.MM.currentSection < includes.Section.GAME_OPTIONS:
                             self.MM.currentSection += 1
 
                         else:
@@ -252,7 +253,7 @@ class PAM:
                     print(event.name)
                     
 
-            elif event.event_type == KEY_UP:
+            elif event.event_type == keyboard.KEY_UP:
                 # Anti Turbo
                 if(event.name in self.currentInputs):
                     self.currentInputs.remove(event.name);
@@ -296,7 +297,7 @@ class PAM:
                     self.MM.CurrentTab().color = self.MM.CurrentTab().h_color
                 else:
                     for subTab in self.MM.CurrentTab().children:
-                        if subTab.is_selected:
+                        if subTab.highlighted:
                             subTab.color = subTab.selected_color
             elif self.MM.currentSection == includes.Section.GAMES:
                 # Show the active game as well as the surrounding games
@@ -304,8 +305,9 @@ class PAM:
                 print("Games Section")
             elif self.MM.currentSection == includes.Section.GAME_OPTIONS:
                 for option in self.MM.optionsList:
-                    if option.highlighed:
-                        option.canvas.rectangle.source = option.h_action
+                    if option.highlighted:
+                        option.canvas.rect.source=option.self.h_action
+
                 
         elif self.currentState == includes.CurrentState.GAME_STATE:
             print("you shouldn't be here yet")

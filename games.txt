@@ -1,5 +1,3 @@
-Pong
-Mortal Kombat
-Space Invaders
-Asteroids
-Galaga
+Link's Awakening
+Castlevania
+Super Mario Land

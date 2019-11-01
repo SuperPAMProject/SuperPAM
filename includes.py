@@ -8,6 +8,7 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.carousel import Carousel
 from kivy.uix.scrollview import ScrollView
 from kivy.uix.recycleview import RecycleView
+import kivy.graphics.instructions
 from kivy.uix.label import Label
 from kivy.uix.video import Video
 from kivy.app import App

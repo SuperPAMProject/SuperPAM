@@ -13,16 +13,10 @@ MainMenuLayout:
     size_hint_x: None
     size_hint_y: None
     background_color: 0, 0, 0, 0
-    d_action: ''
-    h_action: ''
-    s_action: ''
     canvas:
        # Color:
           #  rgba: 1, 0, 0, 0.4
-        Rectangle:
-            size: (90, 90)
-            pos: (self.pos[0]+self.size[0]/2.0) - 20, (self.pos[1]+self.size[1]/2.0) - 20
-            source: self.d_action
+
 
 <SideBarTab>:
     size_hint: 0.5, 0.2
@@ -129,17 +123,20 @@ MainMenuLayout:
                     orientation: 'horizontal'
                     #on_parent: self.setLayout()
                     PAMActionButton:
-                        background_normal: '' # default image
+                        id: play
+                        background_normal: 'img/UI_PLAY_ICON.png'  # default image
+                        d_action: 'img/UI_PLAY_ICON.png'
+                        h_action: ''
+                        s_action: ''
+                    PAMActionButton:
+                        id: save
+                        background_normal: 'img/UI_DATA_ICON.png' # default image
                         d_action: ''
                         h_action: ''
                         s_action: ''
                     PAMActionButton:
-                        background_normal: '' # default image
-                        d_action: ''
-                        h_action: ''
-                        s_action: ''
-                    PAMActionButton:
-                        background_normal: '' # default image
+                        background_normal: 'img/UI_FAVORITE_ICON.png' # default image
+                        id: fav
                         d_action: ''
                         h_action: ''
                         s_action: ''
