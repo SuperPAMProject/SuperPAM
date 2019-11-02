@@ -34,12 +34,7 @@ import pamFunctions
     
 
 #MISC. CLASSES
-#These classes don't fit into any of the other categories.
-
-#The video class is for the demo video of the currently highlighted game. Autoplays after 2 seconds.
-
-#The highlighter class is a bit of an experiement. It is a class for a 
-# dynamically shaping highlighter that changes depending on which button you are selecting.
+#----VIDEO-  demo video of the currently highlighted game. Autoplays after 2 seconds. 
 class PAMVideo(Video):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -53,13 +48,6 @@ class PAMVideo(Video):
     def on_stop(self):
         pass
 
-class Highlighter(Widget):
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-        self.shape_rect = False
-        self.shape_circ = False
-        self.color = ''
-
 
 #BUTTON CLASSES
 #These will be the main interactive widgets. 
@@ -68,7 +56,7 @@ class Highlighter(Widget):
 #    d for default, h for highlight and s for selected
 class PAMButton(Button):
     enabled = BooleanProperty(True)
-    btnTxt = StringProperty("NOT SELECTED")
+    btnTxt = StringProperty("")
     background_normal = "img/button_bg.png"
     d_color = colors.getColor("primary")
     h_color = colors.getColor("secondary")
@@ -78,9 +66,11 @@ class PAMButton(Button):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
+    #Called when user moves to the next button
     def setHighlight(self):
         self.highlighted = not self.highlighted
 
+    #Called when user is no longer viewing this button
     def unHighlight(self):
         self.highlighted = False
 
@@ -98,35 +88,8 @@ class PAMActionButton(PAMButton):
         with self.canvas:
             self.rect = Rectangle(size=(90, 90), pos=((self.pos[0]+self.size[0]/2.0) - 20, (self.pos[1]+self.size[1]/2.0) - 20), source=self.d_action)
 
-#----PLAY BUTTON - Starts currently highlighted game  
-class PAMPlayButton(PAMActionButton):
-    default_image = 'img/UI_PLAY_ICON.png'
-    #func_id = 'play'
-    
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-    
-    def press_action(self, *args):
-        print("PLAY") 
 
-#----SAVE BUTTON -  Shows save states of currently highlighted game
-class PAMSaveButton(PAMActionButton):
-    default_image = 'img/UI_DATA_ICON.png'
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-    
-    def press_action(self, *args):
-        print("SAVE") 
-
-#----FAV BUTTON - Adds currently selected game to the Favorites list     
-class PAMFavButton(PAMActionButton):
-    default_image = 'img/UI_FAVORITE_ICON.png'
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-    
-    def press_action(self, *args):
-        print("FAV") 
-
+#----PAM SLIDER - Slider for volume control
 class PamSlider(PAMButton, Slider):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -135,6 +98,9 @@ class PamSlider(PAMButton, Slider):
         self.button_color_default = colors.getColor("primary")
         self.button_color_selected = colors.getColor("accent")
 
+
+#----PAM RADIO BUTTON - Radio button for groups of mutually exclusive options. 
+#    Filling one button will unfill the others in the same group.
 class PamRadioButton(PAMButton):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -144,6 +110,8 @@ class PamRadioButton(PAMButton):
     def on_fill(self):
         pass
 
+
+#----PAM CHECKBOX - Button for true/false options (SFX muted, dyslexia mode, etc.)
 class PamCheckbox(PAMButton):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -152,19 +120,18 @@ class PamCheckbox(PAMButton):
     def on_check(self):
         pass
 
-class PamActionButton(PAMButton):
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-        self.selection_size = 1
-        self.icon_default = ''
-        self.icon_selected = ''
 
+#----WINDOW BUTTON- Button featured at the bottom of a popup. 
+#    Will typically be used to either exit the popup and save the user's option changes.
 class PopupWindowButton(PAMButton):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.option = Label()
         self.window_pos = 0
 
+
+#----WINDOW ITEM- A widget inside a popup. The widget contains a name, button, and either a
+#    checkbox, radio button, or slider
 class PopupWindowItem(PAMButton):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -173,18 +140,19 @@ class PopupWindowItem(PAMButton):
         self.item_name = Label()
         self.sub_widget = Widget()
 
+
+#----TAB ITEM - Button used to open popup windows for options. 
 class SideBarTabItem(PAMButton):
     opensPopup = False
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
  
+
 #----CAROUSEL ITEM - A button that interacts with a label. Selecting it will take the user to the Action Button group.
-#    There will only be one button in the carousel, but it will be passed different labels when the users moves
-#    up and down over the game library
+#   Each CarouselItem will be associated with a unique game and will display that game's title as its text.
 class GameCarouselItem(PAMButton):
     game = ''
-    carousel_pos = 0
-    opacity = 1
+    opacity = 1 #opacity will change with the item's position on-screen
     d_color = colors.getColor("background")
     background_normal = ""
     def __init__(self, **kwargs):
@@ -194,6 +162,8 @@ class GameCarouselItem(PAMButton):
     def on_carousel_move(self):
         pass
 
+
+#----SAVE STATE- Button associated with the one of the currently selected game's save states
 class SaveState(PAMButton):
     scale = 30
     file_path = ''
@@ -250,6 +220,8 @@ class GameInfo(Label):
 # These classes will act as containers for any of the proceeding classes. 
 # Each container will use the 'children' property to iterate over the widgets inside them and perform operations on them.
 
+
+#----BUTTON GROUP - Base for other button groups, such as the PopUp window and SideBar
 class PAMButtonGroup(BoxLayout):
     active = BooleanProperty(False)
     currentIndex = NumericProperty(0)
@@ -338,7 +310,7 @@ class PAMButtonGroup(BoxLayout):
                 pamFunctions.current_game = "games/Castlevania Adventure, The (U) [!].gb"
                 f = pamFunctions.getFunction(self.children[self.currentIndex])
 
-
+#----LABEL GROUP - Group for only textual, non-interactive elements
 class PAMLabelGroup(BoxLayout):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -346,19 +318,21 @@ class PAMLabelGroup(BoxLayout):
         self.group_font_size = 20
         self.group_font_color = colors.getColor("font-dark")
 
-
+#----CONTROL BAR - Displays controls at the bottom of the screen.
 class ControlBar(BoxLayout):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.context = ''
 
+    #Called when the user enters another section (Options, Games, Action buttons) 
+    # will display controls relevant to that context
     def on_context_switch(self):
         pass
 
     def on_remap(self):
         pass
 
-
+#----DESCRIPTION AREA - Group for widgets that display information about the current game
 class GameDescriptionArea(PAMLabelGroup):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -366,7 +340,9 @@ class GameDescriptionArea(PAMLabelGroup):
         self.title_style = ''
         self.info_style = ''
 
-
+#----CAROUSEL- Group for the game library. The carousel will feature one game highlighted at a time. 
+#    Non-highlighted games will be de-emphasized through reduced opacity
+#    Selecting a game in the carousel will redirect the user to the Action Button Group.
 class GameCarousel(PAMLabelGroup):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -375,7 +351,7 @@ class GameCarousel(PAMLabelGroup):
     def on_move(self, direction):
         pass
 
-
+#----POPUP- Float layout to house buttons for a given options category. 
 class PopUpWindow(PAMButtonGroup, PAMLabelGroup):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -385,15 +361,15 @@ class PopUpWindow(PAMButtonGroup, PAMLabelGroup):
         self.item_list: PopupWindowItem
         self.button_list: PopupWindowButton
 
-
+#----TAB - Both a group and an item within a group. The tabs are the items within the sidebar.
+#    And each tab houses several buttons the user can select to access their options.  
 class SideBarTab(PAMButtonGroup, PAMButton):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.tab_item_list: SideBarTabItem
         self.collapse = True
 
-
-
+#----SIDEBAR - Group that contains all Sidebar tabs. 
 class SideBar(PAMButtonGroup):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -404,7 +380,7 @@ class SideBar(PAMButtonGroup):
     def collapseAll(self):
         pass
 
-
+#----SAVE STATE GROUP- Group within a popup window. Contains save states for the currently selected game.
 class SaveStateGroup(PAMButtonGroup):
     def __init(self):
         super().__init__(self, **kwargs)
@@ -419,5 +395,6 @@ class SaveStateGroup(PAMButtonGroup):
 
 #TESTING AREA
 if __name__ == "__main__":
+    #Put code to test here
     print("SUCCESS")
     

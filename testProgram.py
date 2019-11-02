@@ -306,7 +306,7 @@ class PAM:
             elif self.MM.currentSection == includes.Section.GAME_OPTIONS:
                 for option in self.MM.optionsList:
                     if option.highlighted:
-                        option.canvas.rect.source=option.self.h_action
+                        option.canvas.rect.source=option.h_action
 
                 
         elif self.currentState == includes.CurrentState.GAME_STATE:
