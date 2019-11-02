@@ -1,6 +1,7 @@
 #import pamWidgets
 import os
 import subprocess
+import includes
 
 #PLACEHOLDER VARIABLES
 player = ''
@@ -10,6 +11,24 @@ emulator = 'emulators/VisualBoyAdvance.exe'
 client = ''
 library = ''
 menu = ''
+
+def populateGamesLibrary(file):
+    with open(file, 'r') as handle:
+        for line in handle:
+            info = line.split(', ')
+            newGame = includes.Game()
+            newGame.gameName = info[0]
+            newGame.gameInfo.append(info[1])
+            newGame.gameInfo.append(info[2])
+            newGame.gameInfo.append(info[3])
+            newGame.gameInfo.append(info[4])
+            print("Title: " + newGame.gameName)
+            print("Year: " + newGame.gameInfo[0])
+            print("Publisher: " + newGame.gameInfo[1])
+            print("Developer: " + newGame.gameInfo[2])
+            print("Path: " + newGame.gameInfo[3])
+            #self.game_lib.add_widget(myLabel)
+            #self.gameList.append(newGame);
 
 
 #ACTON BUTTON FUNCTIONS
@@ -122,38 +141,36 @@ def controlsPopup(player):
 #ACTIVATED ON BUTTON SELECTION, TAKES ID OF BUTTON TO DETERMINE FUNCTION
 def getFunction(btn):
     if btn.func_id == 'play':
-        playGame(emulator, current_game)
+        return playGame(emulator, current_game)
     elif btn.func_id == 'save':
-        saveGame(current_game)
+        return saveGame(current_game)
     elif btn.func_id == 'fav':
-        favGame(current_game, menu)
+        return favGame(current_game, menu)
     elif btn.func_id == 'host':
-        startSession(player)
+        return startSession(player)
     elif btn.func_id == 'accept':
-        acceptClient(client)
+        return acceptClient(client)
     elif btn.func_id == 'kick':
-        kickClient(client)
+        return kickClient(client)
     elif btn.func_id == 'terminate':
-        endSession(session)
+        return endSession(session)
     elif btn.func_id == 'dev':
-        sortByDev(library)
+        return sortByDev(library)
     elif btn.func_id == 'pub':
-        sortByPub(library)
+        return sortByPub(library)
     elif btn.func_id == 'genre':
-        sortByGenre(library)
+        return sortByGenre(library)
     elif btn.func_id == 'year':
-        sortByYear(library)
+        return sortByYear(library)
     elif btn.func_id == 'sound':
-        soundPopup(player)
+        return soundPopup(player)
     elif btn.func_id == 'visuals':
-        visualsPopup(player)
+        return visualsPopup(player)
     elif btn.func_id == 'user':
-        userPopup(player)
+        return userPopup(player)
     elif btn.func_id == 'controls':
-        controlsPopup(player)
+        return controlsPopup(player)
 
-    
+
 if __name__ == "__main__":
-    emu = "emulators/VisualBoyAdvance.exe"
-    game = "games/Legend of Zelda, The - Link_s Awakening (V1.2) (U) [!].gb"
-    g = playGame(emu, game)
+    populateGamesLibrary("games.txt")

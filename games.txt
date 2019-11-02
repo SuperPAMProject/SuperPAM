@@ -1,3 +1,3 @@
-Link's Awakening
-Castlevania
-Super Mario Land
+Link's Awakening, 1993, Nintendo, Nintendo EAD, games/zelda.gb
+Super Mario Land, 1989, Nintendo, Nintendo R&D1, games/mario.gb
+Castlevania, 1989, Konami, Konami, games/castlevania.gb

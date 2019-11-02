@@ -155,6 +155,12 @@ class GameCarouselItem(PAMButton):
     background_normal = ""
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+        self.gameName = "";
+        self.gameInfo = [];
+        self.gameImage = "";
+        self.gameVideo = "";
+        self.gameDesc = "";
+        self.isFavorite = False;
 
 
     def on_carousel_move(self):

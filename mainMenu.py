@@ -44,10 +44,22 @@ class mainMenu:
     def populateGameLibrary(self, games):
         with open(includes.game_titles, 'r') as handle:
             for line in handle:
+                info = line.split(', ')
                 newGame = pamWidgets.GameCarouselItem()
-                newGame.text = line
+                newGame.gameName = info[0]
+                newGame.gameInfo.append(info[1])
+                newGame.gameInfo.append(info[2])
+                newGame.gameInfo.append(info[3])
+                newGame.gameInfo.append(info[4])
+                newGame.text = newGame.gameName
                 games.add_widget(newGame)
                 self.gameList.append(newGame);
+                #Just printing for testing. Can be removed anytime
+                print("Title: " + newGame.gameName)
+                print("Year: " + newGame.gameInfo[0])
+                print("Publisher: " + newGame.gameInfo[1])
+                print("Developer: " + newGame.gameInfo[2])
+                print("Path: " + newGame.gameInfo[3])
                 
 
     # sets up the game options so that they can be displayed
