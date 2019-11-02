@@ -9,6 +9,7 @@ MainMenuLayout:
     highlighted: False
     selected: False
 
+
 <PAMActionButton>:
     size_hint_x: None
     size_hint_y: None
@@ -17,48 +18,69 @@ MainMenuLayout:
        # Color:
           #  rgba: 1, 0, 0, 0.4
         Rectangle:
-            pos: (self.pos[0]+self.size[0]/2.0) - 20, (self.pos[1]+self.size[1]/2.0) - 20
-            size: (90, 90)
+            pos: (self.pos[0]+self.size[0]/2.0) - 40, (self.pos[1]+self.size[1]/2.0) - 40
+            size: (self.parent.width*0.3, self.parent.height)
             source: self.d_action
 
 
 
 
 <SideBar>:
-    size_hint_y: 0.5
-    pos_y: self.parent.top
+    #size_hint_y: 0.5
+    size_hint: None, None
+    size: self.parent.width*0.23, self.parent.height*0.76
+    pos_hint: {'x':0, 'top':1}
+    on_pos: pos={self.parent.x, self.parent.y}
+
 
 <SideBarTab>:
     #size_hint: 0.5, 0.2
-   # text_size: root.width, None
-    pos: self.parent.pos
-    size: self.texture_size
+    #text_size: root.width, None
+    #pos: self.parent.pos
+    pos_hint: {'x':0, 'top':0}
+    on_pos: pos={self.parent.x, self.parent.y}
+    size_hint: None, None
+    size: self.parent.width, self.parent.height*0.12
+    
+
 
 <SideBarTabItem>:
-    
+
+<GameDescriptionArea>:
+    orientation: 'vertical'
+    size_hint: None, None
+    size: self.parent.width*0.86, self.parent.height*0.38
+    pos_hint: {'right': 1, 'top': 1}
+
 <GameTitle>:
-    size_hint_y: 0.15
     text_size: self.size
     font_size: 24
     bold: True
     font: f.getFont("bold")
     halign: 'center'
     valign: 'top'
+    size_hint: None, None
+    size: self.parent.width*0.5, self.parent.height*0.13
 
 <GameInfo>:
-    size_hint_x: 0.5
-    size_hint_y: 0.15
+    size_hint: None, None
+    size: self.parent.width, self.parent.height*0.20
     text_size: self.size
     font: f.getFont("normal")
     font_size: 20 
     halign: 'left'   
     valign: 'top'
 
+<PAMVideo>:
+    size_hint: None, None
+    size: self.parent.width*0.86, self.parent.height*0.29
+    pos_hint: {'right': 1, 'top': 1}
+
 <ControlBar>:
     orientation: 'horizontal'
-    size_hint_y: 0.1
-    size_hint_x: 1
     spacing: 0
+    size_hint: None, None
+    size: self.parent.width, self.parent.height*0.08
     canvas:
         Color:
             rgb: utils.get_color_from_hex(c.getColor("primary"))
@@ -74,15 +96,18 @@ MainMenuLayout:
     
     BoxLayout:
         orientation: 'vertical'
+        
         BoxLayout:
             orientation:'horizontal'
+            size_hint: None, None
+            size: self.parent.width, self.parent.height*0.84
             spacing: 20
+            pos_hint: {'right': 1, 'top': 1}
             SideBar:
                 id: sidebar
                 active: True
                 orientation: 'vertical'
                 rightGroup: games
-                #on_parent: self.setLayout()
                 spacing: 20
                 
                 SideBarTab:
@@ -98,17 +123,24 @@ MainMenuLayout:
                     id: sidebartab4
                     text: 'POWER'
 
+            
             PAMButtonGroup:
                 id: games
                 leftGroup: sidebar
                 rightGroup: actionbtns
                 orientation: 'vertical'
+                size_hint: None, None
+                size: self.parent.width*0.28, self.parent.height*0.72
+                pos_hint: {'center_x': 0.5, 'top': 1}
 
             BoxLayout:
                 orientation: 'vertical'
+                size_hint: None, None
+                size: self.parent.width*0.33, self.parent.height*0.84
+                spacing: 30
+                pos_hint: {'right': 1, 'top': 1}
                 PAMVideo:
                 GameDescriptionArea:
-                    orientation: 'vertical'
                     GameTitle:
                         text: "Title"
                     GameInfo:
@@ -120,10 +152,12 @@ MainMenuLayout:
                     GameInfo:
                         text: "Description:"
                 PAMButtonGroup:
+                    size_hint: None, None
+                    size: self.parent.width, self.parent.height*0.19
                     id: actionbtns
                     leftGroup: games
+                    pos_hint: {'right': 1, 'top': 1}
                     orientation: 'horizontal'
-                    #on_parent: self.setLayout()
                     PAMActionButton:
                         id: play
                         background_normal: 'img/UI_PLAY_ICON.png'  # default image
