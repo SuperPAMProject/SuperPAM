@@ -7,6 +7,7 @@ import mainMenu
 import display
 import pamWidgets
 from kivy.uix.boxlayout import BoxLayout
+from kivy.core.text import LabelBase
 from kivy.graphics.vertex_instructions import Rectangle
 
 
@@ -298,7 +299,7 @@ class PAM:
                 else:
                     for subTab in self.MM.CurrentTab().children:
                         if subTab.highlighted:
-                            subTab.color = subTab.selected_color
+                            subTab.color = subTab.s_color
             elif self.MM.currentSection == includes.Section.GAMES:
                 # Show the active game as well as the surrounding games
                 # Also, update any animations needed to fully transtition between games
@@ -319,15 +320,11 @@ class PAM:
     def closePAM(self):
         sys.exit(0);
         
-        
-# This was just me testing code. Can be deleted at any time.
-def endProgram():
-    print("hello")
-    sys.exit()
-    print("bye")
 
 pam = PAM();
+
 pam.Display.run();
+
 # main loop
 # displays current state
 # updates current state

@@ -3,5 +3,5 @@
 #Currently incomplete. Still need to get an appropriate filter that can work with our system.
 filters = {
     "tritanopia":"",
-    "deuternopia":""
+    "deuteranopia":""
 }

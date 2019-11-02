@@ -55,16 +55,16 @@ class PAMVideo(Video):
 #----PAMBUTTON - The base for all other buttons. The button's colors are organized by
 #    d for default, h for highlight and s for selected
 class PAMButton(Button):
-    enabled = BooleanProperty(True)
-    btnTxt = StringProperty("")
-    background_normal = "img/button_bg.png"
-    d_color = colors.getColor("primary")
-    h_color = colors.getColor("secondary")
-    s_color = colors.getColor("accent")
-    func_id = ''
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+        self.enabled = BooleanProperty(True)
+        self.btnTxt = StringProperty("")
+        self.background_normal = "img/button_bg.png"
+        self.d_color = colors.getColor("primary")
+        self.h_color = colors.getColor("secondary")
+        self.s_color = colors.getColor("accent")
+        self.func_id = ''
 
     #Called when user moves to the next button
     def setHighlight(self):
@@ -85,8 +85,6 @@ class PAMActionButton(PAMButton):
         self.d_action = ''
         self.h_action = ''
         self.s_action = ''
-        with self.canvas:
-            self.rect = Rectangle(size=(90, 90), pos=((self.pos[0]+self.size[0]/2.0) - 20, (self.pos[1]+self.size[1]/2.0) - 20), source=self.d_action)
 
 
 #----PAM SLIDER - Slider for volume control
