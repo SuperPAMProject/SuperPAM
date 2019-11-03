@@ -30,7 +30,7 @@ from enum import Enum
 import pamFunctions
 
 
-#player = "player1" # for testing purposes with the 'controls' module
+player = "player1" # for testing purposes with the 'controls' module
     
 
 #MISC. CLASSES
@@ -65,6 +65,7 @@ class PAMButton(Button):
         self.h_color = colors.getColor("secondary")
         self.s_color = colors.getColor("accent")
         self.func_id = ''
+        
 
     #Called when user moves to the next button
     def setHighlight(self):
@@ -161,6 +162,7 @@ class GameCarouselItem(PAMButton):
         self.gameVideo = "";
         self.gameDesc = "";
         self.isFavorite = False;
+        self.d_color = colors.getColor("background")
 
 
     def on_carousel_move(self):
@@ -237,12 +239,13 @@ class PAMButtonGroup(BoxLayout):
     rightGroupPos = StringProperty('')
     gSpacing = NumericProperty(10)
     gPadding = NumericProperty(10)
+    gameList = []
     
     
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-       # keyboard.on_press(self.on_press)
+        #keyboard.on_press(self.on_press)
 
 
     def setLayout(self):
@@ -311,7 +314,6 @@ class PAMButtonGroup(BoxLayout):
                 #self.children[self.currentIndex].selected = BooleanProperty(True)
                 self.children[self.currentIndex].btnTxt = "SELECTED"
                 #self.children[self.currentIndex].press_action()
-                pamFunctions.current_game = "games/Castlevania Adventure, The (U) [!].gb"
                 f = pamFunctions.getFunction(self.children[self.currentIndex])
 
 #----LABEL GROUP - Group for only textual, non-interactive elements
@@ -347,10 +349,23 @@ class GameDescriptionArea(PAMLabelGroup):
 #----CAROUSEL- Group for the game library. The carousel will feature one game highlighted at a time. 
 #    Non-highlighted games will be de-emphasized through reduced opacity
 #    Selecting a game in the carousel will redirect the user to the Action Button Group.
-class GameCarousel(PAMLabelGroup):
+class GameCarousel(PAMButtonGroup):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.game_list: GameCarouselItem
+
+    def on_press(self, event):
+        super().on_press(event)
+        if self.active:
+            self.updateGameInfo(self.children[self.currentIndex])
+
+    def updateGameInfo(self, game):
+        print(game.gameInfo[0])
+        print(game.gameInfo[1])
+        print(game.gameInfo[2])
+        print(game.gameInfo[3])
+        pamFunctions.current_game = game.gameInfo[3]
+        print(pamFunctions.current_game)
     
     def on_move(self, direction):
         pass

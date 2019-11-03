@@ -1,6 +1,7 @@
 #:import utils kivy.utils
 #:import c colors
 #:import f fonts
+#:import pf pamFunctions
 MainMenuLayout:
 
 <PAMButton>:
@@ -9,6 +10,9 @@ MainMenuLayout:
     highlighted: False
     selected: False
 
+<GameCarouselItem>:
+    background_color:  utils.get_color_from_hex(self.h_color) if self.highlighted else utils.get_color_from_hex(self.d_color)
+    
 
 <PAMActionButton>:
     size_hint_x: None
@@ -21,6 +25,7 @@ MainMenuLayout:
             pos: (self.pos[0]+self.size[0]/2.0) - 40, (self.pos[1]+self.size[1]/2.0) - 40
             size: (self.parent.width*0.3, self.parent.height)
             source: self.d_action
+
 
 
 
@@ -42,8 +47,6 @@ MainMenuLayout:
     size_hint: None, None
     size: self.parent.width, self.parent.height*0.12
     
-
-
 <SideBarTabItem>:
 
 <GameDescriptionArea>:
@@ -109,7 +112,7 @@ MainMenuLayout:
                 orientation: 'vertical'
                 rightGroup: games
                 spacing: 20
-                
+                on_parent: self.setLayout()
                 SideBarTab:
                     id: sidebartab1
                     text: 'MULTIPLAYER'
@@ -124,7 +127,7 @@ MainMenuLayout:
                     text: 'POWER'
 
             
-            PAMButtonGroup:
+            GameCarousel:
                 id: games
                 leftGroup: sidebar
                 rightGroup: actionbtns
@@ -132,6 +135,8 @@ MainMenuLayout:
                 size_hint: None, None
                 size: self.parent.width*0.28, self.parent.height*0.72
                 pos_hint: {'center_x': 0.5, 'top': 1}
+                on_parent: self.setLayout()#pf.populateGameLibrary(games) <-- for testing. Can be removed.
+  
 
             BoxLayout:
                 orientation: 'vertical'
@@ -139,18 +144,21 @@ MainMenuLayout:
                 size: self.parent.width*0.33, self.parent.height*0.84
                 spacing: 30
                 pos_hint: {'right': 1, 'top': 1}
+                id: gameDetails
                 PAMVideo:
                 GameDescriptionArea:
                     GameTitle:
+                        id: title
                         text: "Title"
                     GameInfo:
+                        id: dev
                         text: "Developer:"
                     GameInfo:
+                        id: pub
                         text: "Publisher:"
                     GameInfo:
+                        id: year
                         text: "Year:"
-                    GameInfo:
-                        text: "Description:"
                 PAMButtonGroup:
                     size_hint: None, None
                     size: self.parent.width, self.parent.height*0.19
@@ -158,6 +166,7 @@ MainMenuLayout:
                     leftGroup: games
                     pos_hint: {'right': 1, 'top': 1}
                     orientation: 'horizontal'
+                    on_parent: self.setLayout()
                     PAMActionButton:
                         id: play
                         background_normal: 'img/UI_PLAY_ICON.png'  # default image

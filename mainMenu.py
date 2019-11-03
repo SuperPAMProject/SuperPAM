@@ -9,9 +9,6 @@ class mainMenu:
     # Set up menu buttons/game carousel/game info
     # Populate lists from files
     def __init__(self, sidebar, games, actionbtns):
-        print(sidebar)
-        print(games)
-        print(actionbtns)
         self.tabsList = [];
         self.gameList = [];
         self.favoriteList = [];
@@ -22,9 +19,7 @@ class mainMenu:
         self.o_i = 0; # Game Options
         self.f_i = 0; # Favorites
         self.populateMenus(sidebar);
-        print(self.tabsList)
         self.populateGameLibrary(games)
-        print(games.children)
         #self.populateFavorites();
         self.populateGameOptions(actionbtns);
         
@@ -34,9 +29,6 @@ class mainMenu:
 
         for child in sidebar.children:
             self.tabsList.append(child)
-            print(child)
-        
-        print("populated tabs list");
 
 
     # reads from a folder all the game data
@@ -67,9 +59,6 @@ class mainMenu:
             
         for child in actionbtns.children:
             self.optionsList.append(child)
-            print(child)
-            
-        print("populated options list");
 
 
     # Tabs

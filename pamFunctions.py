@@ -2,33 +2,37 @@
 import os
 import subprocess
 import includes
+import pamWidgets
 
 #PLACEHOLDER VARIABLES
 player = ''
 session = ''
-current_game = 'games/Legend of Zelda, The - Link_s Awakening (V1.2) (U) [!].gb'
+current_game = 'games/zelda.gb'
 emulator = 'emulators/VisualBoyAdvance.exe'
 client = ''
 library = ''
 menu = ''
 
-def populateGamesLibrary(file):
-    with open(file, 'r') as handle:
+def populateGameLibrary(self):
+    self.setLayout()
+    with open(includes.game_titles, 'r') as handle:
         for line in handle:
             info = line.split(', ')
-            newGame = includes.Game()
+            newGame = pamWidgets.GameCarouselItem()
             newGame.gameName = info[0]
             newGame.gameInfo.append(info[1])
             newGame.gameInfo.append(info[2])
             newGame.gameInfo.append(info[3])
             newGame.gameInfo.append(info[4])
+            newGame.text = newGame.gameName
+            self.add_widget(newGame)
+            self.gameList.append(newGame)
+            #Just printing for testing. Can be removed anytime
             print("Title: " + newGame.gameName)
             print("Year: " + newGame.gameInfo[0])
             print("Publisher: " + newGame.gameInfo[1])
             print("Developer: " + newGame.gameInfo[2])
             print("Path: " + newGame.gameInfo[3])
-            #self.game_lib.add_widget(myLabel)
-            #self.gameList.append(newGame);
 
 
 #ACTON BUTTON FUNCTIONS
@@ -173,4 +177,4 @@ def getFunction(btn):
 
 
 if __name__ == "__main__":
-    populateGamesLibrary("games.txt")
+    pass
