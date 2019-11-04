@@ -13,6 +13,7 @@ from kivy.graphics.vertex_instructions import Rectangle
 
 
 
+
 # This class serves as the entirety of the program. It will be the
 # container for all the necessary data as well as how to interact/interpret
 # said data
@@ -29,9 +30,14 @@ class PAM:
         self.MM = mainMenu.mainMenu(self.layout.ids["sidebar"], self.layout.ids["games"], self.layout.ids["actionbtns"]);
         self.inputHook = keyboard.hook(self.readInputs)
         self.currentInputs = [];
-        self.updateState();
-        for tab in self.MM.tabsList:
-            print(tab.text)
+        self.comp_anims = [False, False, False, False, False];
+        self.anim1 = None
+        self.anim2 = None
+        self.anim3 = None
+        self.anim4 = None
+        self.anim5 = None
+        self.updateState(None);
+        self.setGames();
         
 
 
@@ -139,6 +145,9 @@ class PAM:
                                 print("DEBUG: Potentially unaccounted-for case in the Tabs section")
 
                         elif self.MM.currentSection == includes.Section.GAMES:
+                            self.MM.g_i += 1
+                            if self.MM.g_i >= len(self.MM.gameList):
+                                self.MM.g_i = 0
                             print("Cycle through games")
                             # Cycle through games
 
@@ -190,6 +199,9 @@ class PAM:
 
 
                         elif self.MM.currentSection == includes.Section.GAMES:
+                            self.MM.g_i -= 1
+                            if self.MM.g_i < 0:
+                                self.MM.g_i =  len(self.MM.gameList) - 1
                             print("Cycle through games")
                             # Cycle through games
 
@@ -209,9 +221,9 @@ class PAM:
                 # move towards the left side of the screen
                 elif event.name == includes.DI_LEFT:
                     if self.currentState == includes.CurrentState.MAIN_MENU_STATE:
-                        if self.MM.currentSection == includes.Section.GAME_OPTIONS and self.MM.o_i > includes.GameOptions.PLAY:
+                        if self.MM.currentSection == includes.Section.GAME_OPTIONS and  (len(self.MM.optionsList) - 1) - self.MM.o_i > includes.GameOptions.PLAY:
                             self.MM.CurrentOption().highlighted = False
-                            self.MM.o_i -= 1 
+                            self.MM.o_i += 1 
                             self.MM.CurrentOption().highlighted = True
                         elif self.MM.currentSection > includes.Section.TABS:
                             self.MM.currentSection -= 1
@@ -232,13 +244,14 @@ class PAM:
                 # move towards the right side of the screen
                 elif event.name == includes.DI_RIGHT:
                     if self.currentState == includes.CurrentState.MAIN_MENU_STATE:
-                        if self.MM.currentSection == includes.Section.GAME_OPTIONS and self.MM.o_i < includes.GameOptions.FAVORITE:
+                        if self.MM.currentSection == includes.Section.GAME_OPTIONS and (len(self.MM.optionsList) - 1) - self.MM.o_i < includes.GameOptions.FAVORITE:
                             self.MM.CurrentOption().highlighted = False
-                            self.MM.o_i += 1
+                            self.MM.o_i -= 1
                             self.MM.CurrentOption().highlighted = True
                             
                         elif self.MM.currentSection < includes.Section.GAME_OPTIONS:
                             self.MM.currentSection += 1
+                            self.MM.o_i = len(self.MM.optionsList) - 1
 
                         else:
                             pass # eat the input
@@ -266,10 +279,48 @@ class PAM:
         else:
             pass # There's nothing to do right now
 
-        self.updateState();
+        self.updateState(event);
 
       
-    def updateState(self):
+    def completeAnim(self, anim, wid):
+        self.comp_anims[wid.index] = True
+        allTrue = True
+        for comptest in self.comp_anims:
+            if comptest == False:
+                allTrue = False
+                break
+        
+        # all animations done
+        if allTrue:
+            games = self.layout.ids["games"].children
+            height = games[0].height
+            # reset height
+            games[6].y = games[7].y - height
+            games[5].y = games[7].y - height * 2
+            games[4].y = games[7].y - height * 3
+            games[3].y = games[7].y - height * 4
+            games[2].y = games[7].y - height * 5
+
+            # reset A values
+            games[6].color[3] = 0.33
+            games[5].color[3] = 0.66
+            games[4].color[3] = 1
+            games[3].color[3] = 0.66
+            games[2].color[3] = 0.33
+            # reset names
+            games[6].text = self.MM.GetGame(-2).text
+            games[5].text = self.MM.GetGame(-1).text
+            games[4].text = self.MM.GetGame().text
+            games[3].text = self.MM.GetGame(+1).text
+            games[2].text = self.MM.GetGame(+2).text
+
+            #reset booleans
+            self.comp_anims = [False, False, False, False, False];
+
+            print("ANIM DONE")
+
+
+    def updateState(self, event):
         """based on the current state, inputs will alter the state:
         if current state is menu state, the stick will iterate through
         the various menus/sections and call functions as needed.
@@ -302,8 +353,62 @@ class PAM:
                         if subTab.highlighted:
                             subTab.background_color = includes.get_color_from_hex(subTab.h_color)
             elif self.MM.currentSection == includes.Section.GAMES:
-                # Show the active game as well as the surrounding games
-                # Also, update any animations needed to fully transtition between games
+                self.setGames()
+                # update y coordinates of GameCarouselItems as well as alpha value of GameName Text
+                if event.event_type == keyboard.KEY_DOWN:
+                    if event.name == includes.DI_UP:
+                        carousel = self.layout.ids["games"]
+                        games = carousel.children
+                        anim_x = carousel.x
+                        anim_height = games[0].height
+                        y1 = games[1].y
+                        y2 = games[2].y
+                        y3 = games[3].y
+                        y4 = games[4].y
+                        y5 = games[5].y
+                        self.anim1 = includes.Animation(x=anim_x, y=y1 + anim_height, color = (1,1,1,0), t='in_out_cubic')
+                        self.anim2 = includes.Animation(x=anim_x, y=y2 + anim_height, color = (1,1,1,0.33), t='in_out_cubic')
+                        self.anim3 = includes.Animation(x=anim_x, y=y3 + anim_height, color = (1,1,1,0.66), t='in_out_cubic')
+                        self.anim4 = includes.Animation(x=anim_x, y=y4 + anim_height, color = (1,1,1,1), t='in_out_cubic')
+                        self.anim5 = includes.Animation(x=anim_x, y=y5 + anim_height, color = (1,1,1,0.66), t='in_out_cubic')
+                        self.anim1.bind(on_complete=self.completeAnim)
+                        self.anim2.bind(on_complete=self.completeAnim)
+                        self.anim3.bind(on_complete=self.completeAnim)
+                        self.anim4.bind(on_complete=self.completeAnim)
+                        self.anim5.bind(on_complete=self.completeAnim)
+                        self.anim1.start(games[1])
+                        self.anim2.start(games[2])
+                        self.anim3.start(games[3])
+                        self.anim4.start(games[4])
+                        self.anim5.start(games[5])
+                    elif event.name == includes.DI_DOWN:
+                        carousel = self.layout.ids["games"]
+                        games = carousel.children
+                        anim_x = carousel.x
+                        anim_height = games[0].height
+                        y1 = games[1].y
+                        y2 = games[2].y
+                        y3 = games[3].y
+                        y4 = games[4].y
+                        y5 = games[5].y
+                        self.anim1 = includes.Animation(x=anim_x, y=y1 - anim_height, color = (1,1,1,0.66), t='in_out_cubic')
+                        self.anim1.bind(on_complete=self.completeAnim())
+                        self.anim2 = includes.Animation(x=anim_x, y=y2 - anim_height, color = (1,1,1,1), t='in_out_cubic')
+                        self.anim3 = includes.Animation(x=anim_x, y=y3 - anim_height, color = (1,1,1,0.66), t='in_out_cubic')
+                        self.anim4 = includes.Animation(x=anim_x, y=y4 - anim_height, color = (1,1,1,0.33), t='in_out_cubic')
+                        self.anim5 = includes.Animation(x=anim_x, y=y5 - anim_height, color = (1,1,1,0), t='in_out_cubic')
+                        self.anim1.bind(on_complete=self.completeAnim)
+                        self.anim2.bind(on_complete=self.completeAnim)
+                        self.anim3.bind(on_complete=self.completeAnim)
+                        self.anim4.bind(on_complete=self.completeAnim)
+                        self.anim5.bind(on_complete=self.completeAnim)
+                        self.anim1.start(games[1])
+                        self.anim2.start(games[2])
+                        self.anim3.start(games[3])
+                        self.anim4.start(games[4])
+                        self.anim5.start(games[5])
+                # when position of animating GameCarouselItems reaches new 'location',
+                # reset the y values to their starting positions and move the "games" data to the new GCI slot
                 print("Games Section")
             elif self.MM.currentSection == includes.Section.GAME_OPTIONS:
                 for option in self.MM.optionsList:
@@ -317,7 +422,40 @@ class PAM:
         else:
             print("STATE ERROR!")
 
-    
+    def setGames(self):
+        # Show the active game as well as the surrounding games
+        games = self.layout.ids["games"].children
+        print(games)
+        
+        # Get the current game plus the 4 surrounding it
+        
+        game0 = self.MM.GetGame(-2)
+        game1 = self.MM.GetGame(-1)
+        print(game1.gameName)
+        currentGame = self.MM.GetGame()
+        print(currentGame.gameName)
+        game3 = self.MM.GetGame(+1)
+        print(game3.gameName)
+        game4 = self.MM.GetGame(+2)
+
+        # place current game in game slot 2
+        
+        #games[2].gameName = currentGame.gameName
+        #games[2] = currentGame
+        games[3].text = currentGame.gameName
+        games[3].color[3] = 1
+
+        # place surrounding games in slots 0,1,3,4
+
+        games[5].text = game0.gameName
+        games[5].color[3] = 0.33
+        games[4].text = game1.gameName
+        games[4].color[3] = 0.66
+        games[2].text = game3.gameName
+        games[2].color[3] = 0.66
+        games[1].text = game4.gameName
+        games[1].color[3] = 0.33
+
     # a function to close out of the PAM
     def closePAM(self):
         sys.exit(0);

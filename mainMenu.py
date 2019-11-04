@@ -35,6 +35,28 @@ class mainMenu:
     # then stores the data for use at a later time
     def populateGameLibrary(self, games):
         with open(includes.game_titles, 'r') as handle:
+            games.add_widget(pamWidgets.GameCarouselItem())
+            games.add_widget(pamWidgets.GameCarouselItem())
+            games.add_widget(pamWidgets.GameCarouselItem())
+            games.add_widget(pamWidgets.GameCarouselItem()) # current game 
+            games.add_widget(pamWidgets.GameCarouselItem())
+            games.add_widget(pamWidgets.GameCarouselItem())
+            games.add_widget(pamWidgets.GameCarouselItem())
+            for i in range(0, len(games.children)):
+                games.children[i].background_color = (0, 0, 0, 0)
+                games.children[i].index = i
+                
+
+            
+            selected_game = pamWidgets.GameCarouselItem()
+            selected_game.text = "BAM"
+            games.add_widget(selected_game)
+            games.children[0].x = games.children[3].x
+            print(str(games.children[0].text))
+            games.children[0].y = games.children[3].y
+            games.children[0].background_color = includes.get_color_from_hex(selected_game.h_color)
+            
+            index = 0
             for line in handle:
                 info = line.split(', ')
                 newGame = pamWidgets.GameCarouselItem()
@@ -44,7 +66,8 @@ class mainMenu:
                 newGame.gameInfo.append(info[3])
                 newGame.gameInfo.append(info[4])
                 newGame.text = newGame.gameName
-                games.add_widget(newGame)
+                newGame.index = index
+                index += 1
                 self.gameList.append(newGame);
                 #Just printing for testing. Can be removed anytime
                 print("Title: " + newGame.gameName)
@@ -52,6 +75,7 @@ class mainMenu:
                 print("Publisher: " + newGame.gameInfo[1])
                 print("Developer: " + newGame.gameInfo[2])
                 print("Path: " + newGame.gameInfo[3])
+
                 
 
     # sets up the game options so that they can be displayed
@@ -72,8 +96,8 @@ class mainMenu:
             return -1
 
     # Games
-    def GetGame(self, gameId = -1):
-        if gameId == -1:
+    def GetGame(self, gameId = None):
+        if gameId == None:
             gameId = self.g_i
             
         while gameId < 0:

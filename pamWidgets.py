@@ -154,6 +154,7 @@ class GameCarouselItem(PAMButton):
     opacity = 1 #opacity will change with the item's position on-screen
     d_color = colors.getColor("background")
     background_normal = ""
+    
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.gameName = "";
@@ -163,6 +164,7 @@ class GameCarouselItem(PAMButton):
         self.gameDesc = "";
         self.isFavorite = False;
         self.d_color = colors.getColor("background")
+        self.index = 0
 
 
     def on_carousel_move(self):
