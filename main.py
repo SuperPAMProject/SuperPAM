@@ -292,6 +292,7 @@ class PAM:
         
         # all animations done
         if allTrue:
+            self.setGames()
             games = self.layout.ids["games"].children
             height = games[0].height
             # reset height
@@ -353,7 +354,7 @@ class PAM:
                         if subTab.highlighted:
                             subTab.background_color = includes.get_color_from_hex(subTab.h_color)
             elif self.MM.currentSection == includes.Section.GAMES:
-                self.setGames()
+                
                 # update y coordinates of GameCarouselItems as well as alpha value of GameName Text
                 if event.event_type == keyboard.KEY_DOWN:
                     if event.name == includes.DI_UP:
@@ -392,7 +393,6 @@ class PAM:
                         y4 = games[4].y
                         y5 = games[5].y
                         self.anim1 = includes.Animation(x=anim_x, y=y1 - anim_height, color = (1,1,1,0.66), t='in_out_cubic')
-                        self.anim1.bind(on_complete=self.completeAnim())
                         self.anim2 = includes.Animation(x=anim_x, y=y2 - anim_height, color = (1,1,1,1), t='in_out_cubic')
                         self.anim3 = includes.Animation(x=anim_x, y=y3 - anim_height, color = (1,1,1,0.66), t='in_out_cubic')
                         self.anim4 = includes.Animation(x=anim_x, y=y4 - anim_height, color = (1,1,1,0.33), t='in_out_cubic')

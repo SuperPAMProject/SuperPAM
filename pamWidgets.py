@@ -19,6 +19,7 @@ from kivy.uix.label import Label
 from kivy.uix.video import Video
 from kivy.uix.slider import Slider
 from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.floatlayout import FloatLayout
 from kivy.properties import *
 from kivy.graphics.vertex_instructions import Rectangle
 import controls
@@ -47,6 +48,11 @@ class PAMVideo(Video):
 
     def on_stop(self):
         pass
+
+class GameCarouselHighlighter(FloatLayout):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        
 
 
 #BUTTON CLASSES
@@ -82,10 +88,9 @@ class PAMActionButton(PAMButton):
     d_color = colors.getColor("background")
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        print(self.properties)
-        self.d_action = ''
         self.h_action = ''
         self.s_action = ''
+        self.d_color = colors.getColor("background")
 
 
 #----PAM SLIDER - Slider for volume control
@@ -385,10 +390,12 @@ class PopUpWindow(PAMButtonGroup, PAMLabelGroup):
 #----TAB - Both a group and an item within a group. The tabs are the items within the sidebar.
 #    And each tab houses several buttons the user can select to access their options.  
 class SideBarTab(PAMButtonGroup, PAMButton):
+    d_color = colors.getColor("background")
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.tab_item_list: SideBarTabItem
         self.collapse = True
+        self.d_color = colors.getColor("background")
 
 #----SIDEBAR - Group that contains all Sidebar tabs. 
 class SideBar(PAMButtonGroup):

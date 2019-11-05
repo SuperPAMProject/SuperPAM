@@ -44,17 +44,18 @@ class mainMenu:
             games.add_widget(pamWidgets.GameCarouselItem())
             for i in range(0, len(games.children)):
                 games.children[i].background_color = (0, 0, 0, 0)
-                games.children[i].index = i
+                games.children[i].index = i #index will be used later in the animations
                 
 
             
             selected_game = pamWidgets.GameCarouselItem()
-            selected_game.text = "BAM"
+            selected_game.text = ""
             games.add_widget(selected_game)
-            games.children[0].x = games.children[3].x
-            print(str(games.children[0].text))
-            games.children[0].y = games.children[3].y
-            games.children[0].background_color = includes.get_color_from_hex(selected_game.h_color)
+            #highlighter = pamWidgets.GameCarouselHighlighter()
+            #games.add_widget(highlighter)
+            #games.children[0].x = games.children[3].x
+            #games.children[0].y += games.children[3].y
+            #games.children[0].background_color = includes.get_color_from_hex(selected_game.h_color)
             
             index = 0
             for line in handle:

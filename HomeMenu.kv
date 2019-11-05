@@ -2,6 +2,7 @@
 #:import c colors
 #:import f fonts
 #:import pf pamFunctions
+#:import w display.Window
 MainMenuLayout:
 
 <PAMButton>:
@@ -13,46 +14,49 @@ MainMenuLayout:
 <GameCarouselItem>:
     background_color:  utils.get_color_from_hex(self.h_color) if self.highlighted else utils.get_color_from_hex(self.d_color)
     
+<GameCarouselHighlighter>:
+    canvas.before:
+        Color:
+            rgba: utils.get_color_from_hex(c.getColor("secondary"))
+        Rectangle:
+            pos: w.width*0.30, w.height*0.576
+            size: w.width*0.28, w.height*0.04
 
 <PAMActionButton>:
+    
     size_hint_x: None
     size_hint_y: None
     background_color: 0, 0, 0, 0
+    d_action: self.d_action
+    d_color: self.d_color
+    size_hint: 0.3, 0.3
+
     canvas:
-       # Color:
-          #  rgba: 1, 0, 0, 0.4
         Rectangle:
-            pos: (self.pos[0]+self.size[0]/2.0) - 40, (self.pos[1]+self.size[1]/2.0) - 40
-            size: (self.parent.width*0.3, self.parent.height)
             source: self.d_action
+            pos: (self.pos[0]+self.size[0]/2.0) - 40, (self.pos[1]+self.size[1]/2.0) - 40
+            size: (self.parent.width*0.20, self.parent.width*0.2)
 
-
-
-
+        
 
 <SideBar>:
-    #size_hint_y: 0.5
-    size_hint: None, None
-    size: self.parent.width*0.23, self.parent.height*0.76
-    pos_hint: {'x':0, 'top':1}
+    size_hint: 0.23, 0.25
+    pos_hint: {'right':0.3, 'top':0.85}
     on_pos: pos={self.parent.x, self.parent.y}
 
 
 <SideBarTab>:
-    #size_hint: 0.5, 0.2
+    size_hint: 0.5, 0.12
     #text_size: root.width, None
     #pos: self.parent.pos
-    pos_hint: {'x':0, 'top':0}
-    on_pos: pos={self.parent.x, self.parent.y}
-    size_hint: None, None
-    size: self.parent.width, self.parent.height*0.12
+    #pos_hint: {'x':0, 'top':0}
+    #on_pos: pos={self.parent.x, self.parent.y}
     
 <SideBarTabItem>:
 
 <GameDescriptionArea>:
     orientation: 'vertical'
-    size_hint: None, None
-    size: self.parent.width*0.86, self.parent.height*0.38
+    size_hint: 0.86, 0.38
     pos_hint: {'right': 1, 'top': 1}
 
 <GameTitle>:
@@ -62,12 +66,10 @@ MainMenuLayout:
     font: f.getFont("bold")
     halign: 'center'
     valign: 'top'
-    size_hint: None, None
-    size: self.parent.width*0.5, self.parent.height*0.13
+    size_hint: 0.5, 0.13
 
 <GameInfo>:
-    size_hint: None, None
-    size: self.parent.width, self.parent.height*0.20
+    size_hint: 1, 0.2
     text_size: self.size
     font: f.getFont("normal")
     font_size: 20 
@@ -75,15 +77,13 @@ MainMenuLayout:
     valign: 'top'
 
 <PAMVideo>:
-    size_hint: None, None
-    size: self.parent.width*0.86, self.parent.height*0.29
+    size_hint: 0.86, 0.29
     pos_hint: {'right': 1, 'top': 1}
 
 <ControlBar>:
     orientation: 'horizontal'
     spacing: 0
-    size_hint: None, None
-    size: self.parent.width, self.parent.height*0.08
+    size_hint: 1, 0.08
     canvas:
         Color:
             rgb: utils.get_color_from_hex(c.getColor("primary"))
@@ -102,21 +102,21 @@ MainMenuLayout:
         
         BoxLayout:
             orientation:'horizontal'
-            size_hint: None, None
-            size: self.parent.width, self.parent.height*0.84
-            spacing: 20
-            pos_hint: {'right': 1, 'top': 1}
+            size_hint: 1, 0.84
+            #spacing: 20
+            #pos_hint: {'right': 1, 'top': 1}
             SideBar:
                 id: sidebar
                 active: True
                 orientation: 'vertical'
                 rightGroup: games
-                spacing: 20
+                #spacing: 20
                 on_parent: self.setLayout()
                 SideBarTab:
                     id: sidebartab1
                     text: 'MULTIPLAYER'
                     highlighted: True
+                    #pos_hint: {'top': 1}
                 SideBarTab:
                     id: sidebartab2
                     text: 'SORT'
@@ -133,16 +133,15 @@ MainMenuLayout:
                 leftGroup: sidebar
                 rightGroup: actionbtns
                 orientation: 'vertical'
-                size_hint: None, None
-                size: self.parent.width*0.28, self.parent.height*0.72
+                size_hint: 0.28, 0.72
                 pos_hint: {'center_x': 0.5, 'top': 1}
-                on_parent: self.setLayout()#pf.populateGameLibrary(games) <-- for testing. Can be removed.
-  
+                on_parent: self.setLayout()
+                GameCarouselHighlighter:
 
+                    
             BoxLayout:
                 orientation: 'vertical'
-                size_hint: None, None
-                size: self.parent.width*0.33, self.parent.height*0.84
+                size_hint: 0.33, 0.84
                 spacing: 30
                 pos_hint: {'right': 1, 'top': 1}
                 id: gameDetails
@@ -161,8 +160,7 @@ MainMenuLayout:
                         id: year
                         text: "Year:"
                 PAMButtonGroup:
-                    size_hint: None, None
-                    size: self.parent.width, self.parent.height*0.19
+                    size_hint: 1, 0.19
                     id: actionbtns
                     leftGroup: games
                     pos_hint: {'right': 1, 'top': 1}
@@ -170,22 +168,26 @@ MainMenuLayout:
                     on_parent: self.setLayout()
                     PAMActionButton:
                         id: play
-                        background_normal: 'img/UI_PLAY_ICON.png'  # default image
                         d_action: 'img/UI_PLAY_ICON.png'
+                        d_color: '#FFFFFF00'
                         h_action: ''
                         s_action: ''
                         func_id: 'play'
+
+
                     PAMActionButton:
                         id: save
-                        background_normal: 'img/UI_DATA_ICON.png' # default image
-                        d_action: ''
+                        d_action: 'img/UI_DATA_ICON.png'
+                        d_color: '#FFFFFF00'
                         h_action: ''
                         s_action: ''
                         func_id: 'save'
+
+
                     PAMActionButton:
-                        background_normal: 'img/UI_FAVORITE_ICON.png' # default image
                         id: fav
-                        d_action: ''
+                        d_action: 'img/UI_FAVORITE_ICON.png'
+                        d_color: '#FFFFFF00'
                         h_action: ''
                         s_action: ''
                         func_id: 'fav'
