@@ -3,6 +3,9 @@ import os
 import subprocess
 import includes
 import pamWidgets
+import win32con
+import win32gui
+import win32process
 
 #PLACEHOLDER VARIABLES
 player = ''
@@ -141,11 +144,31 @@ def reformatSystem(player):
 def controlsPopup(player):
     pass
 
+def remapButton(player):
+    pass
+
+def confirmRemap(player):
+    pass
+
+
+#MISC. FUNCTIONS
+def get_hwnds_for_pid (pid):
+  def callback (hwnd, hwnds):
+    if win32gui.IsWindowVisible (hwnd) and win32gui.IsWindowEnabled (hwnd):
+      _, found_pid = win32process.GetWindowThreadProcessId (hwnd)
+      if found_pid == pid:
+        hwnds.append (hwnd)
+    return True
+
+  hwnds = []
+  win32gui.EnumWindows (callback, hwnds)
+  return hwnds
+
 
 #ACTIVATED ON BUTTON SELECTION, TAKES ID OF BUTTON TO DETERMINE FUNCTION
-def getFunction(btn):
+def getFunction(btn, menu):
     if btn.func_id == 'play':
-        return playGame(emulator, current_game)
+        return playGame(emulator, menu.GetGame().gamePath)
     elif btn.func_id == 'save':
         return saveGame(current_game)
     elif btn.func_id == 'fav':
@@ -177,4 +200,14 @@ def getFunction(btn):
 
 
 if __name__ == "__main__":
-    pass
+    import subprocess
+    import time
+    notepad = subprocess.Popen ([r"notepad.exe"])
+    #
+    # sleep to give the window time to appear
+    #
+    time.sleep (2.0)
+    
+    for hwnd in get_hwnds_for_pid (notepad.pid):
+        print(hwnd, "=>", win32gui.GetWindowText (hwnd))
+        win32gui.SendMessage (hwnd, win32con.WM_CLOSE, 0, 0)

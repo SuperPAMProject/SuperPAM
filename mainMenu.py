@@ -66,6 +66,7 @@ class mainMenu:
                 newGame.gameInfo.append(info[2])
                 newGame.gameInfo.append(info[3])
                 newGame.gameInfo.append(info[4])
+                newGame.gamePath = info[4]
                 newGame.text = newGame.gameName
                 newGame.index = index
                 index += 1

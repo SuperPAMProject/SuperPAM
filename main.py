@@ -6,6 +6,7 @@ import includes
 import mainMenu
 import display
 import pamWidgets
+import pamFunctions
 from kivy.uix.boxlayout import BoxLayout
 from kivy.core.text import LabelBase
 from kivy.graphics.vertex_instructions import Rectangle
@@ -37,6 +38,8 @@ class PAM:
         self.anim4 = None
         self.anim5 = None
         self.updateState(None);
+        self.runningGame = None
+        self.lastSelectedGame = None
         self.setGames();
         
 
@@ -69,17 +72,45 @@ class PAM:
                     if self.currentState == includes.CurrentState.MAIN_MENU_STATE:
                         if self.MM.currentSection == includes.Section.TABS:
                             currentTab = self.MM.CurrentTab()
-                            # do stuff with the current tab
-                        elif self.MM.currrentSection == includes.Section.GAMES:
-                            currentGame = self.MM.GetGame()
-                            # do stuff with the current game
+                            pamFunctions.getFunction(currentTab, self.MM)                          
+                        elif self.MM.currentSection == includes.Section.GAMES:
+                            currentGame = self.MM.GetGame()     
+                            if self.runningGame is None:
+                                self.runningGame = pamFunctions.playGame(pamFunctions.emulator, currentGame.gamePath)
+                                self.lastSelectedGame = currentGame
+                            else:
+                                if currentGame == self.lastSelectedGame: #add in check for if lastSelectedGame is still running
+                                    #GO BACK TO GAME. NOT LINUX FRIENDLY. REPLACE LATER.
+
+                                    print("PID:")
+                                    print(self.runningGame.pid)
+                                    for hwnd in pamFunctions.get_hwnds_for_pid (self.runningGame.pid):
+                                        print(hwnd, "=>", includes.win32gui.GetWindowText (hwnd))
+                                        includes.win32gui.SetForegroundWindow(hwnd)
+                                        FRONT = includes.win32gui.GetWindowRect(hwnd)                 
+                                    
+                                else: 
+                                    pamFunctions.closeGame(self.runningGame)
+                                    self.runningGame = pamFunctions.playGame(pamFunctions.emulator, currentGame.gamePath)
+
+                            self.currentState = includes.CurrentState.GAME_STATE
+                            
+                            #start transition to playing the game
                         elif self.MM.currentSection == includes.Section.GAME_OPTIONS:
                             currentOption = self.MM.CurrentOption()
-                            # do stuff with the current option
+                            pamFunctions.getFunction(currentOption, self.MM)
+                            
                     print(event.name)
                     
                 elif event.name == includes.BUTTON_2:
-                    print(event.name)
+                    if self.currentState == includes.CurrentState.MAIN_MENU_STATE:
+                        if self.MM.currentSection == includes.Section.TABS:
+                            pass
+                        elif self.MM.currentSection == includes.Section.GAMES:
+                            pamFunctions.closeGame(self.runningGame)
+                            self.runningGame = None
+                        elif self.MM.currentSection == includes.Section.GAME_OPTIONS:
+                            pass
 
                 elif event.name == includes.BUTTON_3:
                     print(event.name)
@@ -100,7 +131,22 @@ class PAM:
                     print(event.name)
 
                 elif event.name == includes.HOME_BUTTON:
-                    print(event.name)
+                    if self.currentState == includes.CurrentState.MAIN_MENU_STATE:
+                        if self.runningGame is not None:
+                            print("PID:")
+                            print(self.runningGame.pid)
+                            for hwnd in pamFunctions.get_hwnds_for_pid (self.runningGame.pid):
+                                print(hwnd, "=>", includes.win32gui.GetWindowText (hwnd))
+                                includes.win32gui.SetForegroundWindow(hwnd)
+                                FRONT = includes.win32gui.GetWindowRect(hwnd)   
+                            self.currentState = includes.CurrentState.GAME_STATE
+
+                    elif self.currentState == includes.CurrentState.GAME_STATE:
+                        self.currentState = includes.CurrentState.MAIN_MENU_STATE
+                        #GO BACK TO HOME MENU. NOT LINUX FRIENDLY. REPLACE LATER.
+                        HWND = includes.win32gui.FindWindow(None, 'HomeMenu') 
+                        includes.win32gui.SetForegroundWindow(HWND)
+                        FRONT = includes.win32gui.GetWindowRect(HWND)
 
                 elif event.name == includes.COIN_BUTTON:
                     print(event.name)
@@ -346,9 +392,7 @@ class PAM:
             # Then set new selection
             if self.MM.currentSection == includes.Section.TABS:
                 if self.MM.CurrentTab().highlighted:
-                    print(self.MM.CurrentTab().background_color)
                     self.MM.CurrentTab().background_color = includes.get_color_from_hex(self.MM.CurrentTab().h_color)
-                    print(self.MM.CurrentTab().background_color)
                 else:
                     for subTab in self.MM.CurrentTab().children:
                         if subTab.highlighted:

@@ -50,6 +50,7 @@ class HomeMenuApp(App):
 
 def SetupDisplay():
     Window.clearcolor = get_color_from_hex(colors.getColor("background"))
+    #Window.fullscreen = 'auto'  #dont use when debugging
     LabelBase.register(
         name='Roboto',
         fn_regular='fonts/Roboto-Light.ttf',

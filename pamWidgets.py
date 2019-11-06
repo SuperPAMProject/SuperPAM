@@ -164,6 +164,7 @@ class GameCarouselItem(PAMButton):
         super().__init__(**kwargs)
         self.gameName = "";
         self.gameInfo = [];
+        self.gamePath = ""
         self.gameImage = "";
         self.gameVideo = "";
         self.gameDesc = "";
@@ -367,10 +368,6 @@ class GameCarousel(PAMButtonGroup):
             self.updateGameInfo(self.children[self.currentIndex])
 
     def updateGameInfo(self, game):
-        print(game.gameInfo[0])
-        print(game.gameInfo[1])
-        print(game.gameInfo[2])
-        print(game.gameInfo[3])
         pamFunctions.current_game = game.gameInfo[3]
         print(pamFunctions.current_game)
     
