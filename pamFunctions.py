@@ -55,12 +55,29 @@ def saveGame(game):
 
 def favGame(game, menu):
     print("FAVORITE")
-    #game.favorite = not game.favorite
+    game.isFavorite = not game.isFavorite
 
-   # if game.favorite:
-    #    menu.favoriteList.append(game)
-    #else:
-     #   menu.favoriteList.remove(game)
+    if game.isFavorite:
+        menu.favoriteList.append(game)
+        with open('user/favorites.txt', 'a') as favTxt:
+            favTxt.write(game.gameName + "\n")
+        favTxt.close()
+    else:
+        menu.favoriteList.remove(game)
+        with open("user/favorites.txt", "r") as favTxt:
+            lines = favTxt.readlines()
+        with open("user/favorites.txt", "w") as favTxt:
+            for line in lines:
+                if line.strip("\n") != game.gameName:
+                    favTxt.write(line)
+        favTxt.close()
+
+    for g in menu.favoriteList:
+        print(g.gameName)
+    
+
+    
+
 
 
 #MULTIPLAYER FUNCTIONS
@@ -172,7 +189,7 @@ def getFunction(btn, menu):
     elif btn.func_id == 'save':
         return saveGame(current_game)
     elif btn.func_id == 'fav':
-        return favGame(current_game, menu)
+        return favGame(menu.GetGame(), menu)
     elif btn.func_id == 'host':
         return startSession(player)
     elif btn.func_id == 'accept':

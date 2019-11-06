@@ -52,6 +52,7 @@ class PAMVideo(Video):
 class GameCarouselHighlighter(FloatLayout):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+        self.isFavorite = False #see if you can remove this later
         
 
 

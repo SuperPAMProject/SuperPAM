@@ -8,8 +8,9 @@
 #and accent as a selection color. Warning is used only in critical decisions for the user.
 #Font-light is the font-color for lighter backgrounds, and font-dark is for darker ones. 
 
-
-current_scheme = "waves" #should read from user's settings on start up
+with open('user/color_scheme.txt', 'r') as cs:
+    for line in cs:
+        current_scheme = line
 
 color_schemes = {
     "waves" : {

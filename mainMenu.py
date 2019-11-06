@@ -71,14 +71,6 @@ class mainMenu:
                 newGame.index = index
                 index += 1
                 self.gameList.append(newGame);
-                #Just printing for testing. Can be removed anytime
-                print("Title: " + newGame.gameName)
-                print("Year: " + newGame.gameInfo[0])
-                print("Publisher: " + newGame.gameInfo[1])
-                print("Developer: " + newGame.gameInfo[2])
-                print("Path: " + newGame.gameInfo[3])
-
-                
 
     # sets up the game options so that they can be displayed
     def populateGameOptions(self, actionbtns):

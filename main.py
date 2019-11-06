@@ -470,6 +470,7 @@ class PAM:
         # Show the active game as well as the surrounding games
         games = self.layout.ids["games"].children
         print(games)
+
         
         # Get the current game plus the 4 surrounding it
         
@@ -499,6 +500,15 @@ class PAM:
         games[2].color[3] = 0.66
         games[1].text = game4.gameName
         games[1].color[3] = 0.33
+
+        #Set a game as a favorite if its name is in the favorite.txt
+        print("Favorites:")
+        with open('user/favorites.txt', 'r') as favTxt:
+            for game in games:
+                for line in favTxt:
+                    if game.gameName == line:
+                        game.isFavorite = True
+                        print(game.gameName)
 
     # a function to close out of the PAM
     def closePAM(self):
