@@ -29,6 +29,8 @@ import colors
 from kivy.utils import get_color_from_hex
 from enum import Enum
 import pamFunctions
+from kivy.core.audio import SoundLoader
+from playsound import playsound
 
 
 player = "player1" # for testing purposes with the 'controls' module
@@ -62,7 +64,7 @@ class GameCarouselHighlighter(FloatLayout):
 #----PAMBUTTON - The base for all other buttons. The button's colors are organized by
 #    d for default, h for highlight and s for selected
 class PAMButton(Button):
-
+    highlighted = BooleanProperty(False)
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.enabled = BooleanProperty(True)
@@ -72,7 +74,14 @@ class PAMButton(Button):
         self.h_color = colors.getColor("secondary")
         self.s_color = colors.getColor("accent")
         self.func_id = ''
+        self.h_sound = 'sounds/menuNav_7.wav'
+        self.bind(highlighted=self.on_highlighted)
         
+    #called when button is highlighted
+    def on_highlighted(self, *args):
+        print("HIGH")
+        if self.highlighted:
+            playsound(self.h_sound, False)
 
     #Called when user moves to the next button
     def setHighlight(self):

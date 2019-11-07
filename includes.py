@@ -25,7 +25,7 @@ import colors
 import fonts
 import controls
 from win32 import win32gui  
-
+from kivy.core.audio import SoundLoader
 
 #constants
 BUTTON_1 = 'z'

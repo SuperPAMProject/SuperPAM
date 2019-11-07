@@ -161,9 +161,11 @@ class PAM:
                                 self.MM.t_i -= 1
                                 if self.MM.CurrentTab().collapse:
                                     self.MM.CurrentTab().highlighted = True
+                                    
                                 else:
                                     currentTab = self.MM.CurrentTab()
                                     currentTab.children[len(currentTab.children) - 1].highlighted = True
+                                    
 
                             # if not at the beginning and tab not collapsed
                             elif self.MM.t_i > 0 and not self.MM.CurrentTab().collapse:
@@ -172,9 +174,11 @@ class PAM:
                                     self.MM.t_i -= 1
                                     if self.MM.CurrentTab().collapse:
                                         self.MM.CurrentTab().highlighted = True
+                                        
                                     else:
                                         currentTab = self.MM.CurrentTab()
                                         currentTab.children[len(currentTab.children) - 1].highlighted = True
+                                        
 
                                 else:
                                     for i in range(len(self.MM.CurrentTab().children)):
@@ -183,9 +187,9 @@ class PAM:
 
                                             if i == 0:
                                                 self.MM.CurrentTab().highlighted = True;
+                                                
                                             else:
                                                 currentTab.children[i - 1].highlighted = True;
-
                                             break;
                             else:
                                 print("DEBUG: Potentially unaccounted-for case in the Tabs section")

@@ -6,13 +6,13 @@
 MainMenuLayout:
 
 <PAMButton>:
-    background_color:  utils.get_color_from_hex(self.h_color) if self.highlighted else utils.get_color_from_hex(self.d_color)
+    #background_color:  utils.get_color_from_hex(self.h_color) if self.highlighted else utils.get_color_from_hex(self.d_color)
     font: f.getFont("normal")
-    highlighted: False
+    #highlighted: False
     selected: False
 
 <GameCarouselItem>:
-    background_color:  utils.get_color_from_hex(self.h_color) if self.highlighted else utils.get_color_from_hex(self.d_color)
+#    background_color:  utils.get_color_from_hex(self.h_color) if self.highlighted else utils.get_color_from_hex(self.d_color)
     
 <GameCarouselHighlighter>:
     canvas.before:
@@ -115,7 +115,7 @@ MainMenuLayout:
                 SideBarTab:
                     id: sidebartab1
                     text: 'MULTIPLAYER'
-                    highlighted: True
+                    #highlighted: True
                     #pos_hint: {'top': 1}
                 SideBarTab:
                     id: sidebartab2

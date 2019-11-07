@@ -49,6 +49,7 @@ class mainMenu:
 
             
             selected_game = pamWidgets.GameCarouselItem()
+            selected_game.background_color = includes.get_color_from_hex('#FFFFFF00')
             selected_game.text = ""
             games.add_widget(selected_game)
             #highlighter = pamWidgets.GameCarouselHighlighter()
