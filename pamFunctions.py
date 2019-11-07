@@ -51,10 +51,9 @@ def saveGame(game):
     #deactivate the current group
     #spawn save state group popup
     #activate popup group
-    print("SAVE")
+    pass
 
 def favGame(game, menu):
-    print("FAVORITE")
     game.isFavorite = not game.isFavorite
 
     if game.isFavorite:

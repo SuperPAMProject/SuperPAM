@@ -24,8 +24,10 @@ from enum import IntEnum
 import colors
 import fonts
 import controls
+import sounds
 from win32 import win32gui  
 from kivy.core.audio import SoundLoader
+from playsound import playsound
 
 #constants
 BUTTON_1 = 'z'

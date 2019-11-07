@@ -26,6 +26,7 @@ import controls
 import keyboard
 import fonts
 import colors
+import sounds
 from kivy.utils import get_color_from_hex
 from enum import Enum
 import pamFunctions
@@ -72,18 +73,20 @@ class PAMButton(Button):
         self.d_color = colors.getColor("primary")
         self.h_color = colors.getColor("secondary")
         self.s_color = colors.getColor("accent")
-        self.h_sound = 'sounds/menuNav_7.wav'
+        self.h_sound = sounds.getSound("highlight_btn")
+        self.s_sound = sounds.getSound("select_btn")
         self.bind(highlighted=self.on_highlight)
         self.bind(selected=self.on_select)
         
     def on_highlight(self, *args):
-        print("HIGH")
         if self.highlighted:
             playsound(self.h_sound, False)
 
     def on_select(self, *args):
         if self.selected:
             print(self.func_id + " Selected")
+            playsound(self.s_sound, False)
+
 
 #----PAM ACTION BUTTON - base for the action buttons. Action buttons have their own icons.
 #    Their default color is set to the background, so that there is no colored block around the icons.
