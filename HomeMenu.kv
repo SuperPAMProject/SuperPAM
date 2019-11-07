@@ -6,14 +6,20 @@
 MainMenuLayout:
 
 <PAMButton>:
-    #background_color:  utils.get_color_from_hex(self.h_color) if self.highlighted else utils.get_color_from_hex(self.d_color)
     font: f.getFont("normal")
-    #highlighted: False
-    selected: False
 
+<PAMActionButton>:
+    size_hint: 0.3, 0.3
+    background_color: 0, 0, 0, 0
+    d_action: self.d_action
+    d_color: self.d_color
+    canvas:
+        Rectangle:
+            source: self.d_action
+            pos: (self.pos[0]+self.size[0]/2.0) - 40, (self.pos[1]+self.size[1]/2.0) - 40
+            size: (self.parent.width*0.20, self.parent.width*0.2)
+<GameCarousel>:
 <GameCarouselItem>:
-#    background_color:  utils.get_color_from_hex(self.h_color) if self.highlighted else utils.get_color_from_hex(self.d_color)
-    
 <GameCarouselHighlighter>:
     canvas.before:
         Color:
@@ -22,38 +28,15 @@ MainMenuLayout:
             pos: w.width*0.30, w.height*0.576
             size: w.width*0.28, w.height*0.04
 
-<PAMActionButton>:
-    
-    size_hint_x: None
-    size_hint_y: None
-    background_color: 0, 0, 0, 0
-    d_action: self.d_action
-    d_color: self.d_color
-    size_hint: 0.3, 0.3
-
-    canvas:
-        Rectangle:
-            source: self.d_action
-            pos: (self.pos[0]+self.size[0]/2.0) - 40, (self.pos[1]+self.size[1]/2.0) - 40
-            size: (self.parent.width*0.20, self.parent.width*0.2)
-
-        
-
 <SideBar>:
     size_hint: 0.23, 0.25
-    pos_hint: {'right':0.3, 'top':0.85}
+    pos_hint: {'right':0.4, 'top':0.89}
     on_pos: pos={self.parent.x, self.parent.y}
-
 
 <SideBarTab>:
     size_hint: 0.5, 0.12
-    #text_size: root.width, None
-    #pos: self.parent.pos
-    #pos_hint: {'x':0, 'top':0}
-    #on_pos: pos={self.parent.x, self.parent.y}
     
 <SideBarTabItem>:
-
 <GameDescriptionArea>:
     orientation: 'vertical'
     size_hint: 0.86, 0.38
@@ -72,7 +55,7 @@ MainMenuLayout:
     size_hint: 1, 0.2
     text_size: self.size
     font: f.getFont("normal")
-    font_size: 20 
+    font_size: 20 #make a variable later on 
     halign: 'left'   
     valign: 'top'
 
@@ -82,7 +65,6 @@ MainMenuLayout:
 
 <ControlBar>:
     orientation: 'horizontal'
-    spacing: 0
     size_hint: 1, 0.08
     canvas:
         Color:
@@ -93,60 +75,50 @@ MainMenuLayout:
             size: self.size 
 
 <MainMenuLayout>:
-    sidebar: sidebar
-    games: games
-    actionbtns: actionbtns
-    
+  
     BoxLayout:
-        orientation: 'vertical'
-        
+        orientation: 'vertical'  
         BoxLayout:
             orientation:'horizontal'
             size_hint: 1, 0.84
-            #spacing: 20
-            #pos_hint: {'right': 1, 'top': 1}
             SideBar:
                 id: sidebar
-                active: True
                 orientation: 'vertical'
-                rightGroup: games
-                #spacing: 20
-                on_parent: self.setLayout()
                 SideBarTab:
                     id: sidebartab1
+                    func_id: 'multiplayer'
                     text: 'MULTIPLAYER'
-                    #highlighted: True
-                    #pos_hint: {'top': 1}
                 SideBarTab:
                     id: sidebartab2
+                    func_id: 'sort'
                     text: 'SORT'
                 SideBarTab:
                     id: sidebartab3
+                    func_id: 'options'
                     text: 'OPTIONS'
                 SideBarTab:
                     id: sidebartab4
-                    text: 'POWER'
-
-            
+                    func_id: 'power'
+                    text: 'POWER'           
             GameCarousel:
                 id: games
-                leftGroup: sidebar
-                rightGroup: actionbtns
                 orientation: 'vertical'
                 size_hint: 0.28, 0.72
                 pos_hint: {'center_x': 0.5, 'top': 1}
-                on_parent: self.setLayout()
                 GameCarouselHighlighter:
+                    id: highlighter
 
                     
             BoxLayout:
+                id: gameDetails
                 orientation: 'vertical'
                 size_hint: 0.33, 0.84
-                spacing: 30
                 pos_hint: {'right': 1, 'top': 1}
-                id: gameDetails
+                spacing: 30
                 PAMVideo:
+                    id: pamVid
                 GameDescriptionArea:
+                    id: gameDescArea
                     GameTitle:
                         id: title
                         text: "Title"
@@ -160,39 +132,33 @@ MainMenuLayout:
                         id: year
                         text: "Year:"
                 PAMButtonGroup:
-                    size_hint: 1, 0.19
                     id: actionbtns
-                    leftGroup: games
-                    pos_hint: {'right': 1, 'top': 1}
                     orientation: 'horizontal'
-                    on_parent: self.setLayout()
+                    size_hint: 1, 0.19
+                    pos_hint: {'right': 1, 'top': 1}
                     PAMActionButton:
                         id: play
-                        d_action: 'img/UI_PLAY_ICON.png'
+                        func_id: 'play'
                         d_color: '#FFFFFF00'
+                        d_action: 'img/UI_PLAY_ICON.png'
                         h_action: ''
                         s_action: ''
-                        func_id: 'play'
-
-
                     PAMActionButton:
                         id: save
-                        d_action: 'img/UI_DATA_ICON.png'
+                        func_id: 'save'
                         d_color: '#FFFFFF00'
+                        d_action: 'img/UI_DATA_ICON.png'
                         h_action: ''
                         s_action: ''
-                        func_id: 'save'
-
-
                     PAMActionButton:
                         id: fav
-                        d_action: 'img/UI_FAVORITE_ICON.png'
+                        func_id: 'fav'
                         d_color: '#FFFFFF00'
+                        d_action: 'img/UI_FAVORITE_ICON.png'
                         h_action: ''
                         s_action: ''
-                        func_id: 'fav'
-
         ControlBar:
+            id: controlbar
             Label:
                 text:"Select"
             Label:

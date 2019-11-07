@@ -72,7 +72,9 @@ class PAM:
                     if self.currentState == includes.CurrentState.MAIN_MENU_STATE:
                         if self.MM.currentSection == includes.Section.TABS:
                             currentTab = self.MM.CurrentTab()
-                            pamFunctions.getFunction(currentTab, self.MM)                          
+                            currentTab.selected = True
+                            pamFunctions.getFunction(currentTab, self.MM)
+                            currentTab.selected = False                          
                         elif self.MM.currentSection == includes.Section.GAMES:
                             currentGame = self.MM.GetGame()     
                             if self.runningGame is None:
@@ -99,6 +101,8 @@ class PAM:
                         elif self.MM.currentSection == includes.Section.GAME_OPTIONS:
                             currentOption = self.MM.CurrentOption()
                             pamFunctions.getFunction(currentOption, self.MM)
+                            if currentOption.func_id == 'play':
+                                self.currentState = includes.CurrentState.GAME_STATE
                             
                     print(event.name)
                     

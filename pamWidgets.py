@@ -32,8 +32,6 @@ import pamFunctions
 from kivy.core.audio import SoundLoader
 from playsound import playsound
 
-
-player = "player1" # for testing purposes with the 'controls' module
     
 
 #MISC. CLASSES
@@ -65,37 +63,31 @@ class GameCarouselHighlighter(FloatLayout):
 #    d for default, h for highlight and s for selected
 class PAMButton(Button):
     highlighted = BooleanProperty(False)
+    selected = BooleanProperty(False)
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+        self.func_id = ''
         self.enabled = BooleanProperty(True)
-        self.btnTxt = StringProperty("")
         self.background_normal = "img/button_bg.png"
         self.d_color = colors.getColor("primary")
         self.h_color = colors.getColor("secondary")
         self.s_color = colors.getColor("accent")
-        self.func_id = ''
         self.h_sound = 'sounds/menuNav_7.wav'
-        self.bind(highlighted=self.on_highlighted)
+        self.bind(highlighted=self.on_highlight)
+        self.bind(selected=self.on_select)
         
-    #called when button is highlighted
-    def on_highlighted(self, *args):
+    def on_highlight(self, *args):
         print("HIGH")
         if self.highlighted:
             playsound(self.h_sound, False)
 
-    #Called when user moves to the next button
-    def setHighlight(self):
-        self.highlighted = not self.highlighted
-
-    #Called when user is no longer viewing this button
-    def unHighlight(self):
-        self.highlighted = False
-
+    def on_select(self, *args):
+        if self.selected:
+            print(self.func_id + " Selected")
 
 #----PAM ACTION BUTTON - base for the action buttons. Action buttons have their own icons.
 #    Their default color is set to the background, so that there is no colored block around the icons.
 class PAMActionButton(PAMButton):
-    d_color = colors.getColor("background")
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.h_action = ''
@@ -157,19 +149,13 @@ class PopupWindowItem(PAMButton):
 
 #----TAB ITEM - Button used to open popup windows for options. 
 class SideBarTabItem(PAMButton):
-    opensPopup = False
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
  
 
 #----CAROUSEL ITEM - A button that interacts with a label. Selecting it will take the user to the Action Button group.
 #   Each CarouselItem will be associated with a unique game and will display that game's title as its text.
-class GameCarouselItem(PAMButton):
-    game = ''
-    opacity = 1 #opacity will change with the item's position on-screen
-    d_color = colors.getColor("background")
-    background_normal = ""
-    
+class GameCarouselItem(PAMButton):  
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.gameName = "";
@@ -189,15 +175,14 @@ class GameCarouselItem(PAMButton):
 
 #----SAVE STATE- Button associated with the one of the currently selected game's save states
 class SaveState(PAMButton):
-    scale = 30
-    file_path = ''
-    game = ''
-    save_date = ''
-    save_number = 0
-    game_image = ''
-
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+        self.scale = 30
+        self.file_path = ''
+        self.game = ''
+        self.save_date = ''
+        self.save_number = 0
+        self.game_image = ''
 
     def changeSize(self):
         self.scale += 30
@@ -218,23 +203,21 @@ class SaveState(PAMButton):
 #----CONTROL BAR ITEM - part of the control bar at the bottom of the screen
 #    Each item has both text and an image indicating which control maps to a given command.
 class ControlBarItem(Label):
-    control_icon = ''
-    control_pos = 0
+
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+        self.control_icon = ''
+        self.control_pos = 0
 
 #----GAME TITLE - features the title of the currenty highlighted game in the carousel. 
 #    Only updates when a new game is highlighted
 class GameTitle(Label):
-    alignment = 'center'
-    scale = 30
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
 #----GAME INFO - Labels for title, developer, publisher and release year. 
 #    The info each label will contain is outlined in the .kv file
 class GameInfo(Label):
-    alignment = 'left'
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         
@@ -244,95 +227,10 @@ class GameInfo(Label):
 # These classes will act as containers for any of the proceeding classes. 
 # Each container will use the 'children' property to iterate over the widgets inside them and perform operations on them.
 
-
 #----BUTTON GROUP - Base for other button groups, such as the PopUp window and SideBar
 class PAMButtonGroup(BoxLayout):
-    active = BooleanProperty(False)
-    currentIndex = NumericProperty(0)
-    forward = 'up'
-    backward = 'down'
-    leftGroup = ObjectProperty(None)
-    rightGroup = ObjectProperty(None)
-    leftGroupPos = StringProperty('')
-    rightGroupPos = StringProperty('')
-    gSpacing = NumericProperty(10)
-    gPadding = NumericProperty(10)
-    gameList = []
-    
-    
-
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        #keyboard.on_press(self.on_press)
-
-
-    def setLayout(self):
-        if self.orientation == 'vertical':
-            self.forward = controls.getInput(player, 'up')
-            self.backward = controls.getInput(player, 'down')
-            self.leftGroupPos = controls.getInput(player, 'left')
-            self.rightGroupPos = controls.getInput(player, 'right')
-        else:
-            self.forward = controls.getInput(player, 'left')
-            self.backward = controls.getInput(player, 'right')
-            self.leftGroupPos = controls.getInput(player, 'left')
-            self.rightGroupPos = controls.getInput(player, 'right')
-
-        
-    def nextIndex(self):
-        self.currentIndex += 1
-        if self.currentIndex > len(self.children) - 1:
-            self.currentIndex = len(self.children) - 1
- 
-
-    def prevIndex(self):
-        self.currentIndex -= 1
-        if self.currentIndex < 0:
-            self.currentIndex = 0
-
-
-    def checkForGroup(self, group):
-        return group is not None
-
-
-    def switchGroup(self, group):
-        last_child = len(group.children)-1
-        self.active = False
-        group.active = True
-        self.children[self.currentIndex].unHighlight()
-        group.children[last_child].highlighted = True
-        group.currentIndex = last_child
-
-
-    def on_press(self, event):
-        if self.active and event.event_type == keyboard.KEY_DOWN:
-            print(event.name + " " + event.event_type)
-            #This shit is a mess. Just don't bother with it right now.
-            if event.name == self.leftGroupPos and self.checkForGroup(self.leftGroup):
-                if self.orientation == 'vertical':
-                    self.switchGroup(self.leftGroup)
-                else:
-                    if self.children[len(self.children)-1].highlighted:
-                        self.currentIndex -= 1
-                        self.switchGroup(self.leftGroup)
-            elif event.name == self.rightGroupPos and self.checkForGroup(self.rightGroup):
-                if self.orientation == 'vertical':
-                    self.switchGroup(self.rightGroup)
-
-            if event.name == self.forward:
-                self.children[self.currentIndex].unHighlight()
-                self.nextIndex()
-                self.children[self.currentIndex].setHighlight()
-            elif event.name == self.backward:
-                self.children[self.currentIndex].unHighlight()
-                self.prevIndex()
-                self.children[self.currentIndex].setHighlight()
-            
-            if event.name == controls.getInput(player, "select"):
-                #self.children[self.currentIndex].selected = BooleanProperty(True)
-                self.children[self.currentIndex].btnTxt = "SELECTED"
-                #self.children[self.currentIndex].press_action()
-                f = pamFunctions.getFunction(self.children[self.currentIndex])
 
 #----LABEL GROUP - Group for only textual, non-interactive elements
 class PAMLabelGroup(BoxLayout):
@@ -370,12 +268,6 @@ class GameDescriptionArea(PAMLabelGroup):
 class GameCarousel(PAMButtonGroup):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.game_list: GameCarouselItem
-
-    def on_press(self, event):
-        super().on_press(event)
-        if self.active:
-            self.updateGameInfo(self.children[self.currentIndex])
 
     def updateGameInfo(self, game):
         pamFunctions.current_game = game.gameInfo[3]
@@ -397,7 +289,6 @@ class PopUpWindow(PAMButtonGroup, PAMLabelGroup):
 #----TAB - Both a group and an item within a group. The tabs are the items within the sidebar.
 #    And each tab houses several buttons the user can select to access their options.  
 class SideBarTab(PAMButtonGroup, PAMButton):
-    d_color = colors.getColor("background")
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.tab_item_list: SideBarTabItem
@@ -409,7 +300,6 @@ class SideBar(PAMButtonGroup):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.item_list: SideBarTab
-        self.active = False
         
 
     def collapseAll(self):
@@ -425,7 +315,6 @@ class SaveStateGroup(PAMButtonGroup):
 
     def sortByNumber(self):
         pass
-
 
 
 #TESTING AREA
