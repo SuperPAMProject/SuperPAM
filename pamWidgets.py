@@ -93,9 +93,27 @@ class PAMButton(Button):
 class PAMActionButton(PAMButton):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+        self.d_action = ''
         self.h_action = ''
         self.s_action = ''
         self.d_color = colors.getColor("background")
+
+    def on_highlight(self, *args):
+        if self.highlighted:
+            playsound(self.h_sound, False)
+            self.action_image = self.h_action
+            print(self.canvas.children[4])
+            print(self.canvas.children[4].source)
+        else:
+            self.action_image=self.d_action
+    
+    def on_select(self, *args):
+        if self.selected:
+            print(self.func_id + " Selected")
+            playsound(self.s_sound, False)
+            self.action_image=self.s_action
+        else:
+            self.action_image=self.d_action
 
 
 #----PAM SLIDER - Slider for volume control

@@ -7,6 +7,7 @@
 #Primary will be used as default for most button widgets, with secondary used as their highlight color, 
 #and accent as a selection color. Warning is used only in critical decisions for the user.
 #Font-light is the font-color for lighter backgrounds, and font-dark is for darker ones. 
+#Each action button (Play, Save, Favorite) all have their default, highlight, and selection images for every color scheme.
 
 with open('user/color_scheme.txt', 'r') as cs:
     for line in cs:
@@ -20,7 +21,16 @@ color_schemes = {
         "accent": "#96CDFF",
         "warning": "#C33C54",
         "font_light": "#FFFFFF",
-        "font-dark": "#FFFFFF"
+        "font-dark": "#FFFFFF",
+        "play-d":'img/Play_Waves_Default.png',
+        "play-h":'img/Play_Waves_Highlight.png',
+        "play-s":'img/Play_Waves_Select.png',
+        "save-d":'img/Save_Waves_Default.png',
+        "save-h":'img/Save_Waves_Highlight.png',
+        "save-s":'img/Save_Waves_Select.png',
+        'fav-d':'img/Fav_Waves_Default.png',
+        'fav-h':'img/Fav_Waves_Highlight.png',
+        'fav-s':'img/Fav_Waves_Select.png'
     },
     "watermelon" : {
         "background": "#101216",
@@ -29,7 +39,16 @@ color_schemes = {
         "accent": "#ED6A5E",
         "warning": "#ED6A5E",
         "font_light": "#FFFFFF",
-        "font_dark": "#101216"
+        "font_dark": "#101216",
+        "play-d":'img/Play_Waves_Default.png',
+        "play-h":'img/Play_Waves_Highlight.png',
+        "play-s":'img/Play_Waves_Select.png',
+        "save-d":'img/Save_Waves_Default.png',
+        "save-h":'img/Save_Waves_Highlight.png',
+        "save-s":'img/Save_Waves_Select.png',
+        'fav-d':'img/Fav_Waves_Default.png',
+        'fav-h':'img/Fav_Waves_Highlight.png',
+        'fav-s':'img/Fav_Waves_Select.png'
     }, 
     "burn" : {
         "background": "#101216",
@@ -38,7 +57,16 @@ color_schemes = {
         "accent": "#D6CBC1",
         "warning": "#FF3300",
         "font_light": "#FFFFFF",
-        "font_dark": "#101216"
+        "font_dark": "#101216",
+        "play-d":'img/Play_Waves_Default.png',
+        "play-h":'img/Play_Waves_Highlight.png',
+        "play-s":'img/Play_Waves_Select.png',
+        "save-d":'img/Save_Waves_Default.png',
+        "save-h":'img/Save_Waves_Highlight.png',
+        "save-s":'img/Save_Waves_Select.png',
+        'fav-d':'img/Fav_Waves_Default.png',
+        'fav-h':'img/Fav_Waves_Highlight.png',
+        'fav-s':'img/Fav_Waves_Select.png'
     },
     "blossom": {
         "background": "#101216",
@@ -47,7 +75,16 @@ color_schemes = {
         "accent": "#7E5A9B",
         "warning": "#FF3300",
         "font_light": "#63458A",
-        "font_dark": "#63458A"
+        "font_dark": "#63458A",
+        "play-d":'img/Play_Waves_Default.png',
+        "play-h":'img/Play_Waves_Highlight.png',
+        "play-s":'img/Play_Waves_Select.png',
+        "save-d":'img/Save_Waves_Default.png',
+        "save-h":'img/Save_Waves_Highlight.png',
+        "save-s":'img/Save_Waves_Select.png',
+        'fav-d':'img/Fav_Waves_Default.png',
+        'fav-h':'img/Fav_Waves_Highlight.png',
+        'fav-s':'img/Fav_Waves_Select.png'
     }
 }
 

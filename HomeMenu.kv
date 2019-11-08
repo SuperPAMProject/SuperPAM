@@ -11,11 +11,11 @@ MainMenuLayout:
 <PAMActionButton>:
     size_hint: 0.3, 0.3
     background_color: 0, 0, 0, 0
-    d_action: self.d_action
+    action_image: self.action_image
     d_color: self.d_color
     canvas:
         Rectangle:
-            source: self.d_action
+            source: self.action_image
             pos: (self.pos[0]+self.size[0]/2.0) - 40, (self.pos[1]+self.size[1]/2.0) - 40
             size: (self.parent.width*0.20, self.parent.width*0.2)
 <GameCarousel>:
@@ -140,23 +140,26 @@ MainMenuLayout:
                         id: play
                         func_id: 'play'
                         d_color: '#FFFFFF00'
-                        d_action: 'img/UI_PLAY_ICON.png'
-                        h_action: ''
-                        s_action: ''
+                        d_action: c.getColor('play-d')
+                        h_action: c.getColor('play-h')
+                        s_action: c.getColor('play-s')
+                        action_image: self.d_action
                     PAMActionButton:
                         id: save
                         func_id: 'save'
                         d_color: '#FFFFFF00'
-                        d_action: 'img/UI_DATA_ICON.png'
-                        h_action: ''
-                        s_action: ''
+                        d_action: c.getColor('save-d')
+                        h_action: c.getColor('save-h')
+                        s_action: c.getColor('save-s')
+                        action_image: self.d_action
                     PAMActionButton:
                         id: fav
                         func_id: 'fav'
                         d_color: '#FFFFFF00'
-                        d_action: 'img/UI_FAVORITE_ICON.png'
-                        h_action: ''
-                        s_action: ''
+                        d_action: c.getColor('fav-d')
+                        h_action: c.getColor('fav-h')
+                        s_action: c.getColor('fav-s')
+                        action_image: self.d_action
         ControlBar:
             id: controlbar
             Label:
