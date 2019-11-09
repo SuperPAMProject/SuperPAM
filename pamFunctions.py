@@ -180,6 +180,11 @@ def get_hwnds_for_pid (pid):
   win32gui.EnumWindows (callback, hwnds)
   return hwnds
 
+def testPopup():
+    pop = pamWidgets.PopupWindow()
+    pop.open()
+    return True
+
 
 #ACTIVATED ON BUTTON SELECTION, TAKES ID OF BUTTON TO DETERMINE FUNCTION
 def getFunction(btn, menu):
@@ -191,6 +196,8 @@ def getFunction(btn, menu):
         return favGame(menu.GetGame(), menu)
     elif btn.func_id == 'host':
         return startSession(player)
+    elif btn.func_id == 'multiplayer':
+        return testPopup()
     elif btn.func_id == 'accept':
         return acceptClient(client)
     elif btn.func_id == 'kick':

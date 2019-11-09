@@ -20,6 +20,7 @@ from kivy.uix.video import Video
 from kivy.uix.slider import Slider
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.floatlayout import FloatLayout
+from kivy.uix.popup import Popup
 from kivy.properties import *
 from kivy.graphics.vertex_instructions import Rectangle
 import controls
@@ -298,11 +299,11 @@ class GameCarousel(PAMButtonGroup):
         pass
 
 #----POPUP- Float layout to house buttons for a given options category. 
-class PopUpWindow(PAMButtonGroup, PAMLabelGroup):
+class PopupWindow(Popup):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.open = False
-        self.title = Label()
+        #self.open = False
+        #self.title = ''
         self.message = Label()
         self.item_list: PopupWindowItem
         self.button_list: PopupWindowButton

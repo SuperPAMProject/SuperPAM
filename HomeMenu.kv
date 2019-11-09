@@ -59,6 +59,107 @@ MainMenuLayout:
     halign: 'left'   
     valign: 'top'
 
+<PopupHeader@BoxLayout>:
+    id: header
+    orientation:'horizontal'
+    size_hint: 1, 0.12
+    padding: 20
+    canvas:
+        Color:
+            rgba: utils.get_color_from_hex(c.getColor("primary"))                      
+        Rectangle:
+            pos: self.pos
+            size: self.size
+    Label: 
+        text: 'TITLE'
+        halign: 'left'
+        text_size: self.size
+        font_size: 20 #make a variable later on 
+        font: f.getFont("bold")
+        bold: True
+        
+
+<PopupWindowContent@BoxLayout>:
+    orientation:'vertical'
+    size_hint: 0.77, 0.50
+    spacing: 20
+    
+
+
+<PopupFooter@BoxLayout>:
+    id: footer
+    orientation:'horizontal'
+    size_hint: 1, 0.12
+    canvas:
+        Color:
+            rgba: utils.get_color_from_hex(c.getColor("primary"))                      
+        Rectangle:
+            pos: self.pos
+            size: self.size
+<PopupButtonGroup@BoxLayout>:
+    orientation: 'horizontal'
+    size_hint: 0.43, 1
+
+
+<PopupWindowButton>:
+    size_hint: 0.19, 1
+    
+<PopupWindowItem>:
+    background_color: utils.get_color_from_hex(c.getColor("primary"))
+    size_hint: 1, 0.25
+<PopupWindow>:
+    id: pop
+    title: ''
+    background: 'img/no_alpha.png'
+    separator_color: 0, 0, 0, 0
+    size_hint: 0.5, 0.64
+    FloatLayout:
+        canvas:
+            Color:
+                rgba: utils.get_color_from_hex(c.getColor("secondary"))
+            Rectangle:
+                size: self.size
+                pos: self.pos
+        
+        BoxLayout:
+            pos: self.parent.pos
+            size: self.parent.size
+            orientation:'vertical'
+            spacing: 20
+            
+            PopupHeader:
+
+            PopupWindowContent:
+                padding: 20
+                Label:
+                    size_hint: 0.33, 0.06
+                    text: 'Message'
+                    halign: 'left'
+                    #text_size: self.size
+                    pos_hint: {'top': 1}
+                    font_size: 20 #make a variable later on 
+                PopupWindowItem:
+                    text: 'content'     
+                PopupWindowItem:
+                    text: 'content'     
+ 
+
+            PopupFooter:
+                PopupButtonGroup:
+                    pos_hint: {'center_x': 1}
+                    PopupWindowButton:
+                        text: 'CONFIRM'
+                        bold: True
+                        background_color: utils.get_color_from_hex(c.getColor("primary"))
+                        on_press: pop.dismiss()
+                    PopupWindowButton:
+                        text: 'EXIT'
+                        bold: True
+                        background_color: utils.get_color_from_hex(c.getColor("secondary"))
+                        on_press: pop.dismiss()
+                Label:
+                    text: ''
+
 <PAMVideo>:
     size_hint: 0.86, 0.29
     pos_hint: {'right': 1, 'top': 1}
