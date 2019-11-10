@@ -12,9 +12,6 @@ from kivy.core.text import LabelBase
 from kivy.graphics.vertex_instructions import Rectangle
 
 
-
-
-
 # This class serves as the entirety of the program. It will be the
 # container for all the necessary data as well as how to interact/interpret
 # said data
@@ -78,7 +75,7 @@ class PAM:
                         elif self.MM.currentSection == includes.Section.GAMES:
                             currentGame = self.MM.GetGame()     
                             if self.runningGame is None:
-                                self.runningGame = pamFunctions.playGame(pamFunctions.emulator, currentGame.gamePath)
+                                self.runningGame = pamFunctions.playGame(currentGame.gameName)
                                 self.lastSelectedGame = currentGame
                             else:
                                 if currentGame == self.lastSelectedGame: #add in check for if lastSelectedGame is still running
@@ -93,7 +90,7 @@ class PAM:
                                     
                                 else: 
                                     pamFunctions.closeGame(self.runningGame)
-                                    self.runningGame = pamFunctions.playGame(pamFunctions.emulator, currentGame.gamePath)
+                                    self.runningGame = pamFunctions.playGame(currentGame.gameName)
                             includes.playsound(includes.sounds.getSound("exit_menu"), False)
                             self.currentState = includes.CurrentState.GAME_STATE
                             
