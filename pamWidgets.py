@@ -63,6 +63,8 @@ class GameCarouselHighlighter(FloatLayout):
 #Each button will have the properties of 'highlighted', 'selected', and 'enabled'
 #----PAMBUTTON - The base for all other buttons. The button's colors are organized by
 #    d for default, h for highlight and s for selected
+
+
 class PAMButton(Button):
     highlighted = BooleanProperty(False)
     selected = BooleanProperty(False)
@@ -88,6 +90,9 @@ class PAMButton(Button):
             print(self.func_id + " Selected")
             playsound(self.s_sound, False)
 
+class ScaleButton(PAMButton):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
 
 #----PAM ACTION BUTTON - base for the action buttons. Action buttons have their own icons.
 #    Their default color is set to the background, so that there is no colored block around the icons.
@@ -151,7 +156,7 @@ class PamCheckbox(PAMButton):
 
 #----WINDOW BUTTON- Button featured at the bottom of a popup. 
 #    Will typically be used to either exit the popup and save the user's option changes.
-class PopupWindowButton(PAMButton):
+class PopupWindowButton(ScaleButton):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.option = Label()
@@ -160,7 +165,7 @@ class PopupWindowButton(PAMButton):
 
 #----WINDOW ITEM- A widget inside a popup. The widget contains a name, button, and either a
 #    checkbox, radio button, or slider
-class PopupWindowItem(PAMButton):
+class PopupWindowItem(ScaleButton):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.icon_default = ''
@@ -170,14 +175,14 @@ class PopupWindowItem(PAMButton):
 
 
 #----TAB ITEM - Button used to open popup windows for options. 
-class SideBarTabItem(PAMButton):
+class SideBarTabItem(ScaleButton):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
  
 
 #----CAROUSEL ITEM - A button that interacts with a label. Selecting it will take the user to the Action Button group.
 #   Each CarouselItem will be associated with a unique game and will display that game's title as its text.
-class GameCarouselItem(PAMButton):  
+class GameCarouselItem(ScaleButton):  
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.gameName = "";
@@ -224,7 +229,12 @@ class SaveState(PAMButton):
 
 #----CONTROL BAR ITEM - part of the control bar at the bottom of the screen
 #    Each item has both text and an image indicating which control maps to a given command.
-class ControlBarItem(Label):
+
+class ScaleLabel(Label):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
+class ControlBarItem(ScaleLabel):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -233,13 +243,13 @@ class ControlBarItem(Label):
 
 #----GAME TITLE - features the title of the currenty highlighted game in the carousel. 
 #    Only updates when a new game is highlighted
-class GameTitle(Label):
+class GameTitle(ScaleLabel):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
 #----GAME INFO - Labels for title, developer, publisher and release year. 
 #    The info each label will contain is outlined in the .kv file
-class GameInfo(Label):
+class GameInfo(ScaleLabel):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         
@@ -310,7 +320,7 @@ class PopupWindow(Popup):
 
 #----TAB - Both a group and an item within a group. The tabs are the items within the sidebar.
 #    And each tab houses several buttons the user can select to access their options.  
-class SideBarTab(PAMButtonGroup, PAMButton):
+class SideBarTab(PAMButtonGroup, ScaleButton):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.tab_item_list: SideBarTabItem
