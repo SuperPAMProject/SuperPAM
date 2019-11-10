@@ -63,11 +63,11 @@ class mainMenu:
                 info = line.split(', ')
                 newGame = pamWidgets.GameCarouselItem()
                 newGame.gameName = info[0]
-                newGame.gameInfo.append(info[1])
-                newGame.gameInfo.append(info[2])
-                newGame.gameInfo.append(info[3])
-                newGame.gameInfo.append(info[4])
-                newGame.gamePath = info[4]
+                newGame.gameInfo.append(info[0])
+                newGame.gameInfo.append(info[0])
+                newGame.gameInfo.append(info[0])
+                newGame.gameInfo.append(info[0])
+                newGame.gamePath = info[0]
                 newGame.text = newGame.gameName
                 newGame.index = index
                 index += 1
