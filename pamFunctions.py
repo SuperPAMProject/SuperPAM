@@ -194,6 +194,7 @@ def testPopup(btn, menu):
     pop.size_hint = (0.6, 0.74)
     pop.opacity = 1
     pop.disabled = False
+    print(pop.children[0].children[1].children[0].children)
 
     print("OPEN")
     return True
