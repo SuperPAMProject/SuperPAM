@@ -4,6 +4,7 @@ from kivy.core.window import Window
 from kivy.utils import get_color_from_hex
 from kivy.properties import ObjectProperty
 from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.carousel import Carousel
 from kivy.uix.scrollview import ScrollView
 from kivy.uix.recycleview import RecycleView
@@ -30,7 +31,7 @@ class GameItem(Label):
         self.color = (1, 1, 1, 1)
 
 
-class MainMenuLayout(BoxLayout):
+class MainMenuLayout(FloatLayout):
     game_select = ObjectProperty(None)
     game_plus_1 = ObjectProperty(None)
     game_plus_2 = ObjectProperty(None)

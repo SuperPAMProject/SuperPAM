@@ -6,6 +6,7 @@ import pamWidgets
 import win32con
 import win32gui
 import win32process
+from kivy.app import App
 
 #PLACEHOLDER VARIABLES
 player = ''
@@ -180,9 +181,13 @@ def get_hwnds_for_pid (pid):
   win32gui.EnumWindows (callback, hwnds)
   return hwnds
 
-def testPopup():
-    pop = pamWidgets.PopupWindow()
-    pop.open()
+def testPopup(btn, menu):
+
+    con = pamWidgets.PopupWindowLayout(size=(50, 50), pos=(50, 50))
+    #pop = pamWidgets.PopupWindow(content=con)
+    App.get_running_app().root.add_widget(con)
+    print("OPEN")
+    #pop.open()
     return True
 
 
@@ -197,7 +202,7 @@ def getFunction(btn, menu):
     elif btn.func_id == 'host':
         return startSession(player)
     elif btn.func_id == 'multiplayer':
-        return testPopup()
+        return testPopup(btn, menu)
     elif btn.func_id == 'accept':
         return acceptClient(client)
     elif btn.func_id == 'kick':

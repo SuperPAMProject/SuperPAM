@@ -35,7 +35,6 @@ from kivy.core.audio import SoundLoader
 from playsound import playsound
 
     
-
 #MISC. CLASSES
 #----VIDEO-  demo video of the currently highlighted game. Autoplays after 2 seconds. 
 class PAMVideo(Video):
@@ -63,7 +62,6 @@ class GameCarouselHighlighter(FloatLayout):
 #Each button will have the properties of 'highlighted', 'selected', and 'enabled'
 #----PAMBUTTON - The base for all other buttons. The button's colors are organized by
 #    d for default, h for highlight and s for selected
-
 
 class PAMButton(Button):
     highlighted = BooleanProperty(False)
@@ -165,7 +163,7 @@ class PopupWindowButton(ScaleButton):
 
 #----WINDOW ITEM- A widget inside a popup. The widget contains a name, button, and either a
 #    checkbox, radio button, or slider
-class PopupWindowItem(ScaleButton):
+class PopupWindowItem(BoxLayout):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.icon_default = ''
@@ -317,6 +315,10 @@ class PopupWindow(Popup):
         self.message = Label()
         self.item_list: PopupWindowItem
         self.button_list: PopupWindowButton
+
+class PopupWindowLayout(BoxLayout):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)    
 
 #----TAB - Both a group and an item within a group. The tabs are the items within the sidebar.
 #    And each tab houses several buttons the user can select to access their options.  

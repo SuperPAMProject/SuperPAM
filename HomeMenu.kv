@@ -1,3 +1,4 @@
+#:kivy 1.9.0
 #:import utils kivy.utils
 #:import c colors
 #:import f fonts
@@ -5,9 +6,8 @@
 #:import w display.Window
 MainMenuLayout:
 
-
 <ScaleLabel>:
-	_scale: 1. if self.texture_size[0] < self.width else float(self.width) / (self.texture_size[0]+1)
+	_scale: 1. if self.texture_size[0] < self.width else float(self.width) / (self.texture_size[0]+0.1)
 	canvas.before:
 		PushMatrix
 		Scale:
@@ -20,7 +20,7 @@ MainMenuLayout:
 <ScaleButton>:
 	state_image: self.background_normal if self.state == 'normal' else self.background_down
 	disabled_image: self.background_disabled_normal if self.state == 'normal' else self.background_disabled_down
-	_scale: 1. if self.texture_size[0] < self.width else float(self.width) / (self.texture_size[0]+1)
+	_scale: 1. if self.texture_size[0] < self.width else float(self.width) / (self.texture_size[0]+0.1)
 	canvas:
 		Color:
 			rgba: self.background_color
@@ -29,6 +29,7 @@ MainMenuLayout:
 			pos: self.pos
 			size: self.size
 			source: self.disabled_image if self.disabled else self.state_image
+            auto_scale: 'both_lower'
 		PushMatrix
 		Scale:
 			origin: self.center
@@ -48,7 +49,7 @@ MainMenuLayout:
     size_hint: 0.3, 0.3
     background_color: 0, 0, 0, 0
     action_image: self.action_image
-    d_color: self.d_color
+    #d_color: self.d_color
     canvas:
         Rectangle:
             source: self.action_image
@@ -96,6 +97,31 @@ MainMenuLayout:
     halign: 'left'   
     valign: 'top'
 
+<PAMCheckbox>:
+    id: wid
+    icon: self.icon
+    background_color: 0, 0, 0, 0
+    background_normal: ''
+    background_down:''
+    size_hint: 0.16, 1
+    canvas:
+        Rectangle:
+            source: self.icon
+            pos: (self.pos[0]-20, self.pos[1])
+            size: (self.parent.width*0.16, self.parent.height)
+<PAMIcon@PAMButton>:
+    id: icon
+    icon: self.icon
+    background_color: 0, 0, 0, 0
+    background_normal: ''
+    background_down: ''
+    size_hint: 0.16, 1
+    canvas:
+        Rectangle:
+            source: self.icon
+            pos: self.pos#(self.pos[0]+self.size[0]/2.0) - 40, (self.pos[1]+self.size[1]/2.0) - 40
+            size: (self.parent.width*0.14, self.parent.height)
+
 <PopupHeader@BoxLayout>:
     id: header
     orientation:'horizontal'
@@ -108,25 +134,25 @@ MainMenuLayout:
             pos: self.pos
             size: self.size
     ScaleLabel: 
+        id: title
         text: 'TITLE'
         halign: 'left'
-        font_size: self.height * 0.5
+        font_size: (self.height + self.width) * 0.09
         font: f.getFont("bold")
         bold: True
         
 
 <PopupWindowContent@BoxLayout>:
     orientation:'vertical'
-    size_hint: 0.77, 0.50
-    spacing: 20
+    size_hint: 0.77, 0.75
+    spacing: 10
+    padding: 20
     
-
-
 <PopupFooter@BoxLayout>:
     id: footer
     orientation:'horizontal'
     size_hint: 1, 0.12
-    canvas:
+    canvas.before:
         Color:
             rgba: utils.get_color_from_hex(c.getColor("primary"))                      
         Rectangle:
@@ -138,72 +164,77 @@ MainMenuLayout:
 <PopupWindowButton>:
     size_hint: 0.19, 1
     font_size: self.height * 0.5
+    background_normal: ''
+    background_down: ''
 <PopupWindowItem>:
-    background_color: utils.get_color_from_hex(c.getColor("primary"))
-    font_size: self.height * 0.5
-    size_hint: 1, 0.25
+    size_hint: 1, 0.40
+    orientation:'horizontal'
+    canvas.before:
+        Color:
+            rgba: utils.get_color_from_hex(c.getColor("primary"))
+        Rectangle:
+            size: self.size
+            pos: self.pos          
+    PAMIcon:
+        id: icon
+        icon: 'img/SFX_ON.png'
+    PAMIcon:
+        id: divider
+        icon: 'img/divider.png'
+    ScaleLabel:
+        id: optionName
+        text: 'MUTE SFX'
+        font_size: self.height * 0.5
+    PamCheckbox:
+        icon: 'img/unchecked.png'
+
+<PopupWindowLayout>:
+    id: popup
+    size_hint: 0.5, 0.64 
+    orientation:'vertical'
+    spacing: 20
+    pos_hint: {'top': 0.9, 'x': 0.2}
+    canvas:
+        Color:
+            rgba: utils.get_color_from_hex(c.getColor("secondary"))
+        Rectangle:
+            size: self.size
+            pos:self.pos
+    PopupHeader:
+        id: header
+    PopupWindowContent:
+        id: content
+        PopupWindowItem:
+        PopupWindowItem:
+        PopupWindowItem:
+        PopupWindowItem:
+    PopupFooter:
+        id: footer
+        Label:
+            text: ''
+        PopupButtonGroup:
+            id: popupbtns
+            pos_hint: {'center_x': 1}
+            spacing: 10
+            padding: 5
+            PopupWindowButton:
+                text: 'CONFIRM'
+                bold: True
+                background_color: utils.get_color_from_hex(c.getColor("primary"))
+            PopupWindowButton:
+                text: 'EXIT'
+                bold: True
+                background_color: utils.get_color_from_hex(c.getColor("secondary"))
+        Label:
+            text: ''
+
 <PopupWindow>:
     id: pop
     title: ''
     background: 'img/no_alpha.png'
     separator_color: 0, 0, 0, 0
     size_hint: 0.5, 0.64
-    FloatLayout:
-        canvas:
-            Color:
-                rgba: utils.get_color_from_hex(c.getColor("secondary"))
-            Rectangle:
-                size: self.size
-                pos: self.pos
-        
-        BoxLayout:
-            pos: self.parent.pos
-            size: self.parent.size
-            orientation:'vertical'
-            spacing: 20       
-            PopupHeader:
-                id: header
-
-            PopupWindowContent:
-                id: content
-                padding: 20
-                ScaleLabel:
-                    #size_hint: 0.33, 0.06
-                    text: 'Message'
-                    halign: 'left'
-                    #size: self.texture_size
-                    #text_size: self.size
-                    pos_hint: {'top': 1}
-                    font_size: self.height * 0.5
-                PopupWindowItem:
-                    text: 'content'     
-                PopupWindowItem:
-                    text: 'content'     
-                PopupWindowItem:
-                    text: 'content'     
-                PopupWindowItem:
-                    text: 'content'     
-            PopupFooter:
-                id: footer
-                Label:
-                    text: ''
-                PopupButtonGroup:
-                    id: popupbtns
-                    pos_hint: {'center_x': 1}
-                    spacing: 10
-                    padding: 5
-                    PopupWindowButton:
-                        text: 'CONFIRM'
-                        bold: True
-                        background_color: utils.get_color_from_hex(c.getColor("primary"))
-                        on_press: pop.dismiss()
-                    PopupWindowButton:
-                        text: 'EXIT'
-                        bold: True
-                        background_color: utils.get_color_from_hex(c.getColor("secondary"))
-                        on_press: pop.dismiss()
-                Label:
-                    text: ''
+    auto_dismiss: False
 
 <PAMVideo>:
     size_hint: 0.86, 0.29
@@ -224,9 +255,9 @@ MainMenuLayout:
 <ControlBarItem>:
     font_size: self.height * 0.5
 <MainMenuLayout>:
-  
+    id: main
     BoxLayout:
-        orientation: 'vertical'  
+        orientation: 'vertical'    
         BoxLayout:
             orientation:'horizontal'
             size_hint: 1, 0.84
@@ -235,7 +266,7 @@ MainMenuLayout:
                 orientation: 'vertical'
                 SideBarTab:
                     id: sidebartab1
-                    func_id: 'none'#change to multiplayer to test popup
+                    func_id: 'multiplayer'
                     text: 'MULTIPLAYER'
                 SideBarTab:
                     id: sidebartab2
@@ -255,9 +286,7 @@ MainMenuLayout:
                 size_hint: 0.28, 0.72
                 pos_hint: {'center_x': 0.5, 'top': 1}
                 GameCarouselHighlighter:
-                    id: highlighter
-
-                    
+                    id: highlighter               
             BoxLayout:
                 id: gameDetails
                 orientation: 'vertical'
@@ -268,9 +297,6 @@ MainMenuLayout:
                     id: pamVid
                 GameDescriptionArea:
                     id: gameDescArea
-                    GameTitle:
-                        id: title
-                        text: "Title"
                     GameInfo:
                         id: dev
                         text: "Developer:"
