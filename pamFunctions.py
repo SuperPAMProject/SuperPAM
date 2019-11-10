@@ -183,11 +183,19 @@ def get_hwnds_for_pid (pid):
 
 def testPopup(btn, menu):
 
-    con = pamWidgets.PopupWindowLayout(size=(50, 50), pos=(50, 50))
-    #pop = pamWidgets.PopupWindow(content=con)
-    App.get_running_app().root.add_widget(con)
+    #con = pamWidgets.PopupWindowLayout(size=(75, 75), pos=(50, 50)) #pamWidgets.PopupWindowButton(text='hi')#
+    #App.get_running_app().root.add_widget(con)
+    dark = App.get_running_app().root.ids.dark
+    dark.size_hint = (1, 1)
+    dark.opacity = 1
+    dark.disabled = False
+
+    pop = App.get_running_app().root.ids.firstPop
+    pop.size_hint = (0.6, 0.74)
+    pop.opacity = 1
+    pop.disabled = False
+
     print("OPEN")
-    #pop.open()
     return True
 
 
