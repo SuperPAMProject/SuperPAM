@@ -9,27 +9,26 @@ class mainMenu:
     # Set up menu buttons/game carousel/game info
     # Populate lists from files
     def __init__(self, sidebar, games, actionbtns):
-        self.tabsList = [];
-        self.gameList = [];
-        self.favoriteList = [];
-        self.optionsList = [];
+        self.tabsList = []
+        self.gameList = []
+        self.favoriteList = []
+        self.optionsList = []
         self.currentSection = includes.Section.TABS; # Sections
         self.t_i = 0; # Tabs
         self.g_i = 0; # Games
         self.o_i = 0; # Game Options
         self.f_i = 0; # Favorites
-        self.populateMenus(sidebar);
+        self.populateMenus(sidebar)
         self.populateGameLibrary(games)
-        #self.populateFavorites();
-        self.populateGameOptions(actionbtns);
+        self.populateFavorites()
+        self.populateGameOptions(actionbtns)
         
-
     # sets up the menus labels so that they can be displayed
     def populateMenus(self, sidebar):
-
         for child in sidebar.children:
             self.tabsList.append(child)
-
+        
+        self.t_i = len(self.tabsList) - 1
 
     # reads from a folder all the game data
     # then stores the data for use at a later time
@@ -65,12 +64,19 @@ class mainMenu:
                 index += 1
                 self.gameList.append(newGame);
 
+    # reads a list of favorites from a file
+    # and compares it to the game list. If the game
+    # is on the list, then it adds it to the favorite list
+    def populateFavorites(self):
+        pass
+
     # sets up the game options so that they can be displayed
     def populateGameOptions(self, actionbtns):
             
         for child in actionbtns.children:
             self.optionsList.append(child)
 
+        self.o_i = len(self.optionsList) - 1
 
     # Tabs
     def CurrentTab(self, offset = 0):
@@ -80,11 +86,11 @@ class mainMenu:
             returnMe = self.tabsList[self.t_i + offset]
             return returnMe
         else:
-            return -1
+            return None
 
     # Games
-    def GetGame(self, gameId = 0):
-        gameId = self.g_i + gameId
+    def GetGame(self, offset = 0):
+        gameId = self.g_i + offset
             
         while gameId < 0:
             gameId += len(self.gameList)
@@ -94,7 +100,12 @@ class mainMenu:
             
         return self.gameList[gameId]
 
-    def GetFavorite(self, favoriteId):
+    # Favorites
+    def GetFavorite(self, offset = 0):
+        if len(self.favoriteList) is 0:
+            return None
+        
+        favoriteId = self.f_i + offset
         while favoriteId < 0:
             favoriteId += len(self.favoriteList)
 

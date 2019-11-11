@@ -31,7 +31,6 @@ class GameItem(Label):
         self.font_size = 24
         self.color = (1, 1, 1, 1)
 
-
 class MainMenuLayout(FloatLayout):
     game_select = ObjectProperty(None)
     game_plus_1 = ObjectProperty(None)
@@ -43,7 +42,6 @@ class MainMenuLayout(FloatLayout):
 
     def __init__(self, **kwargs):
         super(MainMenuLayout, self).__init__(**kwargs)
-
 
 # Extends the App Kivy Class. Build will be called when run function is called
 class HomeMenuApp(App):

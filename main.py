@@ -12,14 +12,9 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.core.text import LabelBase
 from kivy.graphics.vertex_instructions import Rectangle
 
-
-
-
+# Our own on_resize function so that we can ensure the games animate properly
 def on_resize(one, two, three):
     pam.selectedY = pam.layout.ids["games"].children[3].y
-
-#def setup(one):
-#    pam.setGames()
 
 # This class serves as the entirety of the program. It will be the
 # container for all the necessary data as well as how to interact/interpret
@@ -27,7 +22,7 @@ def on_resize(one, two, three):
 class PAM:
 
     # initialization of the PAM
-    def __init__(self):      
+    def __init__(self):
         self.currentState = includes.CurrentState.MAIN_MENU_STATE; 
         self.Display = display.SetupDisplay();
         self.Display.load_kv("HomeMenu.kv")
@@ -56,17 +51,13 @@ class PAM:
         self.window.bind(on_resize=on_resize)
         #self.Display.bind(on_start=setup)
         
-
-    
-
     # check currentState and if program is loading
     # displays window based on the current state    
     def displayState(self):
-        if not isLoading:
+        if not includes.isLoading:
             print("Check currentState and display the appropriate window");
         else:
             pass # There's nothing for you to do right now
-
 
     # TODO: Finish button reading
     # Reads all current button inputs. Because keyboard can't suppress inputs in Linux,
@@ -76,11 +67,13 @@ class PAM:
             if event.event_type == keyboard.KEY_DOWN:
 
                 # Anti Turbo
-                if(event.name in self.currentInputs and event.name != includes.DI_UP and event.name != includes.DI_DOWN and event.name != includes.DI_LEFT and event.name != includes.DI_RIGHT):
-                    return;
+                if(event.name in self.currentInputs and 
+                event.name != includes.DI_UP and event.name != includes.DI_DOWN
+                and event.name != includes.DI_LEFT and event.name != includes.DI_RIGHT):
+                    return
+                
                 else:
-                    self.currentInputs.append(event.name);
-
+                    self.currentInputs.append(event.name)
 
                 if event.name == includes.BUTTON_1:
                     # Accept button
@@ -121,8 +114,6 @@ class PAM:
                             if currentOption.func_id == 'play':
                                 self.currentState = includes.CurrentState.GAME_STATE
                                 includes.playsound(includes.sounds.getSound("exit_menu"), False)
-                            
-                    print(event.name)
                     
                 elif event.name == includes.BUTTON_2:
                     if self.currentState == includes.CurrentState.MAIN_MENU_STATE:
@@ -135,22 +126,22 @@ class PAM:
                             pass
 
                 elif event.name == includes.BUTTON_3:
-                    print(event.name)
+                    pass
 
                 elif event.name == includes.BUTTON_4:
-                    print(event.name)
+                    pass
 
                 elif event.name == includes.BUTTON_5:
-                    print(event.name)
+                    pass
 
                 elif event.name == includes.BUTTON_6:
-                    print(event.name)
+                    pass
 
                 elif event.name == includes.BUTTON_7:
-                    print(event.name)
+                    pass
 
                 elif event.name == includes.BUTTON_8:
-                    print(event.name)
+                    pass
 
                 elif event.name == includes.HOME_BUTTON:
                     if self.currentState == includes.CurrentState.MAIN_MENU_STATE:
@@ -172,7 +163,7 @@ class PAM:
                         FRONT = includes.win32gui.GetWindowRect(HWND)
 
                 elif event.name == includes.COIN_BUTTON:
-                    print(event.name)
+                    pass
 
                 elif event.name == includes.DI_DOWN:
                     if self.currentState == includes.CurrentState.MAIN_MENU_STATE:
@@ -223,7 +214,6 @@ class PAM:
                             self.MM.g_i += 1
                             if self.MM.g_i >= len(self.MM.gameList):
                                 self.MM.g_i = 0
-                            print("Current Game: " + self.MM.GetGame().text)
                             # Cycle through games
 
                         else:
@@ -236,8 +226,6 @@ class PAM:
                         
                     else:
                         print("DEBUG: The current state is incorrect")
-                    print(event.name)
-
 
                 elif event.name == includes.DI_UP:
                     if self.currentState == includes.CurrentState.MAIN_MENU_STATE:
@@ -279,7 +267,6 @@ class PAM:
                             self.MM.g_i -= 1
                             if self.MM.g_i < 0:
                                 self.MM.g_i =  len(self.MM.gameList) - 1
-                            print("Current Game: " + self.MM.GetGame().text)
                             # Cycle through games
 
                         else:
@@ -292,22 +279,15 @@ class PAM:
                         
                     else:
                         print("DEBUG: The current state is incorrect")
-                    print(event.name)
                     
-
-                # move towards the left side of the screen
                 elif event.name == includes.DI_LEFT:
                     if self.currentState == includes.CurrentState.MAIN_MENU_STATE:
                         if self.MM.currentSection == includes.Section.GAME_OPTIONS and  (len(self.MM.optionsList) - 1) - self.MM.o_i > includes.GameOptions.PLAY:
-                            self.MM.CurrentOption().highlighted = False
                             self.MM.o_i += 1 
-                            self.MM.CurrentOption().highlighted = True
                         elif self.MM.currentSection > includes.Section.TABS:
-                            self.MM.currentSection -= 1
-                            
+                            self.MM.currentSection -= 1 
                         else:
                             pass # eat the input
-                        print(event.name)
 
                     elif self.currentState == includes.CurrentState.GAME_STATE:
                         # Transfer input to emulator
@@ -315,24 +295,16 @@ class PAM:
                         
                     else:
                         print("DEBUG: The current state is incorrect")
-                    print(event.name)
                     
-
-                # move towards the right side of the screen
                 elif event.name == includes.DI_RIGHT:
                     if self.currentState == includes.CurrentState.MAIN_MENU_STATE:
                         if self.MM.currentSection == includes.Section.GAME_OPTIONS and (len(self.MM.optionsList) - 1) - self.MM.o_i < includes.GameOptions.FAVORITE:
-                            self.MM.CurrentOption().highlighted = False
                             self.MM.o_i -= 1
-                            self.MM.CurrentOption().highlighted = True
-                            
                         elif self.MM.currentSection < includes.Section.GAME_OPTIONS:
                             self.MM.currentSection += 1
                             self.MM.o_i = len(self.MM.optionsList) - 1
-
                         else:
                             pass # eat the input
-                        print(event.name)
 
                     elif self.currentState == includes.CurrentState.GAME_STATE:
                         # Transfer input to emulator
@@ -340,75 +312,55 @@ class PAM:
                         
                     else:
                         print("DEBUG: The current state is incorrect")
-                    print(event.name)
                     
-
             elif event.event_type == keyboard.KEY_UP:
                 # Anti Turbo
                 if(event.name in self.currentInputs):
                     self.currentInputs.remove(event.name);
                 else:
-                    # print("Somehow, there was a key up event for something that didn't have a key down input")
-                    print(event.name)
                     return
                 
-            
         else:
             pass # There's nothing to do right now
 
-        self.updateState(event);
+        self.updateState(event)
 
-      
+    # This function gets called when a game carousel animation completes
     def completeAnim(self, anim, wid):
         self.comp_anims[wid.index] = True
         allTrue = True
-        for comptest in self.comp_anims:
-            if comptest == False:
+        for isComplete in self.comp_anims:
+            if isComplete == False:
                 allTrue = False
                 break
         
         # all animations done
         if allTrue:
-            print("RESETTING")
-            self.setGames()
-            # currently selected game is in array slot 4
+            # Grab the carousel as  well as widget height
             games = self.layout.ids["games"].children
             height = games[0].height
-            # reset height starting with the current game
+
+            # reset widget locations starting with the current game widget's known base location
             games[3].y = self.selectedY
 
-            # from here, every other game carousel item can be set
-            games[0].y = games[3].y + height * 3
-            games[1].y = games[3].y + height * 2
-            games[2].y = games[3].y + height * 1
-            games[4].y = games[3].y - height * 1
-            games[5].y = games[3].y - height * 2
-            games[6].y = games[3].y - height * 3
+            # from here, every other game carousel item's y position can be set
+            # (0,0) is at the bottom left of the window
+            games[6].y = games[3].y + height * 3
+            games[5].y = games[3].y + height * 2
+            games[4].y = games[3].y + height * 1
+            games[2].y = games[3].y - height * 1
+            games[1].y = games[3].y - height * 2
+            games[0].y = games[3].y - height * 3
 
-            # reset A values
-            games[0].color[3] = 0.00
-            games[1].color[3] = 0.33
-            games[2].color[3] = 0.66
-            games[3].color[3] = 1
-            games[4].color[3] = 0.66
-            games[5].color[3] = 0.33
-            games[6].color[3] = 0.00
+            # reset the game list
+            self.setGames()
 
-            # reset names
-            games[0].text = self.MM.GetGame(-3).text
-            games[1].text = self.MM.GetGame(-2).text
-            games[2].text = self.MM.GetGame(-1).text
-            games[3].text = self.MM.GetGame().text
-            games[4].text = self.MM.GetGame(+1).text
-            games[5].text = self.MM.GetGame(+2).text
-            games[6].text = self.MM.GetGame(-3).text
+            #reset values so that animations can begin again
+            self.comp_anims = [False, False, False, False, False, False, False]
+            self.anim0 = None
 
-            #reset booleans
-            self.comp_anims = [False, False, False, False, False, False, False];
-
-            print("ANIM DONE")
-
-
+    # This function gets called on startup to initialize the game to our desired settings
+    # and also whenever a new input is received from the player
     def updateState(self, event):
         """based on the current state, inputs will alter the state:
         if current state is menu state, the stick will iterate through
@@ -419,211 +371,212 @@ class PAM:
         (P2 inputs only, etc.)"""
 
         if self.currentState == includes.CurrentState.MAIN_MENU_STATE:
-            # Undo all selections
-            # Tabs Section
-            for tab in self.MM.tabsList:
-                for subTab in tab.children:
-                    subTab.background_color = includes.get_color_from_hex(subTab.d_color)
+            # DEBUG SETTING
+            if event is None:
+                self.MM.currentSection = includes.Section.GAME_OPTIONS
+                print("DEBUG: The PAM is starting in: " + str(self.MM.currentSection))
+            ############################
 
-                tab.background_color = includes.get_color_from_hex(tab.d_color)
+            if event is None or event.event_type is keyboard.KEY_DOWN:
+                # Undo all selections in the Tabs Section
+                for tab in self.MM.tabsList:
+                    # tab
+                    #tab.highlighted = False
+                    tab.background_color = includes.get_color_from_hex(tab.d_color)
 
-            # Games Section
-            # Game Options Section
-            for option in self.MM.optionsList:
-                option.background_color = includes.get_color_from_hex(option.d_color)
+                    # inner tab
+                    for subTab in tab.children:
+                        #subTab.highlighted = False
+                        subTab.background_color = includes.get_color_from_hex(subTab.d_color)
 
-            # Then set new selection
-            if self.MM.currentSection == includes.Section.TABS:
-                if self.MM.CurrentTab().highlighted:
-                    self.MM.CurrentTab().background_color = includes.get_color_from_hex(self.MM.CurrentTab().h_color)
-                else:
-                    for subTab in self.MM.CurrentTab().children:
-                        if subTab.highlighted:
-                            subTab.background_color = includes.get_color_from_hex(subTab.h_color)
-            elif self.MM.currentSection == includes.Section.GAMES:
-
-                # update y coordinates of GameCarouselItems as well as alpha value of GameName Text
-                if event.event_type == keyboard.KEY_DOWN:
-
-                    # Initialization
-                    carousel = self.layout.ids["games"]
-                    games = carousel.children
-                    anim_x = carousel.x
-                    anim_height = games[0].height
-                    y0 = games[0].y
-                    y1 = games[1].y
-                    y2 = games[2].y
-                    y3 = games[3].y
-                    y4 = games[4].y
-                    y5 = games[5].y
-                    y6 = games[6].y
-
-                    if self.selectedY == None:
-                        self.selectedY = games[3].y
-
-                    if event.name == includes.DI_UP:
-                        
+                # Stop all animations in the Games Section
+                if event is not None:
+                    if event.event_type is keyboard.KEY_DOWN:
                         # stop previous animations
                         if self.anim0 is not None:
-                            self.anim0.stop(games[0])
-                            self.anim1.stop(games[1])
-                            self.anim2.stop(games[2])
+                            # due to how we end animations the game iterator will be 
+                            # temporarily changed in order to avoid an issue where the
+                            # desired game will already be set and will get animated away
+                            # before being reset to the proper position
+                            if event.name == includes.DI_UP:
+                                self.MM.g_i += 1
+                                if self.MM.g_i >= len(self.MM.gameList):
+                                    self.MM.g_i = 0
+
+                            elif event.name == includes.DI_DOWN:
+                                self.MM.g_i -= 1
+                                if self.MM.g_i < 0:
+                                    self.MM.g_i =  len(self.MM.gameList) - 1
+
+                            carousel = self.layout.ids["games"]
+                            games = carousel.children
+                            self.anim0.stop(games[6])
+                            self.anim1.stop(games[5])
+                            self.anim2.stop(games[4])
                             self.anim3.stop(games[3])
-                            self.anim4.stop(games[4])
-                            self.anim5.stop(games[5])
-                            self.anim6.stop(games[6])
-                            print("Stopping previous animations")
+                            self.anim4.stop(games[2])
+                            self.anim5.stop(games[1])
+                            self.anim6.stop(games[0])
 
-                        # set new animation event
-                        self.currentAnimEvent = event.name
+                            # return game iterator to where it is supposed to be
+                            if event.name == includes.DI_UP:
+                                self.MM.g_i -= 1
+                                if self.MM.g_i < 0:
+                                    self.MM.g_i =  len(self.MM.gameList) - 1
 
-                        # set animations
-                        self.anim0 = includes.Animation(x=anim_x, y=y0 - anim_height, color = (1,1,1,0.33), t='in_out_cubic')
-                        self.anim1 = includes.Animation(x=anim_x, y=y1 - anim_height, color = (1,1,1,0.66), t='in_out_cubic')
-                        self.anim2 = includes.Animation(x=anim_x, y=y2 - anim_height, color = (1,1,1,1.00), t='in_out_cubic')
-                        self.anim3 = includes.Animation(x=anim_x, y=y3 - anim_height, color = (1,1,1,0.66), t='in_out_cubic')
-                        self.anim4 = includes.Animation(x=anim_x, y=y4 - anim_height, color = (1,1,1,0.33), t='in_out_cubic')
-                        self.anim5 = includes.Animation(x=anim_x, y=y5 - anim_height, color = (1,1,1,0.00), t='in_out_cubic')
-                        self.anim6 = includes.Animation(x=anim_x, y=y6 - anim_height, color = (1,1,1,0.00), t='in_out_cubic')
+                            elif event.name == includes.DI_DOWN:
+                                self.MM.g_i += 1
+                                if self.MM.g_i >= len(self.MM.gameList):
+                                    self.MM.g_i = 0
 
-                        # bind the completion function
-                        self.anim0.bind(on_complete=self.completeAnim)
-                        self.anim1.bind(on_complete=self.completeAnim)
-                        self.anim2.bind(on_complete=self.completeAnim)
-                        self.anim3.bind(on_complete=self.completeAnim)
-                        self.anim4.bind(on_complete=self.completeAnim)
-                        self.anim5.bind(on_complete=self.completeAnim)
-                        self.anim6.bind(on_complete=self.completeAnim)
-
-                        # start animations
-                        self.anim0.start(games[0])
-                        self.anim1.start(games[1])
-                        self.anim2.start(games[2])
-                        self.anim3.start(games[3])
-                        self.anim4.start(games[4])
-                        self.anim5.start(games[5])
-                        self.anim6.start(games[6])
-
-                    elif event.name == includes.DI_DOWN:
-
-                        # stop previous animations
-                        if self.anim0 is not None:
-                            self.anim0.stop(games[0])
-                            self.anim1.stop(games[1])
-                            self.anim2.stop(games[2])
-                            self.anim3.stop(games[3])
-                            self.anim4.stop(games[4])
-                            self.anim5.stop(games[5])
-                            self.anim6.stop(games[6])
-                            print("Stopping previous animations")
-
-                        # set new animation event
-                        self.currentAnimEvent = event.name
-
-                        # set animations
-                        self.anim0 = includes.Animation(x=anim_x, y=y0 + anim_height, color = (1,1,1,0), t='in_out_cubic')
-                        self.anim1 = includes.Animation(x=anim_x, y=y1 + anim_height, color = (1,1,1,0), t='in_out_cubic')
-                        self.anim2 = includes.Animation(x=anim_x, y=y2 + anim_height, color = (1,1,1,0.33), t='in_out_cubic')
-                        self.anim3 = includes.Animation(x=anim_x, y=y3 + anim_height, color = (1,1,1,0.66), t='in_out_cubic')
-                        self.anim4 = includes.Animation(x=anim_x, y=y4 + anim_height, color = (1,1,1,1), t='in_out_cubic')
-                        self.anim5 = includes.Animation(x=anim_x, y=y5 + anim_height, color = (1,1,1,0.66), t='in_out_cubic')
-                        self.anim6 = includes.Animation(x=anim_x, y=y6 + anim_height, color = (1,1,1,0.33), t='in_out_cubic')
-
-                        # bind the completion function
-                        self.anim0.bind(on_complete=self.completeAnim)
-                        self.anim1.bind(on_complete=self.completeAnim)
-                        self.anim2.bind(on_complete=self.completeAnim)
-                        self.anim3.bind(on_complete=self.completeAnim)
-                        self.anim4.bind(on_complete=self.completeAnim)
-                        self.anim5.bind(on_complete=self.completeAnim)
-                        self.anim6.bind(on_complete=self.completeAnim)
-
-                        # start animations
-                        self.anim0.start(games[0])
-                        self.anim1.start(games[1])
-                        self.anim2.start(games[2])
-                        self.anim3.start(games[3])
-                        self.anim4.start(games[4])
-                        self.anim5.start(games[5])
-                        self.anim6.start(games[6])
-                        
-                # reset the y values to their starting positions and move the "games" data to the new GCI slot
-                print("Games Section")
-            elif self.MM.currentSection == includes.Section.GAME_OPTIONS:
+                # Undo all selections in the Game Options Section
                 for option in self.MM.optionsList:
-                    if option.highlighted:
-                        #option.canvas.rect.source=option.h_action
-                        pass
+                    option.highlighted = False
+                    #option.background_color = includes.get_color_from_hex(option.d_color)
 
+                # Then set new selection
+                if self.MM.currentSection == includes.Section.TABS:
+                    
+                    if self.MM.CurrentTab().highlighted:
+                        self.MM.CurrentTab().background_color = includes.get_color_from_hex(self.MM.CurrentTab().h_color)
+                    else:
+                        for subTab in self.MM.CurrentTab().children:
+                            if subTab.highlighted:
+                                subTab.background_color = includes.get_color_from_hex(subTab.h_color)
                 
-        elif self.currentState == includes.CurrentState.GAME_STATE:
-            print("you shouldn't be here yet")
-        else:
-            print("STATE ERROR!")
+                elif self.MM.currentSection == includes.Section.GAMES:
 
+                    # the game section doesn't need to be updated at the start of the program
+                    if event is not None:
+
+                        # Initialization
+                        carousel = self.layout.ids["games"]
+                        games = carousel.children
+                        anim_x = carousel.x
+                        anim_height = games[0].height
+                        y0 = games[6].y
+                        y1 = games[5].y
+                        y2 = games[4].y
+                        y3 = games[3].y
+                        y4 = games[2].y
+                        y5 = games[1].y
+                        y6 = games[0].y
+
+                        if self.selectedY == None:
+                            self.selectedY = games[3].y
+
+                        # animate carousel downwards
+                        if event.name == includes.DI_UP:
+
+                            # set new animation event
+                            self.currentAnimEvent = event.name
+
+                            # set animations
+                            self.anim0 = includes.Animation(x=anim_x, y=y0 - anim_height, color = (1,1,1,0.33), t='in_out_cubic')
+                            self.anim1 = includes.Animation(x=anim_x, y=y1 - anim_height, color = (1,1,1,0.66), t='in_out_cubic')
+                            self.anim2 = includes.Animation(x=anim_x, y=y2 - anim_height, color = (1,1,1,1.00), t='in_out_cubic')
+                            self.anim3 = includes.Animation(x=anim_x, y=y3 - anim_height, color = (1,1,1,0.66), t='in_out_cubic')
+                            self.anim4 = includes.Animation(x=anim_x, y=y4 - anim_height, color = (1,1,1,0.33), t='in_out_cubic')
+                            self.anim5 = includes.Animation(x=anim_x, y=y5 - anim_height, color = (1,1,1,0.00), t='in_out_cubic')
+                            self.anim6 = includes.Animation(x=anim_x, y=y6 - anim_height, color = (1,1,1,0.00), t='in_out_cubic')
+
+                            # bind the completion function
+                            self.anim0.bind(on_complete=self.completeAnim)
+                            self.anim1.bind(on_complete=self.completeAnim)
+                            self.anim2.bind(on_complete=self.completeAnim)
+                            self.anim3.bind(on_complete=self.completeAnim)
+                            self.anim4.bind(on_complete=self.completeAnim)
+                            self.anim5.bind(on_complete=self.completeAnim)
+                            self.anim6.bind(on_complete=self.completeAnim)
+
+                            # start animations
+                            self.anim0.start(games[6])
+                            self.anim1.start(games[5])
+                            self.anim2.start(games[4])
+                            self.anim3.start(games[3])
+                            self.anim4.start(games[2])
+                            self.anim5.start(games[1])
+                            self.anim6.start(games[0])
+
+                        # animate carousel upwards
+                        elif event.name == includes.DI_DOWN:
+
+                            # set new animation event
+                            self.currentAnimEvent = event.name
+
+                            # set animations
+                            self.anim0 = includes.Animation(x=anim_x, y=y0 + anim_height, color = (1,1,1,0), t='in_out_cubic')
+                            self.anim1 = includes.Animation(x=anim_x, y=y1 + anim_height, color = (1,1,1,0), t='in_out_cubic')
+                            self.anim2 = includes.Animation(x=anim_x, y=y2 + anim_height, color = (1,1,1,0.33), t='in_out_cubic')
+                            self.anim3 = includes.Animation(x=anim_x, y=y3 + anim_height, color = (1,1,1,0.66), t='in_out_cubic')
+                            self.anim4 = includes.Animation(x=anim_x, y=y4 + anim_height, color = (1,1,1,1), t='in_out_cubic')
+                            self.anim5 = includes.Animation(x=anim_x, y=y5 + anim_height, color = (1,1,1,0.66), t='in_out_cubic')
+                            self.anim6 = includes.Animation(x=anim_x, y=y6 + anim_height, color = (1,1,1,0.33), t='in_out_cubic')
+
+                            # bind the completion function
+                            self.anim0.bind(on_complete=self.completeAnim)
+                            self.anim1.bind(on_complete=self.completeAnim)
+                            self.anim2.bind(on_complete=self.completeAnim)
+                            self.anim3.bind(on_complete=self.completeAnim)
+                            self.anim4.bind(on_complete=self.completeAnim)
+                            self.anim5.bind(on_complete=self.completeAnim)
+                            self.anim6.bind(on_complete=self.completeAnim)
+
+                            # start animations
+                            self.anim0.start(games[6])
+                            self.anim1.start(games[5])
+                            self.anim2.start(games[4])
+                            self.anim3.start(games[3])
+                            self.anim4.start(games[2])
+                            self.anim5.start(games[1])
+                            self.anim6.start(games[0])
+
+                elif self.MM.currentSection == includes.Section.GAME_OPTIONS:
+                    self.MM.CurrentOption().highlighted = True
+
+        elif self.currentState == includes.CurrentState.GAME_STATE:
+                print("You have started a game")
+
+        else:
+                print("STATE ERROR!")
+
+    # This function sets the games in the carousel based on where the user is in the list of games
     def setGames(self):
-        # Show the active game as well as the surrounding games
+
+        # Grab the carousel
         games = self.layout.ids["games"].children
 
-        #for i in range(0, len(games)):
-        #    print("Y: " + str(games[i].y))
-        # Get the current game plus the 4 surrounding it
-        game0 = self.MM.GetGame(-3)
-        game1 = self.MM.GetGame(-2)
-        game2 = self.MM.GetGame(-1)
-        game3 = self.MM.GetGame()
-        game4 = self.MM.GetGame(+1)
-        game5 = self.MM.GetGame(+2)
-        game6 = self.MM.GetGame(+3)
-        #print("Hello")
-        print(game0.gameName + "0")
-        print(game1.gameName + "1")
-        print(game2.gameName + "2")
-        print(game3.gameName + "3")
-        print(game4.gameName + "4")
-        print(game5.gameName + "5")
-        print(game6.gameName + "6")
-
-        # place current game in game slot 2
-        
-
-
-        # place surrounding games in slots 0,1,3,4
-
-        games[0].text = game0.gameName + "0"
-        games[0].color[3] = 0.00
-        games[1].text = game1.gameName + "1"
-        games[1].color[3] = 0.33
-        games[2].text = game2.gameName + "2"
-        games[2].color[3] = 0.66
-        games[3].text = game3.gameName + "3"
-        games[3].color[3] = 1
-        games[4].text = game4.gameName + "4"
-        games[4].color[3] = 0.66
-        games[5].text = game5.gameName + "5"
+        # set A values
+        games[6].color[3] = 0.00
         games[5].color[3] = 0.33
-        games[6].text = game6.gameName + "6"
-        games[6].color[3] = 0.001
+        games[4].color[3] = 0.66
+        games[3].color[3] = 1
+        games[2].color[3] = 0.66
+        games[1].color[3] = 0.33
+        games[0].color[3] = 0.00
+
+        # set names
+        games[6].text = self.MM.GetGame(-3).text
+        games[5].text = self.MM.GetGame(-2).text
+        games[4].text = self.MM.GetGame(-1).text
+        games[3].text = self.MM.GetGame().text
+        games[2].text = self.MM.GetGame(+1).text
+        games[1].text = self.MM.GetGame(+2).text
+        games[0].text = self.MM.GetGame(+3).text
 
         #Set a game as a favorite if its name is in the favorite.txt
-        print("Favorites:")
-        with open('user/favorites.txt', 'r') as favTxt:
-            for game in games:
-                for line in favTxt:
-                    if game.gameName == line:
-                        game.isFavorite = True
-                        print(game.gameName)
+        #print("Favorites:")
+        #with open('user/favorites.txt', 'r') as favTxt:
+        #    for game in games:
+        #        for line in favTxt:
+        #            if game.gameName == line:
+        #                game.isFavorite = True
+        #                print(game.gameName)
 
     # a function to close out of the PAM
     def closePAM(self):
         sys.exit(0);
         
-
 pam = PAM();
 
 pam.Display.run();
-
-# main loop
-# displays current state
-# updates current state
-
