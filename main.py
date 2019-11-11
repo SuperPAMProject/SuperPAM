@@ -16,8 +16,10 @@ from kivy.graphics.vertex_instructions import Rectangle
 
 
 def on_resize(one, two, three):
-    print(pam.layout.ids["games"].children[3].y)
     pam.selectedY = pam.layout.ids["games"].children[3].y
+
+#def setup(one):
+#    pam.setGames()
 
 # This class serves as the entirety of the program. It will be the
 # container for all the necessary data as well as how to interact/interpret
@@ -52,6 +54,7 @@ class PAM:
         self.setGames();
         self.window = EventLoop.window
         self.window.bind(on_resize=on_resize)
+        #self.Display.bind(on_start=setup)
         
 
     
@@ -90,7 +93,7 @@ class PAM:
                         elif self.MM.currentSection == includes.Section.GAMES:
                             currentGame = self.MM.GetGame()     
                             if self.runningGame is None:
-                                self.runningGame = pamFunctions.playGame(pamFunctions.emulator, currentGame.gamePath)
+                                self.runningGame = pamFunctions.playGame(currentGame.gameName)
                                 self.lastSelectedGame = currentGame
                             else:
                                 if currentGame == self.lastSelectedGame: #add in check for if lastSelectedGame is still running
@@ -105,7 +108,7 @@ class PAM:
                                     
                                 else: 
                                     pamFunctions.closeGame(self.runningGame)
-                                    self.runningGame = pamFunctions.playGame(pamFunctions.emulator, currentGame.gamePath)
+                                    self.runningGame = pamFunctions.playGame(currentGame.gameName)
                             includes.playsound(includes.sounds.getSound("exit_menu"), False)
                             self.currentState = includes.CurrentState.GAME_STATE
                             
@@ -358,7 +361,6 @@ class PAM:
       
     def completeAnim(self, anim, wid):
         self.comp_anims[wid.index] = True
-        print(wid.text + " " + str(wid.index))
         allTrue = True
         for comptest in self.comp_anims:
             if comptest == False:
@@ -367,6 +369,7 @@ class PAM:
         
         # all animations done
         if allTrue:
+            print("RESETTING")
             self.setGames()
             # currently selected game is in array slot 4
             games = self.layout.ids["games"].children
@@ -392,13 +395,13 @@ class PAM:
             games[6].color[3] = 0.00
 
             # reset names
-            games[0].text = self.MM.GetGame(-3).text + str(games[6].index)
-            games[1].text = self.MM.GetGame(-2).text + str(games[5].index)
-            games[2].text = self.MM.GetGame(-1).text + str(games[4].index)
-            games[3].text = self.MM.GetGame().text + str(games[3].index)
-            games[4].text = self.MM.GetGame(+1).text + str(games[2].index)
-            games[5].text = self.MM.GetGame(+2).text + str(games[1].index)
-            games[6].text = self.MM.GetGame(-3).text + str(games[0].index)
+            games[0].text = self.MM.GetGame(-3).text
+            games[1].text = self.MM.GetGame(-2).text
+            games[2].text = self.MM.GetGame(-1).text
+            games[3].text = self.MM.GetGame().text
+            games[4].text = self.MM.GetGame(+1).text
+            games[5].text = self.MM.GetGame(+2).text
+            games[6].text = self.MM.GetGame(-3).text
 
             #reset booleans
             self.comp_anims = [False, False, False, False, False, False, False];
@@ -477,7 +480,7 @@ class PAM:
                         # set animations
                         self.anim0 = includes.Animation(x=anim_x, y=y0 - anim_height, color = (1,1,1,0.33), t='in_out_cubic')
                         self.anim1 = includes.Animation(x=anim_x, y=y1 - anim_height, color = (1,1,1,0.66), t='in_out_cubic')
-                        self.anim2 = includes.Animation(x=anim_x, y=y2 - anim_height, color = (1,1,1,0.1), t='in_out_cubic')
+                        self.anim2 = includes.Animation(x=anim_x, y=y2 - anim_height, color = (1,1,1,1.00), t='in_out_cubic')
                         self.anim3 = includes.Animation(x=anim_x, y=y3 - anim_height, color = (1,1,1,0.66), t='in_out_cubic')
                         self.anim4 = includes.Animation(x=anim_x, y=y4 - anim_height, color = (1,1,1,0.33), t='in_out_cubic')
                         self.anim5 = includes.Animation(x=anim_x, y=y5 - anim_height, color = (1,1,1,0.00), t='in_out_cubic')
@@ -573,13 +576,13 @@ class PAM:
         game5 = self.MM.GetGame(+2)
         game6 = self.MM.GetGame(+3)
         #print("Hello")
-        #print(game0.gameName)
-        #print(game1.gameName)
-        #print(game2.gameName)
-        #print(game3.gameName)
-        #print(game4.gameName)
-        #print(game5.gameName)
-        #print(game6.gameName)
+        print(game0.gameName + "0")
+        print(game1.gameName + "1")
+        print(game2.gameName + "2")
+        print(game3.gameName + "3")
+        print(game4.gameName + "4")
+        print(game5.gameName + "5")
+        print(game6.gameName + "6")
 
         # place current game in game slot 2
         
@@ -587,20 +590,20 @@ class PAM:
 
         # place surrounding games in slots 0,1,3,4
 
-        games[6].text = game0.gameName
-        games[6].color[3] = 0.00
-        games[5].text = game1.gameName
-        games[5].color[3] = 0.33
-        games[4].text = game2.gameName
-        games[4].color[3] = 0.66
-        games[3].text = game3.gameName
-        games[3].color[3] = 1
-        games[2].text = game4.gameName
-        games[2].color[3] = 0.66
-        games[1].text = game5.gameName
-        games[1].color[3] = 0.33
-        games[0].text = game6.gameName
+        games[0].text = game0.gameName + "0"
         games[0].color[3] = 0.00
+        games[1].text = game1.gameName + "1"
+        games[1].color[3] = 0.33
+        games[2].text = game2.gameName + "2"
+        games[2].color[3] = 0.66
+        games[3].text = game3.gameName + "3"
+        games[3].color[3] = 1
+        games[4].text = game4.gameName + "4"
+        games[4].color[3] = 0.66
+        games[5].text = game5.gameName + "5"
+        games[5].color[3] = 0.33
+        games[6].text = game6.gameName + "6"
+        games[6].color[3] = 0.001
 
         #Set a game as a favorite if its name is in the favorite.txt
         print("Favorites:")

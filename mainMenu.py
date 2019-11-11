@@ -49,6 +49,10 @@ class mainMenu:
             index = 0
             for line in handle:
                 info = line.split(', ')
+                if len(info) < 5:
+                    print("ERROR IN READING GAME")
+                    continue
+                info[4] = info[4].strip("\n")
                 newGame = pamWidgets.GameCarouselItem()
                 newGame.gameName = info[0]
                 newGame.gameInfo.append(info[1])

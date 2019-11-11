@@ -1,6 +1,7 @@
 #import pamWidgets
 import os
 import subprocess
+from subprocess import check_output
 import includes
 import pamWidgets
 import win32con
@@ -11,8 +12,8 @@ from kivy.app import App
 #PLACEHOLDER VARIABLES
 player = ''
 session = ''
-current_game = 'games/zelda.gb'
-emulator = 'emulators/VisualBoyAdvance.exe'
+current_game = ''
+emulator = 'emulators/mame64.exe'
 client = ''
 library = ''
 menu = ''
@@ -40,8 +41,18 @@ def populateGameLibrary(self):
 
 
 #ACTON BUTTON FUNCTIONS
-def playGame(emulator_path, game_path):
-     return subprocess.Popen([emulator_path, game_path])
+def playGame(game_path):
+    try:
+        os.chdir('C:/Users/Michael/Documents/Hobbies/Coding/Bob/SuperPAM/emulators')
+        process = check_output('C:/Users/Michael/Documents/Hobbies/Coding/Bob/SuperPAM/emulators/mame64.exe ' + game_path , shell=True)
+        print(process)
+        os.chdir('C:/Users/Michael/Documents/Hobbies/Coding/Bob/SuperPAM')
+        return process
+    except subprocess.CalledProcessError as e:
+        output = e.output
+        print(output)
+
+     
 
 def closeGame(game):
     game.terminate()
@@ -203,7 +214,7 @@ def testPopup(btn, menu):
 #ACTIVATED ON BUTTON SELECTION, TAKES ID OF BUTTON TO DETERMINE FUNCTION
 def getFunction(btn, menu):
     if btn.func_id == 'play':
-        return playGame(emulator, menu.GetGame().gamePath)
+        return playGame(menu.GetGame().gameName)
     elif btn.func_id == 'save':
         return saveGame(current_game)
     elif btn.func_id == 'fav':
