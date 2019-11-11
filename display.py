@@ -14,6 +14,7 @@ from kivy.clock import Clock
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.widget import Widget
 from kivy.core.text import LabelBase
+
 import kivy
 kivy.require("1.9.0")
 import includes

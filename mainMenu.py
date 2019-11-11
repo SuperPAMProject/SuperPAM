@@ -45,18 +45,6 @@ class mainMenu:
             for i in range(0, len(games.children)):
                 games.children[i].background_color = (0, 0, 0, 0)
                 games.children[i].index = i #index will be used later in the animations
-                
-
-            
-            selected_game = pamWidgets.GameCarouselItem()
-            selected_game.background_color = includes.get_color_from_hex('#FFFFFF00')
-            selected_game.text = ""
-            games.add_widget(selected_game)
-            #highlighter = pamWidgets.GameCarouselHighlighter()
-            #games.add_widget(highlighter)
-            #games.children[0].x = games.children[3].x
-            #games.children[0].y += games.children[3].y
-            #games.children[0].background_color = includes.get_color_from_hex(selected_game.h_color)
             
             index = 0
             for line in handle:
@@ -91,9 +79,8 @@ class mainMenu:
             return -1
 
     # Games
-    def GetGame(self, gameId = None):
-        if gameId == None:
-            gameId = self.g_i
+    def GetGame(self, gameId = 0):
+        gameId = self.g_i + gameId
             
         while gameId < 0:
             gameId += len(self.gameList)
@@ -101,7 +88,7 @@ class mainMenu:
         while gameId >= len(self.gameList):
             gameId -= len(self.gameList)
             
-        return self.gameList[gameId];
+        return self.gameList[gameId]
 
     def GetFavorite(self, favoriteId):
         while favoriteId < 0:

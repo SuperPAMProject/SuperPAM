@@ -1,6 +1,7 @@
 from kivy.uix.widget import Widget
 from kivy.uix.popup import Popup
 from kivy.core.window import Window
+from kivy.core.window import WindowBase
 from kivy.properties import *
 from kivy.utils import get_color_from_hex
 from kivy.properties import ObjectProperty
@@ -29,7 +30,11 @@ from win32 import win32gui
 from kivy.core.audio import SoundLoader
 from playsound import playsound
 
+
+
 #constants
+HIGHLIGHTER_Y = 0.576
+
 BUTTON_1 = 'z'
 BUTTON_2 = 'x'
 BUTTON_3 = 'c'

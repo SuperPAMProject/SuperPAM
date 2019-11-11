@@ -79,6 +79,7 @@ class PAMButton(Button):
         self.bind(highlighted=self.on_highlight)
         self.bind(selected=self.on_select)
         
+        
     def on_highlight(self, *args):
         if self.highlighted:
             playsound(self.h_sound, False)
