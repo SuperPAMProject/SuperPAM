@@ -36,7 +36,8 @@ class PAM:
         #self.layout.ids["games"].children[3].bind(pos=self.on_resize)
         self.inputHook = keyboard.hook(self.readInputs)
         self.currentInputs = [];
-        self.comp_anims = [False, False, False, False, False];
+        self.comp_anims = [False, False, False, False, False, False, False];
+        self.anim0 = None
         self.anim1 = None
         self.anim2 = None
         self.anim3 = None
