@@ -51,9 +51,7 @@ def playGame(game_path):
     except subprocess.CalledProcessError as e:
         output = e.output
         print(output)
-
-     
-
+   
 def closeGame(game):
     game.terminate()
 
@@ -88,8 +86,6 @@ def favGame(game, menu):
     
 
     
-
-
 
 #MULTIPLAYER FUNCTIONS
 def startSession(player):
@@ -167,7 +163,6 @@ def viewStats(player):
 def reformatSystem(player):
     pass
 
-
 #CONTROLS FUNCTIONS
 def controlsPopup(player):
     pass
@@ -192,7 +187,14 @@ def get_hwnds_for_pid (pid):
   win32gui.EnumWindows (callback, hwnds)
   return hwnds
 
-def testPopup(btn, menu):
+def setVisibility(wid):
+    wid.disabled = not wid.disabled
+    if wid.opacity == 1:
+        wid.opacity = 0
+    else:
+        wid.opacity = 1
+
+def multiplayerPopup(btn, menu):
 
     #con = pamWidgets.PopupWindowLayout(size=(75, 75), pos=(50, 50)) #pamWidgets.PopupWindowButton(text='hi')#
     #App.get_running_app().root.add_widget(con)
@@ -201,13 +203,43 @@ def testPopup(btn, menu):
     dark.opacity = 1
     dark.disabled = False
 
-    pop = App.get_running_app().root.ids.firstPop
+    pop = App.get_running_app().root.ids.multiplayerPop
+    pop.ids.header.ids.title.text = 'MULTIPLAYER'
     pop.size_hint = (0.6, 0.74)
     pop.opacity = 1
     pop.disabled = False
-    print(pop.children[0].children[1].children[0].children)
+    
+    for child in pop.ids.content.children:
+        setVisibility(child)
 
-    print("OPEN")
+    return True
+
+def sortPopup(btn, menu):
+    dark = App.get_running_app().root.ids.dark
+    dark.size_hint = (1, 1)
+    dark.opacity = 1
+    dark.disabled = False
+
+    pop = App.get_running_app().root.ids.sortPop
+    pop.ids.header.ids.title.text = 'SORT GAMES'
+    pop.size_hint = (0.6, 0.74)
+    pop.opacity = 1
+    pop.disabled = False
+
+    setVisibility(pop.ids.content.children[0])
+    return True
+
+def optionsPopup(btn, menu):
+    dark = App.get_running_app().root.ids.dark
+    dark.size_hint = (1, 1)
+    dark.opacity = 1
+    dark.disabled = False
+
+    pop = App.get_running_app().root.ids.multiplayerPop
+    pop.ids.header.ids.title.text = 'OPTIONS'
+    pop.size_hint = (0.6, 0.74)
+    pop.opacity = 1
+    pop.disabled = False
     return True
 
 
@@ -222,7 +254,11 @@ def getFunction(btn, menu):
     elif btn.func_id == 'host':
         return startSession(player)
     elif btn.func_id == 'multiplayer':
-        return testPopup(btn, menu)
+        return multiplayerPopup(btn, menu)
+    elif btn.func_id == 'sort':
+        return sortPopup(btn, menu)
+    elif btn.func_id == 'options':
+        return optionsPopup(btn, menu)
     elif btn.func_id == 'accept':
         return acceptClient(client)
     elif btn.func_id == 'kick':
@@ -248,14 +284,4 @@ def getFunction(btn, menu):
 
 
 if __name__ == "__main__":
-    import subprocess
-    import time
-    notepad = subprocess.Popen ([r"notepad.exe"])
-    #
-    # sleep to give the window time to appear
-    #
-    time.sleep (2.0)
-    
-    for hwnd in get_hwnds_for_pid (notepad.pid):
-        print(hwnd, "=>", win32gui.GetWindowText (hwnd))
-        win32gui.SendMessage (hwnd, win32con.WM_CLOSE, 0, 0)
+    pass

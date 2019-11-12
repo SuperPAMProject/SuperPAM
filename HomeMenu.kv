@@ -143,6 +143,7 @@ MainMenuLayout:
         
 
 <PopupWindowContent@BoxLayout>:
+    id: content
     orientation:'vertical'
     size_hint: 0.77, 0.75
     spacing: 10
@@ -206,9 +207,25 @@ MainMenuLayout:
     PopupWindowContent:
         id: content
         PopupWindowItem:
+            id: item1
+            #size_hint: None, None
+            opacity: 0
+            disabled: True
         PopupWindowItem:
+            id: item2
+            #size_hint: None, None
+            opacity: 0
+            disabled: True
         PopupWindowItem:
+            id: item3
+            #size_hint: None, None
+            opacity: 0
+            disabled: True
         PopupWindowItem:
+            id: item4
+            #size_hint: None, None
+            opacity: 0
+            disabled: True
     PopupFooter:
         id: footer
 
@@ -358,7 +375,17 @@ MainMenuLayout:
                 size: self.size
                 pos: self.pos
     PopupWindowLayout:
-        id: firstPop
+        id: multiplayerPop
+        size_hint: None, None
+        opacity: 0
+        disabled: True
+    PopupWindowLayout:
+        id: sortPop
+        size_hint: None, None
+        opacity: 0
+        disabled: True
+    PopupWindowLayout:
+        id: optionsPop
         size_hint: None, None
         opacity: 0
         disabled: True
