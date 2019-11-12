@@ -9,27 +9,26 @@ class mainMenu:
     # Set up menu buttons/game carousel/game info
     # Populate lists from files
     def __init__(self, sidebar, games, actionbtns):
-        self.tabsList = [];
-        self.gameList = [];
-        self.favoriteList = [];
-        self.optionsList = [];
+        self.tabsList = []
+        self.gameList = []
+        self.favoriteList = []
+        self.optionsList = []
         self.currentSection = includes.Section.TABS; # Sections
         self.t_i = 0; # Tabs
         self.g_i = 0; # Games
         self.o_i = 0; # Game Options
         self.f_i = 0; # Favorites
-        self.populateMenus(sidebar);
+        self.populateMenus(sidebar)
         self.populateGameLibrary(games)
-        #self.populateFavorites();
-        self.populateGameOptions(actionbtns);
+        self.populateFavorites()
+        self.populateGameOptions(actionbtns)
         
-
     # sets up the menus labels so that they can be displayed
     def populateMenus(self, sidebar):
-
         for child in sidebar.children:
             self.tabsList.append(child)
-
+        
+        self.t_i = len(self.tabsList) - 1
 
     # reads from a folder all the game data
     # then stores the data for use at a later time
@@ -45,22 +44,14 @@ class mainMenu:
             for i in range(0, len(games.children)):
                 games.children[i].background_color = (0, 0, 0, 0)
                 games.children[i].index = i #index will be used later in the animations
-                
-
-            
-            selected_game = pamWidgets.GameCarouselItem()
-            selected_game.background_color = includes.get_color_from_hex('#FFFFFF00')
-            selected_game.text = ""
-            games.add_widget(selected_game)
-            #highlighter = pamWidgets.GameCarouselHighlighter()
-            #games.add_widget(highlighter)
-            #games.children[0].x = games.children[3].x
-            #games.children[0].y += games.children[3].y
-            #games.children[0].background_color = includes.get_color_from_hex(selected_game.h_color)
             
             index = 0
             for line in handle:
                 info = line.split(', ')
+                if len(info) < 5:
+                    print("ERROR IN READING GAME")
+                    continue
+                info[4] = info[4].strip("\n")
                 newGame = pamWidgets.GameCarouselItem()
                 newGame.gameName = info[0]
                 newGame.gameInfo.append(info[0])
@@ -73,12 +64,19 @@ class mainMenu:
                 index += 1
                 self.gameList.append(newGame);
 
+    # reads a list of favorites from a file
+    # and compares it to the game list. If the game
+    # is on the list, then it adds it to the favorite list
+    def populateFavorites(self):
+        pass
+
     # sets up the game options so that they can be displayed
     def populateGameOptions(self, actionbtns):
             
         for child in actionbtns.children:
             self.optionsList.append(child)
 
+        self.o_i = len(self.optionsList) - 1
 
     # Tabs
     def CurrentTab(self, offset = 0):
@@ -88,12 +86,11 @@ class mainMenu:
             returnMe = self.tabsList[self.t_i + offset]
             return returnMe
         else:
-            return -1
+            return None
 
     # Games
-    def GetGame(self, gameId = None):
-        if gameId == None:
-            gameId = self.g_i
+    def GetGame(self, offset = 0):
+        gameId = self.g_i + offset
             
         while gameId < 0:
             gameId += len(self.gameList)
@@ -101,9 +98,14 @@ class mainMenu:
         while gameId >= len(self.gameList):
             gameId -= len(self.gameList)
             
-        return self.gameList[gameId];
+        return self.gameList[gameId]
 
-    def GetFavorite(self, favoriteId):
+    # Favorites
+    def GetFavorite(self, offset = 0):
+        if len(self.favoriteList) is 0:
+            return None
+        
+        favoriteId = self.f_i + offset
         while favoriteId < 0:
             favoriteId += len(self.favoriteList)
 

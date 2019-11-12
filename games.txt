@@ -1,6 +1,10 @@
 Galaga, 1981, Namco, Namco, roms/Galaga
 Starfire, 1979, Exidy, Xidy, roms/Starfire
+<<<<<<< HEAD
 Pacman, 1980, Namco, Namco, roms/Pacman
 
 
 
+=======
+Pacman, 1980, Namco, Namco, roms/Pacman
+>>>>>>> b0a88509c50e70cba8a68649d7acdcc0c10858b7
