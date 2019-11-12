@@ -90,15 +90,16 @@ class PAM:
                                 self.runningGame = pamFunctions.playGame(currentGame.gameName)
                                 self.lastSelectedGame = currentGame
                             else:
-                                if currentGame == self.lastSelectedGame: #add in check for if lastSelectedGame is still running
+                                if currentGame == self.lastSelectedGame:
+                                    pass #add in check for if lastSelectedGame is still running
                                     #GO BACK TO GAME. NOT LINUX FRIENDLY. REPLACE LATER.
 
-                                    print("PID:")
-                                    print(self.runningGame.pid)
-                                    for hwnd in pamFunctions.get_hwnds_for_pid (self.runningGame.pid):
-                                        print(hwnd, "=>", includes.win32gui.GetWindowText (hwnd))
-                                        includes.win32gui.SetForegroundWindow(hwnd)
-                                        FRONT = includes.win32gui.GetWindowRect(hwnd)                 
+                                    #print("PID:")
+                                    #print(self.runningGame.pid)
+                                    #for hwnd in pamFunctions.get_hwnds_for_pid (self.runningGame.pid):
+                                    #    print(hwnd, "=>", includes.win32gui.GetWindowText (hwnd))
+                                    #    includes.win32gui.SetForegroundWindow(hwnd)
+                                    #    FRONT = includes.win32gui.GetWindowRect(hwnd)                 
                                     
                                 else: 
                                     pamFunctions.closeGame(self.runningGame)
@@ -147,21 +148,21 @@ class PAM:
                 elif event.name == includes.HOME_BUTTON:
                     if self.currentState == includes.CurrentState.MAIN_MENU_STATE:
                         if self.runningGame is not None:
-                            print("PID:")
-                            print(self.runningGame.pid)
-                            for hwnd in pamFunctions.get_hwnds_for_pid (self.runningGame.pid):
-                                print(hwnd, "=>", includes.win32gui.GetWindowText (hwnd))
-                                includes.win32gui.SetForegroundWindow(hwnd)
-                                FRONT = includes.win32gui.GetWindowRect(hwnd)   
+                            #print("PID:")
+                            #print(self.runningGame.pid)
+                            #for hwnd in pamFunctions.get_hwnds_for_pid (self.runningGame.pid):
+                             #   print(hwnd, "=>", includes.win32gui.GetWindowText (hwnd))
+                              #  includes.win32gui.SetForegroundWindow(hwnd)
+                              #  FRONT = includes.win32gui.GetWindowRect(hwnd)   
                             self.currentState = includes.CurrentState.GAME_STATE
 
                     elif self.currentState == includes.CurrentState.GAME_STATE:
                         self.currentState = includes.CurrentState.MAIN_MENU_STATE
                         #GO BACK TO HOME MENU. NOT LINUX FRIENDLY. REPLACE LATER.
                         includes.playsound(includes.sounds.getSound("enter_menu"), False)
-                        HWND = includes.win32gui.FindWindow(None, 'HomeMenu') 
-                        includes.win32gui.SetForegroundWindow(HWND)
-                        FRONT = includes.win32gui.GetWindowRect(HWND)
+                        #HWND = includes.win32gui.FindWindow(None, 'HomeMenu') 
+                        #includes.win32gui.SetForegroundWindow(HWND)
+                        #FRONT = includes.win32gui.GetWindowRect(HWND)
 
                 elif event.name == includes.COIN_BUTTON:
                     pass

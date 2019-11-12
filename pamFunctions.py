@@ -4,9 +4,9 @@ import subprocess
 from subprocess import check_output
 import includes
 import pamWidgets
-import win32con
-import win32gui
-import win32process
+#import win32con
+#import win32gui
+#import win32process
 from kivy.app import App
 
 #PLACEHOLDER VARIABLES
@@ -176,16 +176,17 @@ def confirmRemap(player):
 
 #MISC. FUNCTIONS
 def get_hwnds_for_pid (pid):
-  def callback (hwnd, hwnds):
-    if win32gui.IsWindowVisible (hwnd) and win32gui.IsWindowEnabled (hwnd):
-      _, found_pid = win32process.GetWindowThreadProcessId (hwnd)
-      if found_pid == pid:
-        hwnds.append (hwnd)
-    return True
+  #def callback (hwnd, hwnds):
+    #if win32gui.IsWindowVisible (hwnd) and win32gui.IsWindowEnabled (hwnd):
+    #  _, found_pid = win32process.GetWindowThreadProcessId (hwnd)
+     # if found_pid == pid:
+     #   hwnds.append (hwnd)
+    #return True
 
-  hwnds = []
-  win32gui.EnumWindows (callback, hwnds)
-  return hwnds
+  #hwnds = []
+  #win32gui.EnumWindows (callback, hwnds)
+  #return hwnds
+  pass
 
 def setVisibility(wid):
     wid.disabled = not wid.disabled
@@ -196,7 +197,6 @@ def setVisibility(wid):
 
 def multiplayerPopup(btn, menu):
 
-    #con = pamWidgets.PopupWindowLayout(size=(75, 75), pos=(50, 50)) #pamWidgets.PopupWindowButton(text='hi')#
     #App.get_running_app().root.add_widget(con)
     dark = App.get_running_app().root.ids.dark
     dark.size_hint = (1, 1)
