@@ -12,12 +12,6 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.core.text import LabelBase
 from kivy.graphics.vertex_instructions import Rectangle
 
-<<<<<<< HEAD
-=======
-# Our own on_resize function so that we can ensure the games animate properly
-def on_resize(one, two, three):
-    pam.selectedY = pam.layout.ids["games"].children[3].y
->>>>>>> b0a88509c50e70cba8a68649d7acdcc0c10858b7
 
 # This class serves as the entirety of the program. It will be the
 # container for all the necessary data as well as how to interact/interpret
