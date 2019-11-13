@@ -332,12 +332,19 @@ MainMenuLayout:
                 id: gameDetails
                 orientation: 'vertical'
                 size_hint: 0.33, 0.84
-                pos_hint: {'right': 1, 'top': 0.9}
+                pos_hint: {'right': 1, 'top': 0.93}
                 spacing: 30
                 Button:
                     id: gameImage
                     background_normal: 'img/no_alpha.png'
                     size_hint: 0.78, 0.50
+                    pos_hint: {'right': 0.93}
+                    canvas.before:
+                        Color:
+                            rgba: 1, 1, 1, 1
+                        Line:
+                            width: 2
+                            rectangle: self.x, self.y, self.width, self.height
                 GameDescriptionArea:
                     id: gameDescArea
                     GameInfo:
