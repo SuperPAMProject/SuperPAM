@@ -45,6 +45,8 @@ MainMenuLayout:
 <PAMButton>:
     font: f.getFont("normal")
 
+<ControlBarIcon@Image>:
+
 <PAMActionButton>:
     size_hint: 0.3, 0.3
     background_color: 0, 0, 0, 0
@@ -260,7 +262,8 @@ MainMenuLayout:
 <ControlBar>:
     orientation: 'horizontal'
     size_hint: 1, 0.08
-    canvas:
+    barcolor: self.barcolor
+    canvas.before:
         Color:
             rgb: utils.get_color_from_hex(c.getColor("primary"))
             
@@ -329,10 +332,12 @@ MainMenuLayout:
                 id: gameDetails
                 orientation: 'vertical'
                 size_hint: 0.33, 0.84
-                pos_hint: {'right': 1, 'top': 1}
+                pos_hint: {'right': 1, 'top': 0.9}
                 spacing: 30
-                PAMVideo:
-                    id: pamVid
+                Button:
+                    id: gameImage
+                    background_normal: 'img/no_alpha.png'
+                    size_hint: 0.78, 0.50
                 GameDescriptionArea:
                     id: gameDescArea
                     GameInfo:
@@ -376,13 +381,15 @@ MainMenuLayout:
         ControlBar:
             id: controlbar
             ControlBarItem:
-                text:"Select"
+                text:"Select: Z"
+
             ControlBarItem:
-                text: "Back"
+                text: "Back: X"
             ControlBarItem:
-                text: "Play"
+                text: "Home: Q"
             ControlBarItem:
-                text: "Favorite"
+                text: "Favorite: W"
+
     BoxLayout:
         id: dark
         size_hint: None, None

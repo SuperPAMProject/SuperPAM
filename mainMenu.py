@@ -22,6 +22,7 @@ class mainMenu:
         self.populateGameLibrary(games)
         self.populateFavorites()
         self.populateGameOptions(actionbtns)
+        self.current_color_scheme = includes.colors.current_scheme
         
     # sets up the menus labels so that they can be displayed
     def populateMenus(self, sidebar):
@@ -54,10 +55,11 @@ class mainMenu:
                 info[4] = info[4].strip("\n")
                 newGame = pamWidgets.GameCarouselItem()
                 newGame.gameName = info[0]
-                newGame.gameInfo.append(info[0])
-                newGame.gameInfo.append(info[0])
-                newGame.gameInfo.append(info[0])
-                newGame.gameInfo.append(info[0])
+                newGame.gameInfo.append(info[1])
+                newGame.gameInfo.append(info[2])
+                newGame.gameInfo.append(info[3])
+                newGame.gameInfo.append(info[4])
+                newGame.gameImage = info[5]
                 newGame.gamePath = info[0]
                 newGame.text = newGame.gameName
                 newGame.index = index

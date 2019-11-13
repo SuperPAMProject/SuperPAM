@@ -35,20 +35,20 @@ color_schemes = {
     "watermelon" : {
         "background": "#101216",
         "primary": "#23967F",
-        "secondary": "#F7BFB4",
+        "secondary": "#FC6471",
         "accent": "#ED6A5E",
         "warning": "#ED6A5E",
         "font_light": "#FFFFFF",
         "font_dark": "#101216",
-        "play-d":'img/Play_Waves_Default.png',
-        "play-h":'img/Play_Waves_Highlight.png',
-        "play-s":'img/Play_Waves_Select.png',
-        "save-d":'img/Save_Waves_Default.png',
-        "save-h":'img/Save_Waves_Highlight.png',
-        "save-s":'img/Save_Waves_Select.png',
-        'fav-d':'img/Fav_Waves_Default.png',
-        'fav-h':'img/Fav_Waves_Highlight.png',
-        'fav-s':'img/Fav_Waves_Select.png'
+        "play-d":'img/Play_Watermelon_Default.png',
+        "play-h":'img/Play_Watermelon_Highlight.png',
+        "play-s":'img/Play_Watermelon_Select.png',
+        "save-d":'img/Save_Watermelon_Default.png',
+        "save-h":'img/Save_Watermelon_Highlight.png',
+        "save-s":'img/Save_Watermelon_Select.png',
+        'fav-d':'img/Fav_Watermelon_Default.png',
+        'fav-h':'img/Fav_Watermelon_Highlight.png',
+        'fav-s':'img/Fav_Watermelon_Select.png'
     }, 
     "burn" : {
         "background": "#101216",
@@ -58,15 +58,15 @@ color_schemes = {
         "warning": "#FF3300",
         "font_light": "#FFFFFF",
         "font_dark": "#101216",
-        "play-d":'img/Play_Waves_Default.png',
-        "play-h":'img/Play_Waves_Highlight.png',
-        "play-s":'img/Play_Waves_Select.png',
-        "save-d":'img/Save_Waves_Default.png',
-        "save-h":'img/Save_Waves_Highlight.png',
-        "save-s":'img/Save_Waves_Select.png',
-        'fav-d':'img/Fav_Waves_Default.png',
-        'fav-h':'img/Fav_Waves_Highlight.png',
-        'fav-s':'img/Fav_Waves_Select.png'
+        "play-d":'img/Play_Burn_Default.png',
+        "play-h":'img/Play_Burn_Highlight.png',
+        "play-s":'img/Play_Burn_Select.png',
+        "save-d":'img/Save_Burn_Default.png',
+        "save-h":'img/Save_Burn_Highlight.png',
+        "save-s":'img/Save_Burn_Select.png',
+        'fav-d':'img/Fav_Burn_Default.png',
+        'fav-h':'img/Fav_Burn_Highlight.png',
+        'fav-s':'img/Fav_Burn_Select.png'
     },
     "blossom": {
         "background": "#101216",
@@ -90,6 +90,9 @@ color_schemes = {
 
 def getColor(color):
     return color_schemes[current_scheme].get(color)
+
+def getColorOfScheme(color, scheme):
+    return color_schemes[scheme].get(color)
 
 if __name__ == "__main__":
     print(getColor("accent"))

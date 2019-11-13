@@ -149,6 +149,8 @@ def soundPopup(player):
 def visualsPopup(player):
     pass
 
+def setColor(menu):
+    menu.current_color_scheme = 'watermelon'
 
 #USER FUNCTIONS
 def userPopup(player):
@@ -198,19 +200,19 @@ def setVisibility(wid):
 def multiplayerPopup(btn, menu):
 
     #App.get_running_app().root.add_widget(con)
-    dark = App.get_running_app().root.ids.dark
-    dark.size_hint = (1, 1)
-    dark.opacity = 1
-    dark.disabled = False
+    #dark = App.get_running_app().root.ids.dark
+   # dark.size_hint = (1, 1)
+    #dark.opacity = 1
+    #dark.disabled = False
 
-    pop = App.get_running_app().root.ids.multiplayerPop
-    pop.ids.header.ids.title.text = 'MULTIPLAYER'
-    pop.size_hint = (0.6, 0.74)
-    pop.opacity = 1
-    pop.disabled = False
+    #pop = App.get_running_app().root.ids.multiplayerPop
+    #pop.ids.header.ids.title.text = 'MULTIPLAYER'
+    #pop.size_hint = (0.6, 0.74)
+    #pop.opacity = 1
+   # pop.disabled = False
     
-    for child in pop.ids.content.children:
-        setVisibility(child)
+   # for child in pop.ids.content.children:
+      #  setVisibility(child)
 
     return True
 
@@ -254,11 +256,11 @@ def getFunction(btn, menu):
     elif btn.func_id == 'host':
         return startSession(player)
     elif btn.func_id == 'multiplayer':
-        return multiplayerPopup(btn, menu)
+        pass
     elif btn.func_id == 'sort':
-        return sortPopup(btn, menu)
+        pass
     elif btn.func_id == 'options':
-        return optionsPopup(btn, menu)
+        pass
     elif btn.func_id == 'accept':
         return acceptClient(client)
     elif btn.func_id == 'kick':

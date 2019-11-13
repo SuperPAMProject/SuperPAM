@@ -12,6 +12,7 @@ from kivy.app import App
 from kivy.core.window import Window
 from kivy.clock import Clock
 from kivy.uix.widget import Widget
+from kivy.uix.image import Image
 from kivy.uix.button import Button
 from kivy.uix.accordion import Accordion, AccordionItem
 from kivy.uix.behaviors import ButtonBehavior
@@ -54,6 +55,11 @@ class GameCarouselHighlighter(FloatLayout):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.isFavorite = False #see if you can remove this later
+
+class PAMImage(Image):
+    bg_image = StringProperty('img/no_alpha.png')
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
 
 
 #BUTTON CLASSES

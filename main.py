@@ -11,6 +11,7 @@ from kivy.base import EventLoop
 from kivy.uix.boxlayout import BoxLayout
 from kivy.core.text import LabelBase
 from kivy.graphics.vertex_instructions import Rectangle
+from kivy.graphics import Color
 
 
 # Our own on_resize function so that we can ensure the games animate properly
@@ -213,6 +214,7 @@ class PAM:
 
                         elif self.MM.currentSection == includes.Section.GAMES:
                             includes.playsound(includes.sounds.getSound("down_carousel"), False)
+                            
                             self.MM.g_i += 1
                             if self.MM.g_i >= len(self.MM.gameList):
                                 self.MM.g_i = 0
@@ -384,6 +386,11 @@ class PAM:
                 for tab in self.MM.tabsList:
                     # tab
                     #tab.highlighted = False
+                    #ensure tabs use the current color scheme
+                    tab.h_color = includes.colors.getColorOfScheme('secondary', self.MM.current_color_scheme)
+                    tab.s_color = includes.colors.getColorOfScheme('accent', self.MM.current_color_scheme)
+                    with self.layout.ids['controlbar'].canvas:
+                        Color(rgb=includes.get_color_from_hex(includes.colors.getColorOfScheme('primary', self.MM.current_color_scheme)))
                     tab.background_color = includes.get_color_from_hex(tab.d_color)
 
                     # inner tab
@@ -434,6 +441,17 @@ class PAM:
                 # Undo all selections in the Game Options Section
                 for option in self.MM.optionsList:
                     option.highlighted = False
+                    #ensure buttons use the current color scheme
+                    self.layout.ids['play'].d_action = includes.colors.getColorOfScheme('play-d', self.MM.current_color_scheme)
+                    self.layout.ids['play'].h_action = includes.colors.getColorOfScheme('play-h', self.MM.current_color_scheme)
+                    self.layout.ids['play'].s_action = includes.colors.getColorOfScheme('play-s', self.MM.current_color_scheme)
+                    self.layout.ids['play'].action_image = self.layout.ids['play'].d_action
+
+                    self.layout.ids['fav'].d_action = includes.colors.getColorOfScheme('fav-d', self.MM.current_color_scheme)
+                    self.layout.ids['fav'].h_action = includes.colors.getColorOfScheme('fav-h', self.MM.current_color_scheme)
+                    self.layout.ids['fav'].s_action = includes.colors.getColorOfScheme('fav-s', self.MM.current_color_scheme)
+                    self.layout.ids['fav'].action_image = self.layout.ids['fav'].d_action
+
                     #option.background_color = includes.get_color_from_hex(option.d_color)
 
                 # Then set new selection
@@ -466,6 +484,13 @@ class PAM:
 
                         if self.selectedY == None:
                             self.selectedY = games[3].y
+                        
+                        #set game info to match selected game
+                        print(self.MM.GetGame().gameImage)
+                        self.layout.ids['gameImage'].background_normal = self.MM.GetGame().gameImage
+                        self.layout.ids['year'].text = 'Year: ' +self.MM.GetGame().gameInfo[0]
+                        self.layout.ids['dev'].text = 'Developer: ' +self.MM.GetGame().gameInfo[1]
+                        self.layout.ids['pub'].text = 'Publisher: ' +self.MM.GetGame().gameInfo[2]
 
                         # animate carousel downwards
                         if event.name == includes.DI_UP:
@@ -557,6 +582,17 @@ class PAM:
         games[1].color[3] = 0.33
         games[0].color[3] = 0.00
 
+        
+        
+        #set images
+        games[6].gameImage = self.MM.GetGame(-3).gameImage
+        games[5].gameImage = self.MM.GetGame(-2).gameImage
+        games[4].gameImage = self.MM.GetGame(-1).gameImage
+        games[3].gameImage = self.MM.GetGame().gameImage
+        games[2].gameImage = self.MM.GetGame(+1).gameImage
+        games[1].gameImage = self.MM.GetGame(+2).gameImage
+        games[0].gameImage = self.MM.GetGame(+3).gameImage
+
         # set names
         games[6].text = self.MM.GetGame(-3).text
         games[5].text = self.MM.GetGame(-2).text
@@ -565,6 +601,8 @@ class PAM:
         games[2].text = self.MM.GetGame(+1).text
         games[1].text = self.MM.GetGame(+2).text
         games[0].text = self.MM.GetGame(+3).text
+
+
 
         #Set a game as a favorite if its name is in the favorite.txt
         #print("Favorites:")
