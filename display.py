@@ -55,14 +55,14 @@ def SetupDisplay():
         name='Roboto',
         fn_regular='fonts/Roboto-Light.ttf',
         fn_bold='fonts/Roboto-Bold.ttf')
+    LabelBase.register(
+    name='Arial',
+    fn_regular='fonts/ARIAL.ttf',
+    fn_bold='fonts/ARIALBD.ttf')
     print("Set up")
     return HomeMenuApp()
 
 if __name__ == "__main__":
     menu_app = HomeMenuApp()
     Window.clearcolor = get_color_from_hex(colors.getColor("background"))
-    LabelBase.register(
-        name='Roboto',
-        fn_regular='fonts/Roboto-Light.ttf',
-        fn_bold='fonts/Roboto-Bold.ttf')
     menu_app.run()

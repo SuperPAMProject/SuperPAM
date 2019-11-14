@@ -43,7 +43,7 @@ MainMenuLayout:
 			pos: int(self.center_x - self.texture_size[0] / 2.), int(self.center_y - self.texture_size[1] / 2.)
 		PopMatrix
 <PAMButton>:
-    font: f.getFont("normal")
+    #font: f.getFont("normal")
 
 <ControlBarIcon@Image>:
 
@@ -87,7 +87,6 @@ MainMenuLayout:
     text_size: self.size
     font_size: self.height * 0.5
     bold: True
-    font: f.getFont("bold")
     halign: 'center'
     valign: 'top'
     size_hint: 0.5, 0.13
@@ -95,7 +94,6 @@ MainMenuLayout:
 <GameInfo>:
     size_hint: 1, 0.2
     text_size: self.size
-    font: f.getFont("normal")
     font_size: self.height * 0.5
     halign: 'left'   
     valign: 'top'
@@ -141,7 +139,6 @@ MainMenuLayout:
         text: 'TITLE'
         halign: 'left'
         font_size: (self.height + self.width) * 0.09
-        font: f.getFont("bold")
         bold: True
         
 
@@ -287,7 +284,7 @@ MainMenuLayout:
                 SideBarTab:
                     id: sidebartab1
                     func_id: 'multiplayer'
-                    text: 'MULTIPLAYER'
+                    text: 'FONT SWITCH'
                     orientation: 'vertical'
                     #SideBarTab:
                     #    text: 'HOST CONNECTION'
@@ -298,7 +295,7 @@ MainMenuLayout:
                 SideBarTab:
                     id: sidebartab2
                     func_id: 'sort'
-                    text: 'SORT'
+                    text: 'COLORS'
                     orientation: 'vertical'
                     #SideBarTab:
                     #    text: 'BY GENRE'
@@ -389,7 +386,6 @@ MainMenuLayout:
             id: controlbar
             ControlBarItem:
                 text:"Select: Z"
-
             ControlBarItem:
                 text: "Back: X"
             ControlBarItem:

@@ -23,6 +23,7 @@ class mainMenu:
         self.populateFavorites()
         self.populateGameOptions(actionbtns)
         self.current_color_scheme = includes.colors.current_scheme
+        self.current_font = 'Roboto'
         
     # sets up the menus labels so that they can be displayed
     def populateMenus(self, sidebar):

@@ -4,10 +4,12 @@ import subprocess
 from subprocess import check_output
 import includes
 import pamWidgets
-#import win32con
-#import win32gui
-#import win32process
+import win32con
+import win32gui
+import win32process
 from kivy.app import App
+from kivy.core.text import LabelBase
+import display
 
 #PLACEHOLDER VARIABLES
 player = ''
@@ -45,7 +47,6 @@ def playGame(game_path):
     try:
         os.chdir('C:/Users/Michael/Documents/Hobbies/Coding/Bob/SuperPAM/emulators')
         process = check_output('C:/Users/Michael/Documents/Hobbies/Coding/Bob/SuperPAM/emulators/mame64.exe ' + game_path , shell=True)
-        print(process)
         os.chdir('C:/Users/Michael/Documents/Hobbies/Coding/Bob/SuperPAM')
         return process
     except subprocess.CalledProcessError as e:
@@ -150,7 +151,16 @@ def visualsPopup(player):
     pass
 
 def setColor(menu):
-    menu.current_color_scheme = 'watermelon'
+    if menu.current_color_scheme == 'watermelon':
+        menu.current_color_scheme = 'waves'
+    else:
+        menu.current_color_scheme = 'watermelon'
+
+def setFont(menu):
+    if menu.current_font == 'Roboto':
+        menu.current_font = 'Arial'
+    else:
+        menu.current_font = 'Roboto'
 
 #USER FUNCTIONS
 def userPopup(player):
@@ -178,17 +188,16 @@ def confirmRemap(player):
 
 #MISC. FUNCTIONS
 def get_hwnds_for_pid (pid):
-  #def callback (hwnd, hwnds):
-    #if win32gui.IsWindowVisible (hwnd) and win32gui.IsWindowEnabled (hwnd):
-    #  _, found_pid = win32process.GetWindowThreadProcessId (hwnd)
-     # if found_pid == pid:
-     #   hwnds.append (hwnd)
-    #return True
+  def callback (hwnd, hwnds):
+    if win32gui.IsWindowVisible (hwnd) and win32gui.IsWindowEnabled (hwnd):
+      _, found_pid = win32process.GetWindowThreadProcessId (hwnd)
+      if found_pid == pid:
+        hwnds.append (hwnd)
+    return True
 
-  #hwnds = []
-  #win32gui.EnumWindows (callback, hwnds)
-  #return hwnds
-  pass
+  hwnds = []
+  win32gui.EnumWindows (callback, hwnds)
+  return hwnds
 
 def setVisibility(wid):
     wid.disabled = not wid.disabled

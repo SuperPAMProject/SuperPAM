@@ -11,14 +11,14 @@ fonts = {
         "bold": "fonts/Roboto-Bold.ttf"
     },
 
-    "dyslexia": {
-        "normal": "N",
-        "bold": "B"
+    "arial": {
+        "normal": "fonts/ARIAL.ttf",
+        "bold": "fonts/ARIALBD.ttf"
     }
 }
 
-def getFont(font):
-    return fonts[font_mode].get(font)
+def getFont(font, font_type):
+    return fonts[font_type].get(font)
 
 def setFont(mode):
     font_mode = mode

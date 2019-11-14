@@ -122,7 +122,7 @@ class PAMActionButton(PAMButton):
         if self.selected:
             print(self.func_id + " Selected")
             playsound(self.s_sound, False)
-            self.action_image=self.s_action
+            #self.action_image=self.s_action
         else:
             self.action_image=self.d_action
 

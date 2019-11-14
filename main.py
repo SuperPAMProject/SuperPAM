@@ -95,12 +95,12 @@ class PAM:
                                     pass #add in check for if lastSelectedGame is still running
                                     #GO BACK TO GAME. NOT LINUX FRIENDLY. REPLACE LATER.
 
-                                    #print("PID:")
-                                    #print(self.runningGame.pid)
-                                    #for hwnd in pamFunctions.get_hwnds_for_pid (self.runningGame.pid):
-                                    #    print(hwnd, "=>", includes.win32gui.GetWindowText (hwnd))
-                                    #    includes.win32gui.SetForegroundWindow(hwnd)
-                                    #    FRONT = includes.win32gui.GetWindowRect(hwnd)                 
+                                    print("PID:")
+                                    print(self.runningGame.pid)
+                                    for hwnd in pamFunctions.get_hwnds_for_pid (self.runningGame.pid):
+                                        print(hwnd, "=>", includes.win32gui.GetWindowText (hwnd))
+                                        includes.win32gui.SetForegroundWindow(hwnd)
+                                        FRONT = includes.win32gui.GetWindowRect(hwnd)                 
                                     
                                 else: 
                                     pamFunctions.closeGame(self.runningGame)
@@ -108,12 +108,13 @@ class PAM:
                             includes.playsound(includes.sounds.getSound("exit_menu"), False)
                             self.currentState = includes.CurrentState.GAME_STATE
                             
-                            #start transition to playing the game
+                            
                         elif self.MM.currentSection == includes.Section.GAME_OPTIONS:
                             currentOption = self.MM.CurrentOption()
                             currentOption.selected = True
                             pamFunctions.getFunction(currentOption, self.MM)
                             currentOption.selected = False
+
                             if currentOption.func_id == 'play':
                                 self.currentState = includes.CurrentState.GAME_STATE
                                 includes.playsound(includes.sounds.getSound("exit_menu"), False)
@@ -149,21 +150,21 @@ class PAM:
                 elif event.name == includes.HOME_BUTTON:
                     if self.currentState == includes.CurrentState.MAIN_MENU_STATE:
                         if self.runningGame is not None:
-                            #print("PID:")
-                            #print(self.runningGame.pid)
-                            #for hwnd in pamFunctions.get_hwnds_for_pid (self.runningGame.pid):
-                             #   print(hwnd, "=>", includes.win32gui.GetWindowText (hwnd))
-                              #  includes.win32gui.SetForegroundWindow(hwnd)
-                              #  FRONT = includes.win32gui.GetWindowRect(hwnd)   
+                            print("PID:")
+                            print(self.runningGame.pid)
+                            for hwnd in pamFunctions.get_hwnds_for_pid (self.runningGame.pid):
+                                print(hwnd, "=>", includes.win32gui.GetWindowText (hwnd))
+                                includes.win32gui.SetForegroundWindow(hwnd)
+                                FRONT = includes.win32gui.GetWindowRect(hwnd)   
                             self.currentState = includes.CurrentState.GAME_STATE
 
                     elif self.currentState == includes.CurrentState.GAME_STATE:
                         self.currentState = includes.CurrentState.MAIN_MENU_STATE
                         #GO BACK TO HOME MENU. NOT LINUX FRIENDLY. REPLACE LATER.
                         includes.playsound(includes.sounds.getSound("enter_menu"), False)
-                        #HWND = includes.win32gui.FindWindow(None, 'HomeMenu') 
-                        #includes.win32gui.SetForegroundWindow(HWND)
-                        #FRONT = includes.win32gui.GetWindowRect(HWND)
+                        HWND = includes.win32gui.FindWindow(None, 'HomeMenu') 
+                        includes.win32gui.SetForegroundWindow(HWND)
+                        FRONT = includes.win32gui.GetWindowRect(HWND)
 
                 elif event.name == includes.COIN_BUTTON:
                     pass
@@ -389,14 +390,24 @@ class PAM:
                     #ensure tabs use the current color scheme
                     tab.h_color = includes.colors.getColorOfScheme('secondary', self.MM.current_color_scheme)
                     tab.s_color = includes.colors.getColorOfScheme('accent', self.MM.current_color_scheme)
-                    with self.layout.ids['controlbar'].canvas:
-                        Color(rgb=includes.get_color_from_hex(includes.colors.getColorOfScheme('primary', self.MM.current_color_scheme)))
+                    #with self.layout.ids['controlbar'].canvas.before:
+                     #   Color(includes.get_color_from_hex(includes.colors.getColorOfScheme('primary', self.MM.current_color_scheme)))
+                      #  self.rect = Rectangle(pos=self.layout.ids['controlbar'].pos, size=self.layout.ids['controlbar'].size)
                     tab.background_color = includes.get_color_from_hex(tab.d_color)
 
+                    #set tab fonts
+                    tab.font_name = self.MM.current_font
+                
                     # inner tab
                     for subTab in tab.children:
                         #subTab.highlighted = False
                         subTab.background_color = includes.get_color_from_hex(subTab.d_color)
+
+                for child in self.layout.ids['gameDescArea'].children:
+                    child.font_name = self.MM.current_font
+
+                for child in self.layout.ids['games'].children:
+                    child.font_name = self.MM.current_font
 
                 # Stop all animations in the Games Section
                 if event is not None:
