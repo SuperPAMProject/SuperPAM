@@ -1,3 +1,3 @@
-Galaga, 1981, Namco, Namco, roms/Galaga, img/galaga.png
+Galaga, 1981, Namco, Namco, roms/Galaga, img/galaga1.png
 Starfire, 1979, Exidy, Xidy, roms/Starfire, img/starfire.png
 Pacman, 1980, Namco, Namco, roms/Pacman, img/pacman.png

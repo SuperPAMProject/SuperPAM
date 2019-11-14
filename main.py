@@ -16,7 +16,9 @@ from kivy.graphics import Color
 
 # Our own on_resize function so that we can ensure the games animate properly
 def on_resize(one, two, three):
-    pam.selectedY = pam.layout.ids["games"].children[3].y
+    if pam.selectedY is not 0 and pam.selectedY is not None:
+        pam.selectedY = pam.layout.ids["games"].children[3].y
+    print("RESIZING")
 
 # This class serves as the entirety of the program. It will be the
 # container for all the necessary data as well as how to interact/interpret
@@ -410,6 +412,10 @@ class PAM:
                     child.font_name = self.MM.current_font
 
                 # Stop all animations in the Games Section
+                print(self.selectedY)
+                if event is None or self.selectedY is None or self.selectedY is 0:
+                    self.selectedY = self.layout.ids["games"].children[3].y
+
                 if event is not None:
                     if event.event_type is keyboard.KEY_DOWN:
                         # stop previous animations
@@ -485,6 +491,7 @@ class PAM:
                         games = carousel.children
                         anim_x = carousel.x
                         anim_height = games[0].height
+                        print("Height: " + str(anim_height))
                         y0 = games[6].y
                         y1 = games[5].y
                         y2 = games[4].y
@@ -492,9 +499,6 @@ class PAM:
                         y4 = games[2].y
                         y5 = games[1].y
                         y6 = games[0].y
-
-                        if self.selectedY == None:
-                            self.selectedY = games[3].y
                         
                         #set game info to match selected game
                         print(self.MM.GetGame().gameImage)
@@ -518,6 +522,20 @@ class PAM:
                             self.anim5 = includes.Animation(x=anim_x, y=y5 - anim_height, color = (1,1,1,0.00), t='in_out_cubic')
                             self.anim6 = includes.Animation(x=anim_x, y=y6 - anim_height, color = (1,1,1,0.00), t='in_out_cubic')
 
+                            print('Y0: ' + str(y0))
+                            print("Adjusted: " + str(y0 - anim_height))
+                            print('Y1: ' + str(y1))
+                            print("Adjusted: " + str(y1 - anim_height))
+                            print('Y2: ' + str(y2))
+                            print("Adjusted: " + str(y2 - anim_height))
+                            print('Y3: ' + str(y3))
+                            print("Adjusted: " + str(y3 - anim_height))
+                            print('Y4: ' + str(y4))
+                            print("Adjusted: " + str(y4 - anim_height))
+                            print('Y5: ' + str(y5))
+                            print("Adjusted: " + str(y5 - anim_height))
+                            print('Y6: ' + str(y6))
+                            print("Adjusted: " + str(y6 - anim_height))
                             # bind the completion function
                             self.anim0.bind(on_complete=self.completeAnim)
                             self.anim1.bind(on_complete=self.completeAnim)
