@@ -401,7 +401,10 @@ class PAM:
                     tab.font_name = self.MM.current_font
                 
                     # inner tab
-                    for subTab in tab.children:
+                    
+                    subTabs = tab.children[0].children[0].children[0].children[0].children
+                    print(subTabs)
+                    for subTab in subTabs:
                         #subTab.highlighted = False
                         subTab.background_color = includes.get_color_from_hex(subTab.d_color)
 
@@ -473,11 +476,11 @@ class PAM:
 
                 # Then set new selection
                 if self.MM.currentSection == includes.Section.TABS:
-                    
+                    subTabs = tab.children[0].children[0].children[0].children[0].children
                     if self.MM.CurrentTab().highlighted:
                         self.MM.CurrentTab().background_color = includes.get_color_from_hex(self.MM.CurrentTab().h_color)
                     else:
-                        for subTab in self.MM.CurrentTab().children:
+                        for subTab in subTabs:
                             if subTab.highlighted:
                                 subTab.background_color = includes.get_color_from_hex(subTab.h_color)
                 

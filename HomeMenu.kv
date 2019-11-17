@@ -70,7 +70,7 @@ MainMenuLayout:
             size: w.width*0.28, w.height*0.04
 
 <SideBar>:
-    size_hint: 0.23, 0.25
+    size_hint: 0.33, 0.8#0.23, 0.25
     pos_hint: {'right':0.4, 'top':0.89}
     on_pos: pos={self.parent.x, self.parent.y}
 
@@ -78,6 +78,7 @@ MainMenuLayout:
     size_hint: 0.5, 0.12
     font_size: self.height * 0.5
 <SideBarTabItem>:
+    size_hint: 0.5, 0.12
 <GameDescriptionArea>:
     orientation: 'vertical'
     size_hint: 0.86, 0.38
@@ -279,45 +280,64 @@ MainMenuLayout:
             orientation:'horizontal'
             size_hint: 1, 0.84
             SideBar:
-                id: sidebar
                 orientation: 'vertical'
-                SideBarTab:
-                    id: sidebartab1
-                    func_id: 'multiplayer'
-                    text: 'MULTIPLAYER'
-                    orientation: 'vertical'
-                    #SideBarTab:
-                    #    text: 'HOST CONNECTION'
-                    #SideBarTab:
-                    #    text: 'ACCEPT CLIENT'
-                    #SideBarTab:
-                    #    text: 'KICK CLIENT'
-                SideBarTab:
-                    id: sidebartab2
-                    func_id: 'sort'
-                    text: 'SORT'
-                    orientation: 'vertical'
-                    #SideBarTab:
-                    #    text: 'BY GENRE'
-                    #SideBarTab:
-                    #    text: 'BY YEAR'
-                    #SideBarTab:
-                    #    text: 'BY DEVELOPER'
-                SideBarTab:
-                    id: sidebartab3
-                    func_id: 'options'
-                    text: 'OPTIONS'
-                    orientation: 'vertical'
-                    #SideBarTab:
-                    #    text: 'VISUAL'
-                    #SideBarTab:
-                    #    text: 'AUDIO'
-                    #SideBarTab:
-                    #    text: 'TEXT'
-                SideBarTab:
-                    id: sidebartab4
-                    func_id: 'power'
-                    text: 'POWER'           
+                SidebarCarousel:
+                    id: car
+                    loop: True
+                    direction: 'right'
+                    size_hint: 1, 1
+                    pos_hint: {'x': -0.3}
+                    Accordion:
+                        id: sidebar
+                        orientation: 'vertical'
+                        bar_id: 'rootSidebar'
+                        SideBarTab:
+                            title: 'MULTIPLAYER'
+                            BoxLayout:
+                                orientation: 'vertical'
+                                SideBarTabItem:
+                                    text:'Host Session'
+                                    on_press: car.moveToSidebar('hostSidebar')
+                                SideBarTabItem:
+                                    text: 'Leave Session'
+                        SideBarTab:
+                            title: 'SORT GAMES'
+                            orientation: 'vertical'
+                            BoxLayout:
+                                orientation:'vertical'
+                                SideBarTabItem:
+                                    text:'By Favorites'
+                                SideBarTabItem:
+                                    text:'By Title'
+                                SideBarTabItem:
+                                    text: 'By Year'
+                                SideBarTabItem:
+                                    text:'By Developer'
+                                SideBarTabItem:
+                                    text: 'By Publisher'
+                        SideBarTab:
+                            title:'OPTIONS'
+                            BoxLayout:
+                                orientation:'vertical'
+                                SideBarTabItem:
+                                    text: 'Sound'
+                                    on_press: car.moveToSidebar('soundSidebar')
+                                SideBarTabItem:
+                                    text: 'Visuals'
+                                    on_press: car.moveToSidebar('visualsSideBar')
+                                SideBarTabItem:
+                                    text: 'User'
+                                    on_press: car.moveToSidebar('userSidebar')
+                                SideBarTabItem:
+                                    text: 'Inputs'
+                                    on_press: car.moveToSidebar('inputsSidebar')
+
+                        SideBarTab:
+                            title: 'POWER'
+                            BoxLayout:
+                                orientation:'vertical'
+                
+      
             GameCarousel:
                 id: games
                 orientation: 'vertical'

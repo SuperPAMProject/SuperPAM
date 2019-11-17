@@ -16,6 +16,7 @@ from kivy.uix.image import Image
 from kivy.uix.button import Button
 from kivy.uix.accordion import Accordion, AccordionItem
 from kivy.uix.behaviors import ButtonBehavior
+from kivy.uix.carousel import Carousel
 from kivy.uix.label import Label
 from kivy.uix.video import Video
 from kivy.uix.slider import Slider
@@ -321,12 +322,35 @@ class PopupWindowLayout(BoxLayout):
 
 #----SIDE BAR TAB - Both a group and an item within a group. The tabs are the items within the sidebar.
 #    And each tab houses several buttons the user can select to access their options.  
-class SideBarTab(PAMButtonGroup, ScaleButton):
+class SideBarTab(AccordionItem):
+    highlighted = BooleanProperty(False)
+    selected = BooleanProperty(False)
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.tab_item_list: SideBarTabItem
         self.collapse = True
         self.d_color = colors.getColor("background")
+        self.func_id = ''
+        self.enabled = BooleanProperty(True)
+        self.background_normal = "img/no_alpha.png"
+        self.background_selected = "img/no_alpha.png"
+        self.h_color = colors.getColor("secondary")
+        self.s_color = colors.getColor("accent")
+        self.h_sound = sounds.getSound("highlight_btn")
+        self.s_sound = sounds.getSound("select_btn")
+        self.bind(highlighted=self.on_highlight)
+        self.bind(selected=self.on_select)
+        
+        
+    def on_highlight(self, *args):
+        if self.highlighted:
+            playsound(self.h_sound, False)
+
+    def on_select(self, *args):
+        if self.selected:
+            self.collapse = True
+            print(self.func_id + " Selected")
+            playsound(self.s_sound, False)
 
 #----SIDE BAR - Group that contains all Sidebar tabs. 
 class SideBar(PAMButtonGroup):
@@ -337,6 +361,32 @@ class SideBar(PAMButtonGroup):
 
     def collapseAll(self):
         pass
+
+class SidebarCarousel(Carousel):
+    def __init__(self, **kwargs):
+        super(SidebarCarousel, self).__init__(**kwargs)
+        self._keyboard = Window.request_keyboard(self._keyboard_closed, self)
+        self._keyboard.bind(on_key_down=self._on_keyboard_down)
+
+    def _keyboard_closed(self):
+        self._keyboard.unbind(on_key_down=self._on_keyboard_down)
+        self._keyboard = None
+
+    def _on_keyboard_down(self, keyboard, keycode, text, modifiers):
+        if keycode[1] == 'a':
+            self.moveToRootSideBar()
+        return True
+
+    def moveToSidebar(self, id, *args):
+        for sidebar in self.slides:
+            if sidebar.bar_id == id:
+                print(sidebar.bar_id)
+                print(id)
+                self.load_slide(sidebar)
+
+    def moveToRootSideBar(self):
+        self.load_slide(self.slides[0])
+        print('ROOT')
 
 #----SAVE STATE GROUP- Group within a popup window. Contains save states for the currently selected game.
 class SaveStateGroup(PAMButtonGroup):
