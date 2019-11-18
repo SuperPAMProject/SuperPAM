@@ -48,7 +48,7 @@ def playGame(game_path):
         os.chdir('C:/Users/Michael/Documents/Hobbies/Coding/Bob/SuperPAM/emulators')
         process = check_output('C:/Users/Michael/Documents/Hobbies/Coding/Bob/SuperPAM/emulators/mame64.exe ' + game_path , shell=True)
         os.chdir('C:/Users/Michael/Documents/Hobbies/Coding/Bob/SuperPAM')
-        return process
+        return process     
     except subprocess.CalledProcessError as e:
         output = e.output
         print(output)

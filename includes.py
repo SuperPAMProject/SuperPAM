@@ -34,21 +34,21 @@ from playsound import playsound
 
 #constants
 HIGHLIGHTER_Y = 0.576
+BUFFER = 150000
 
 BUTTON_1 = 'z'
 BUTTON_2 = 'x'
 BUTTON_3 = 'c'
-BUTTON_4 = 'v'
-BUTTON_5 = 'a'
-BUTTON_6 = 's'
-BUTTON_7 = 'd'
-BUTTON_8 = 'f'
+BUTTON_4 = 'a'
+BUTTON_5 = 's'
+BUTTON_6 = 'd'
 HOME_BUTTON = 'q'
 COIN_BUTTON = 'w'
-DI_UP = '8'
-DI_LEFT = '4'
-DI_RIGHT = '6'
-DI_DOWN = '2'
+DI_UP = 'numpad8'
+DI_LEFT = 'numpad4'
+DI_RIGHT = 'numpad6'
+DI_DOWN = 'numpad2'
+
 
 # Global Variables
 isLoading = False; # may not need this

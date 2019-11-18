@@ -75,10 +75,11 @@ MainMenuLayout:
     on_pos: pos={self.parent.x, self.parent.y}
 
 <SideBarTab>:
-    size_hint: 0.5, 0.12
-    font_size: self.height * 0.5
+    size_hint: 0.6, 0.13
+    #font_size: self.height * 0.5
 <SideBarTabItem>:
-    size_hint: 0.5, 0.12
+    size_hint: 0.6, 0.16
+    pos_hint: {'x': 0.34}
 <GameDescriptionArea>:
     orientation: 'vertical'
     size_hint: 0.86, 0.38
@@ -274,6 +275,9 @@ MainMenuLayout:
     font_size: self.height * 0.5
 <MainMenuLayout>:
     id: main
+    PAMKeyboardListener:
+        id: kListener
+        size_hint: 0, 0
     BoxLayout:
         orientation: 'vertical'    
         BoxLayout:
@@ -302,6 +306,7 @@ MainMenuLayout:
                                     text: 'Leave Session'
                         SideBarTab:
                             title: 'SORT GAMES'
+                            
                             orientation: 'vertical'
                             BoxLayout:
                                 orientation:'vertical'
@@ -317,6 +322,7 @@ MainMenuLayout:
                                     text: 'By Publisher'
                         SideBarTab:
                             title:'OPTIONS'
+                            
                             BoxLayout:
                                 orientation:'vertical'
                                 SideBarTabItem:
@@ -334,6 +340,7 @@ MainMenuLayout:
 
                         SideBarTab:
                             title: 'POWER'
+                            
                             BoxLayout:
                                 orientation:'vertical'
                 
@@ -343,8 +350,7 @@ MainMenuLayout:
                 orientation: 'vertical'
                 size_hint: 0.28, 1
                 pos_hint: {'center_x': 0.5, 'top': 1}
-                GameCarouselHighlighter:
-                    id: highlighter               
+               
             BoxLayout:
                 id: gameDetails
                 orientation: 'vertical'

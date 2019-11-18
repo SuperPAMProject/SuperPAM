@@ -62,6 +62,17 @@ class PAMImage(Image):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
+class PAMKeyboardListener(Widget):
+    def __init__(self, **kwargs):
+        super(PAMKeyboardListener, self).__init__(**kwargs)
+        self._keyboard = Window.request_keyboard(self._keyboard_closed, self)
+
+    def _keyboard_closed(self, *args):
+        #self._keyboard.unbind(on_key_down=self._on_keyboard_down)
+        self._keyboard = None
+
+    
+
 
 #BUTTON CLASSES
 #These will be the main interactive widgets. 
@@ -178,6 +189,7 @@ class PopupWindowItem(BoxLayout):
 class SideBarTabItem(ScaleButton):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+        self.d_color = colors.getColor('background')
  
 #----CAROUSEL ITEM - A button that interacts with a label. Selecting it will take the user to the Action Button group.
 #   Each CarouselItem will be associated with a unique game and will display that game's title as its text.
@@ -345,6 +357,7 @@ class SideBarTab(AccordionItem):
     def on_highlight(self, *args):
         if self.highlighted:
             playsound(self.h_sound, False)
+            print(self)
 
     def on_select(self, *args):
         if self.selected:
