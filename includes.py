@@ -76,8 +76,7 @@ class Tabs(IntEnum):
 
 class GameOptions(IntEnum):
     PLAY = 0;
-    SAVES = 1;
-    FAVORITE = 2;
+    FAVORITE = 1;
 
 # This class contains all the data needed to successfully navigate through
 # the main menu options. I MAY ADD A BOOLEAN FOR CHECKING IF THE CURRENT TAB
