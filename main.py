@@ -101,9 +101,7 @@ class PAM:
             return
 
         newTime = datetime.now()
-        print("NEW:" + str(newTime))
         oldTime = self.eventDict[keycode[1]]
-        print("OLD:" + str(oldTime))
 
 
 
@@ -133,9 +131,20 @@ class PAM:
                     if self.currentState == includes.CurrentState.MAIN_MENU_STATE:
                         if self.MM.currentSection == includes.Section.TABS:
                             currentTab = self.MM.CurrentTab()
-                            currentTab.selected = True
-                            pamFunctions.getFunction(currentTab, self.MM)
-                            currentTab.selected = False                          
+                            if currentTab.collapse:
+                                currentTab.selected = True
+                                #pamFunctions.getFunction(currentTab, self.MM)
+                                currentTab.selected = False
+                            else:
+                                subTabs = self.MM.CurrentTab().children[0].children[0].children[0].children[0].children
+                                currentSubTab = self.MM.CurrentSubTab(subTabs)
+                                currentSubTab.selected = True
+                                currentSubTab.selected = False
+                                if currentSubTab.sidebar is not None:
+                                    self.MM.CurrentTab().collapse = True
+                                    self.switchToSidebar(currentSubTab.sidebar)
+                                    
+
                         elif self.MM.currentSection == includes.Section.GAMES:
                             currentGame = self.MM.GetGame()     
                             if self.runningGame is None:
@@ -173,7 +182,10 @@ class PAM:
                 elif keycode[1] == includes.BUTTON_2:
                     if self.currentState == includes.CurrentState.MAIN_MENU_STATE:
                         if self.MM.currentSection == includes.Section.TABS:
-                            pass
+                            carousel = self.layout.ids['car']
+                            if carousel.current_slide is not carousel.slides[0]:
+                                carousel.moveToRootSideBar()
+                                self.switchToSidebar(carousel.slides[0])
                         elif self.MM.currentSection == includes.Section.GAMES:
                             pamFunctions.closeGame(self.runningGame)
                             self.runningGame = None
@@ -217,52 +229,40 @@ class PAM:
                 elif keycode[1] == includes.DI_DOWN:
                     if self.currentState == includes.CurrentState.MAIN_MENU_STATE:
                         if self.MM.currentSection == includes.Section.TABS:
-                            subTabs = self.MM.CurrentTab().children[0].children[0].children[0].children[0].children
-                            # if not at the beginning of the list and not inside a tab
-                            if self.MM.t_i > 0 and self.MM.CurrentTab().collapse:
+                            #If tab is closed
+                            if self.MM.CurrentTab().collapse:
                                 self.MM.CurrentTab().highlighted = False
+
+                                #Progress downward in major tabs until at end
                                 self.MM.t_i -= 1
+                                if self.MM.t_i <= 0:
+                                    self.MM.t_i = 0
+
+                                self.MM.CurrentTab().highlighted = True
                                 subTabs = self.MM.CurrentTab().children[0].children[0].children[0].children[0].children
-                                if self.MM.CurrentTab().collapse:
-                                    self.MM.CurrentTab().highlighted = True
-                                    
-                                else:
-                                    currentTab = self.MM.CurrentTab()
-                                    subTabs = self.MM.CurrentTab().children[0].children[0].children[0].children[0].children
-                                    currentTab.children[len(subTabs) - 1].highlighted = True
-                                    #subTabs[len(subTabs) - 1].highlighted = True
-                                    
+                                self.MM.s_t_i = len(subTabs) - 1
+                                print("Current Tab Index: " + str(self.MM.t_i))
 
-                            # if not at the beginning and tab not collapsed
-                            elif self.MM.t_i > 0 and not self.MM.CurrentTab().collapse:
-                                if self.MM.CurrentTab().highlighted:
-                                    self.MM.CurrentTab().highlighted = False
-                                    self.MM.t_i -= 1
-                                    subTabs = self.MM.CurrentTab().children[0].children[0].children[0].children[0].children
-                                    if self.MM.CurrentTab().collapse:
-                                        self.MM.CurrentTab().highlighted = True
-                                        
-                                    else:
-                                        currentTab = self.MM.CurrentTab()
-                                        #currentTab.children[len(currentTab.children) - 1].highlighted = True
-                                        subTabs[len(subTabs) - 1].highlighted = True
-                                        
-
-                                else:
-                                    subTabs = self.MM.CurrentTab().children[0].children[0].children[0].children[0].children
-                                    for i in range(len(subTabs)):
-                                        if subTabs[i].highlighted:
-                                            subTabs[i].highlighted = False;
-
-                                            if i == 0:
-                                                self.MM.CurrentTab().highlighted = True;
-                                                
-                                            else:
-                                                subTabs[i - 1].highlighted = True;
-                                            break;
+                            #If tab is open
                             else:
-                                print("DEBUG: Potentially unaccounted-for case in the Tabs section")
-                                includes.playsound(includes.sounds.getSound("end_of_list"), False)
+                                subTabs = self.MM.CurrentTab().children[0].children[0].children[0].children[0].children
+
+                                if self.MM.CurrentTab().title is not 'POWER':
+                                    self.MM.CurrentSubTab(subTabs).highlighted = False
+                                
+                                self.MM.s_t_i -= 1
+                                print("Current SubTab Index: " + str(self.MM.s_t_i))
+
+                                #Progress downward in sub tabs until at end. Close current major tab
+                                if self.MM.s_t_i < 0:
+                                    self.MM.s_t_i = len(subTabs) - 1
+                                    self.MM.CurrentTab().collapse = True
+
+                                if self.MM.CurrentTab().title is not 'POWER':
+                                    self.MM.CurrentSubTab(subTabs).highlighted = True                              
+
+
+
 
                         elif self.MM.currentSection == includes.Section.GAMES:
                             includes.playsound(includes.sounds.getSound("down_carousel"), False)
@@ -286,39 +286,40 @@ class PAM:
                 elif keycode[1] == includes.DI_UP:
                     if self.currentState == includes.CurrentState.MAIN_MENU_STATE:
                         if self.MM.currentSection == includes.Section.TABS:
-                            subTabs = self.MM.CurrentTab().children[0].children[0].children[0].children[0].children
-                            # if not on the last tab and the current tab is collapsed
-                            if self.MM.t_i < len(self.MM.tabsList) - 1 and self.MM.CurrentTab().collapse:
+                            #Tab is closed
+                            if self.MM.CurrentTab().collapse:
                                 self.MM.CurrentTab().highlighted = False
-                                self.MM.t_i += 1
-                                subTabs = self.MM.CurrentTab().children[0].children[0].children[0].children[0].children
-                                self.MM.CurrentTab().highlighted = True
-
-
-                            # if on any tab and the tab is not collapsed
-                            elif not self.MM.CurrentTab().collapse:
-                                if self.MM.CurrentTab().highlighted:
-                                    self.MM.CurrentTab().highlighted = False                                    
-                                    subTabs[0].highlighted = True
                                 
-                                else: # find the child that is selected 
-                                    for i in range(len(subTabs)):
-                                        if subTabs[i].highlighted: # once you find it
-                                            
+                                #Progress upward in major tabs until at end
+                                self.MM.t_i += 1
+                                if self.MM.t_i >= len(self.MM.tabsList) - 1:
+                                    self.MM.t_i = len(self.MM.tabsList) - 1
 
-                                            if (i == (len(subTabs) - 1)) and self.MM.t_i < (len(self.MM.tabsList) - 1): # if it's the last item in a sub tab and there is a next tab
-                                                self.MM.CurrentTab().children[i].highlighted = False;
-                                                self.MM.t_i += 1
-                                                subTabs = self.MM.CurrentTab().children[0].children[0].children[0].children[0].children
-                                                self.MM.CurrentTab().highlighted = True;
-                                            else:
-                                                subTabs[i].highlighted = False;
-                                                subTabs[i + 1].highlighted = True;
-
-                                            break;
+                                self.MM.CurrentTab().highlighted = True
+                                subTabs = self.MM.CurrentTab().children[0].children[0].children[0].children[0].children
+                                self.MM.s_t_i = len(subTabs) - 1
                             else:
-                                print("DEBUG: Potentially unaccounted-for case in the Tabs section")
-                                includes.playsound(includes.sounds.getSound("end_of_list"), False)
+                                subTabs = self.MM.CurrentTab().children[0].children[0].children[0].children[0].children
+                                if self.MM.CurrentTab().title is not 'POWER':
+                                    self.MM.CurrentSubTab(subTabs).highlighted = False
+                                
+                                #Progress upward in sub tabs until at top. If at top, close current major tab.
+                                self.MM.s_t_i += 1
+                                if self.MM.s_t_i > len(subTabs) - 1:
+                                    self.MM.s_t_i = len(subTabs) - 1
+                                    if self.MM.t_i > 0:
+                                        self.MM.CurrentTab().collapse = True
+
+                                if self.MM.CurrentTab().title is not 'POWER':
+                                    self.MM.CurrentSubTab(subTabs).highlighted = True
+                                else:
+                                    self.MM.t_i += 1
+                                    if self.MM.t_i > len(self.MM.tabsList) - 1:
+                                        self.MM.t_i = len(self.MM.tabsList) - 1
+                                    self.MM.CurrentTab().highlighted = True
+                                    subTabs = self.MM.CurrentTab().children[0].children[0].children[0].children[0].children
+                                    self.MM.s_t_i = len(subTabs) - 1
+
 
 
                         elif self.MM.currentSection == includes.Section.GAMES:
@@ -345,6 +346,8 @@ class PAM:
                             self.MM.o_i += 1 
                         elif self.MM.currentSection > includes.Section.TABS:
                             self.MM.currentSection -= 1 
+                            subTabs = self.MM.CurrentTab().children[0].children[0].children[0].children[0].children
+                            self.MM.s_t_i = len(subTabs) - 1
                         else:
                             pass # eat the input
 
@@ -401,8 +404,9 @@ class PAM:
 
 
             for game in games:
-                print(game.y)
-                print(game.text)
+               # print(game.y)
+               # print(game.text)
+               pass
             # reset widget locations starting with the current game widget's known base location
             games[3].y = self.selectedY
 
@@ -417,8 +421,9 @@ class PAM:
 
 
             for game in games:
-                print(game.y)
-                print(game.text)
+                #print(game.y)
+                #print(game.text)
+                pass
 
             # reset the game list
             self.setGames()
@@ -457,10 +462,12 @@ class PAM:
                      #   Color(includes.get_color_from_hex(includes.colors.getColorOfScheme('primary', self.MM.current_color_scheme)))
                       #  self.rect = Rectangle(pos=self.layout.ids['controlbar'].pos, size=self.layout.ids['controlbar'].size)
                     tab.background_color = includes.get_color_from_hex(tab.d_color)
+                    tab.background_normal = 'img/no_alpha.png'
+                    tab.background_selected = 'img/no_alpha.png'
                     
-                    with tab.canvas.before:
-                        Color(rgba=includes.get_color_from_hex(tab.d_color))
-                        rect = Rectangle(pos=tab.pos, size=tab.size)
+                   # with tab.canvas.before:
+                    #    color = Color(rgba=includes.get_color_from_hex(tab.d_color))
+                     #   rect = Rectangle(pos=tab.pos, size=tab.size)
 
                     #set tab fonts
                     tab.font_name = self.MM.current_font
@@ -479,7 +486,7 @@ class PAM:
                     child.font_name = self.MM.current_font
 
                 # Stop all animations in the Games Section
-                print(self.selectedY)
+                #print(self.selectedY)
                 if keycode is None or self.selectedY is None or self.selectedY is 0:
                     self.selectedY = self.layout.ids["games"].children[3].y
 
@@ -540,16 +547,23 @@ class PAM:
 
                 # Then set new selection
                 if self.MM.currentSection == includes.Section.TABS:
-                    subTabs = tab.children[0].children[0].children[0].children[0].children
+                    subTabs = self.MM.CurrentTab().children[0].children[0].children[0].children[0].children
                     if self.MM.CurrentTab().highlighted:
+                        self.MM.CurrentTab().background_normal = 'img/button_waves.png'
+                        self.MM.CurrentTab().background_selected = 'img/button_waves.png'
                         self.MM.CurrentTab().background_color = includes.get_color_from_hex(self.MM.CurrentTab().h_color)
-                        with self.MM.CurrentTab().canvas.before:
-                            Color(rgba=includes.get_color_from_hex(tab.h_color))
-                            rect = Rectangle(pos=tab.pos, size=tab.size)
-                    else:
-                        for subTab in subTabs:
-                            if subTab.highlighted:
-                                subTab.background_color = includes.get_color_from_hex(subTab.h_color)
+
+                        #self.MM.CurrentTab().background_color = includes.get_color_from_hex(self.MM.CurrentTab().h_color)
+                        #with self.MM.CurrentTab().canvas.before:
+                         #   color = Color(rgba=includes.get_color_from_hex(self.MM.CurrentTab().h_color))
+                          #  rect = Rectangle(pos=self.MM.CurrentTab().pos, size=self.MM.CurrentTab().size)
+                            #Get access to whatever widget displays the accordion title. Change its BG color
+                           # print(self.MM.CurrentTab().title_template)
+                    
+                    for subTab in subTabs:
+                        if subTab.highlighted:
+                            subTab.background_color = includes.get_color_from_hex(subTab.h_color)
+                            
                 
                 elif self.MM.currentSection == includes.Section.GAMES:
 
@@ -561,7 +575,7 @@ class PAM:
                         games = carousel.children
                         anim_x = carousel.x
                         anim_height = games[0].height
-                        print("Height: " + str(anim_height))
+                        #print("Height: " + str(anim_height))
                         y0 = games[6].y
                         y1 = games[5].y
                         y2 = games[4].y
@@ -571,7 +585,7 @@ class PAM:
                         y6 = games[0].y
                         
                         #set game info to match selected game
-                        print(self.MM.GetGame().gameImage)
+                        #print(self.MM.GetGame().gameImage)
                         self.layout.ids['gameImage'].background_normal = self.MM.GetGame().gameImage
                         self.layout.ids['year'].text = 'Year: ' +self.MM.GetGame().gameInfo[0]
                         self.layout.ids['dev'].text = 'Developer: ' +self.MM.GetGame().gameInfo[1]
@@ -712,6 +726,15 @@ class PAM:
         #                game.isFavorite = True
         #                print(game.gameName)
 
+
+    def switchToSidebar(self, sidebar):
+        self.MM.tabsList = []
+        self.MM.populateMenus(sidebar)
+        self.MM.CurrentTab().highlighted = True
+        subTabs = self.MM.CurrentTab().children[0].children[0].children[0].children[0].children
+        self.MM.s_t_i = len(subTabs) - 1
+        self.MM.CurrentSubTab(subTabs).highlighted = True
+        
     # a function to close out of the PAM
     def closePAM(self):
         sys.exit(0);

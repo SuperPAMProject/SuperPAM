@@ -35,7 +35,7 @@ from enum import Enum
 import pamFunctions
 from kivy.core.audio import SoundLoader
 from playsound import playsound
-
+import includes
     
 #MISC. CLASSES
 #----VIDEO-  demo video of the currently highlighted game. Autoplays after 2 seconds. 
@@ -89,22 +89,31 @@ class PAMButton(Button):
         self.enabled = BooleanProperty(True)
         self.background_normal = "img/button_bg.png"
         self.d_color = colors.getColor("primary")
-        self.h_color = colors.getColor("secondary")
+        self.h_color = colors.getColor("primary")
         self.s_color = colors.getColor("accent")
         self.h_sound = sounds.getSound("highlight_btn")
         self.s_sound = sounds.getSound("select_btn")
         self.bind(highlighted=self.on_highlight)
         self.bind(selected=self.on_select)
+        #self.bind(selected=self.on_press)
         
         
     def on_highlight(self, *args):
         if self.highlighted:
+            #print("Parent:" + str(self.parent.func_id))
+            print("Subtab: " + str(self.func_id) + " highlighted")
             playsound(self.h_sound, False)
 
     def on_select(self, *args):
         if self.selected:
             print(self.func_id + " Selected")
             playsound(self.s_sound, False)
+            #trigger = Clock.create_trigger(self.on_press)
+            #trigger()
+            #Clock.schedule_once(self.on_press, 0.1)
+    
+    def outputTest(self, *args):
+        print("SUCCESS")
 
 #----SCALE BUTTON - TODO: This class needs a description
 class ScaleButton(PAMButton):
@@ -190,7 +199,16 @@ class SideBarTabItem(ScaleButton):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.d_color = colors.getColor('background')
+        self.sidebar = None
+        #self.h_color = '#FFFFFF'
+
+    def on_select(self, *args):
+        if self.selected:
+            carousel = self.parent.parent.parent.parent.parent.parent.parent.parent
+            self.sidebar = carousel.moveToSidebar(self.func_id)
+            
  
+    
 #----CAROUSEL ITEM - A button that interacts with a label. Selecting it will take the user to the Action Button group.
 #   Each CarouselItem will be associated with a unique game and will display that game's title as its text.
 class GameCarouselItem(ScaleButton):  
@@ -341,7 +359,7 @@ class SideBarTab(AccordionItem):
         super().__init__(**kwargs)
         self.tab_item_list: SideBarTabItem
         self.collapse = True
-        self.d_color = colors.getColor("background")
+        self.d_color = '#FFFFFF00' #colors.getColor("background")
         self.func_id = ''
         self.enabled = BooleanProperty(True)
         self.background_normal = "img/no_alpha.png"
@@ -356,13 +374,15 @@ class SideBarTab(AccordionItem):
         
     def on_highlight(self, *args):
         if self.highlighted:
+            print(self.func_id + " highlighted")
             playsound(self.h_sound, False)
-            print(self)
 
     def on_select(self, *args):
         if self.selected:
-            self.collapse = True
-            print(self.func_id + " Selected")
+            self.collapse = not self.collapse
+            subTabs = self.children[0].children[0].children[0].children[0].children
+            subTabs[len(subTabs) - 1].highlighted = True
+            print(self.func_id + " selected")
             playsound(self.s_sound, False)
 
 #----SIDE BAR - Group that contains all Sidebar tabs. 
@@ -390,15 +410,21 @@ class SidebarCarousel(Carousel):
             self.moveToRootSideBar()
         return True
 
-    def moveToSidebar(self, id, *args):
+    def moveToSidebar(self, id):
         for sidebar in self.slides:
             if sidebar.bar_id == id:
                 print(sidebar.bar_id)
                 print(id)
                 self.load_slide(sidebar)
+                print(sidebar.children)
+                subTabs = sidebar.children[0].children[0].children[0].children[0].children[0].children
+                for tab in subTabs:
+                    tab.background_color = includes.get_color_from_hex(tab.d_color)
+                return sidebar
 
     def moveToRootSideBar(self):
         self.load_slide(self.slides[0])
+        return self.slides[0]
         print('ROOT')
 
 #----SAVE STATE GROUP- Group within a popup window. Contains save states for the currently selected game.

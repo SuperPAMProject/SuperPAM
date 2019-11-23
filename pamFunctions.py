@@ -253,6 +253,10 @@ def optionsPopup(btn, menu):
     pop.disabled = False
     return True
 
+def sidebarSwitch(btn, menu):
+    #carousel = menu.layout.ids['car']
+    #carousel.moveToSideBar(btn.func_id)
+    pass
 
 #ACTIVATED ON BUTTON SELECTION, TAKES ID OF BUTTON TO DETERMINE FUNCTION
 def getFunction(btn, menu):
@@ -285,7 +289,7 @@ def getFunction(btn, menu):
     elif btn.func_id == 'year':
         return sortByYear(library)
     elif btn.func_id == 'sound':
-        return soundPopup(player)
+        return sidebarSwitch(btn, menu)
     elif btn.func_id == 'visuals':
         return visualsPopup(player)
     elif btn.func_id == 'user':

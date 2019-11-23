@@ -15,6 +15,7 @@ class mainMenu:
         self.optionsList = []
         self.currentSection = includes.Section.TABS; # Sections
         self.t_i = 0; # Tabs
+        self.s_t_i = 0 # SubTabs
         self.g_i = 0; # Games
         self.o_i = 0; # Game Options
         self.f_i = 0; # Favorites
@@ -87,6 +88,16 @@ class mainMenu:
             if (self.t_i + offset) < 0 or (self.t_i + offset) >= len(self.tabsList):
                 return self.tabsList[self.t_i]
             returnMe = self.tabsList[self.t_i + offset]
+            return returnMe
+        else:
+            return None
+
+    # SubTabs
+    def CurrentSubTab(self, subTabList, offset = 0):
+        if len(subTabList) > 0:
+            if (self.s_t_i + offset) < 0 or (self.s_t_i + offset) >= len(subTabList):
+                return subTabList[self.s_t_i]
+            returnMe = subTabList[self.s_t_i + offset]
             return returnMe
         else:
             return None
