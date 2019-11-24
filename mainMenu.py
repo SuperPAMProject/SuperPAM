@@ -25,6 +25,9 @@ class mainMenu:
         self.populateGameOptions(actionbtns)
         self.current_color_scheme = includes.colors.current_scheme
         self.current_font = 'Roboto'
+        self.current_font_size = 'medium'
+        self.videoIsMute = False
+        self.sfxIsMute = False
         
     # sets up the menus labels so that they can be displayed
     def populateMenus(self, sidebar):

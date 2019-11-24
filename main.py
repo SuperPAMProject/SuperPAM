@@ -133,12 +133,12 @@ class PAM:
                             currentTab = self.MM.CurrentTab()
                             if currentTab.collapse:
                                 currentTab.selected = True
-                                #pamFunctions.getFunction(currentTab, self.MM)
                                 currentTab.selected = False
                             else:
                                 subTabs = self.MM.CurrentTab().children[0].children[0].children[0].children[0].children
                                 currentSubTab = self.MM.CurrentSubTab(subTabs)
                                 currentSubTab.selected = True
+                                pamFunctions.getFunction(currentSubTab, self.MM)
                                 currentSubTab.selected = False
                                 if currentSubTab.sidebar is not None:
                                     self.MM.CurrentTab().collapse = True
@@ -256,7 +256,8 @@ class PAM:
                                 #Progress downward in sub tabs until at end. Close current major tab
                                 if self.MM.s_t_i < 0:
                                     self.MM.s_t_i = len(subTabs) - 1
-                                    self.MM.CurrentTab().collapse = True
+                                    if self.MM.t_i > 0:
+                                        self.MM.CurrentTab().collapse = True
 
                                 if self.MM.CurrentTab().title is not 'POWER':
                                     self.MM.CurrentSubTab(subTabs).highlighted = True                              
@@ -298,8 +299,18 @@ class PAM:
                                 self.MM.CurrentTab().highlighted = True
                                 subTabs = self.MM.CurrentTab().children[0].children[0].children[0].children[0].children
                                 self.MM.s_t_i = len(subTabs) - 1
-                            else:
+
+                            #Tab is open
+                            else:    
                                 subTabs = self.MM.CurrentTab().children[0].children[0].children[0].children[0].children
+                                #break free of bottom tabs
+                                if self.MM.t_i == 0 and self.MM.s_t_i == len(subTabs) - 1: 
+                                    self.MM.t_i += 1
+                                    if self.MM.t_i > len(self.MM.tabsList) - 1:
+                                        self.MM.t_i = len(self.MM.tabsList) - 1
+                                    self.MM.CurrentTab().highlighted = True
+                                    subTabs = self.MM.CurrentTab().children[0].children[0].children[0].children[0].children
+                                    self.MM.s_t_i = len(subTabs) - 1
                                 if self.MM.CurrentTab().title is not 'POWER':
                                     self.MM.CurrentSubTab(subTabs).highlighted = False
                                 
@@ -312,13 +323,8 @@ class PAM:
 
                                 if self.MM.CurrentTab().title is not 'POWER':
                                     self.MM.CurrentSubTab(subTabs).highlighted = True
-                                else:
-                                    self.MM.t_i += 1
-                                    if self.MM.t_i > len(self.MM.tabsList) - 1:
-                                        self.MM.t_i = len(self.MM.tabsList) - 1
-                                    self.MM.CurrentTab().highlighted = True
-                                    subTabs = self.MM.CurrentTab().children[0].children[0].children[0].children[0].children
-                                    self.MM.s_t_i = len(subTabs) - 1
+
+                                
 
 
 

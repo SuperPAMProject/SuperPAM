@@ -206,7 +206,13 @@ class SideBarTabItem(ScaleButton):
         if self.selected:
             carousel = self.parent.parent.parent.parent.parent.parent.parent.parent
             self.sidebar = carousel.moveToSidebar(self.func_id)
-            
+
+class SideBarTabButton(SideBarTabItem):
+    def on_select(self, *args):
+        if self.selected:
+            print(self.func_id + " Selected")
+            playsound(self.s_sound, False)
+
  
     
 #----CAROUSEL ITEM - A button that interacts with a label. Selecting it will take the user to the Action Button group.

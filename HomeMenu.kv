@@ -412,8 +412,95 @@ MainMenuLayout:
                             TabItemContainer:
                                 SideBarTabItem:
                                     text: 'Mute Video'
+                                    func_id: 'mute'
                                 SideBarTabItem:
                                     text: 'Mute SFX'
+                                    func_id: 'mute'
+                    Accordion:
+                        id: visualsSidebar
+                        orientation: 'vertical'
+                        bar_id: 'visuals'
+                        SideBarTab:
+                            title: 'Color Scheme'
+                            TabItemContainer:
+                                SideBarTabItem:
+                                    text: 'Waves'
+                                    func_id: 'color_scheme'
+                                SideBarTabItem:
+                                    text: 'Watermelon'
+                                    func_id: 'color_scheme'
+                                SideBarTabItem:
+                                    text: 'Burn'
+                                    func_id: 'color_scheme'
+                                SideBarTabItem:
+                                    text: 'Blossom'
+                                    func_id: 'color_scheme'
+                        SideBarTab:
+                            title: 'Font Size'
+                            TabItemContainer:
+                                SideBarTabItem:
+                                    text: 'Small'
+                                    func_id: 'font_size'
+                                SideBarTabItem:
+                                    text: 'Medium'
+                                    func_id: 'font_size'
+                                SideBarTabItem:
+                                    text: 'Large'
+                                    func_id: 'font_size'
+                        SideBarTab:
+                            title: 'Font Type'
+                            TabItemContainer:
+                                SideBarTabItem:
+                                    text: 'Roboto'
+                                    func_id: 'font_type'
+                                SideBarTabItem:
+                                    text: 'Arial'
+                                    func_id: 'font_type'
+                                SideBarTabItem:
+                                    text: 'Verdana'
+                                    func_id: 'font_type'
+                                SideBarTabItem:
+                                    text: 'Helvetica'
+                                    func_id: 'font_type'
+                    Accordion:
+                        id: userSidebar
+                        orientation: 'vertical'
+                        bar_id: 'user'
+                        SideBarTab:
+                            title: 'USER'
+                            TabItemContainer:
+                                SideBarTabItem:
+                                    text: 'User Stats'
+                                SideBarTabItem:
+                                    text: 'Reformat System'
+                    Accordion:
+                        id: inputsSidebar
+                        orientation: 'vertical'
+                        bar_id: 'inputs'
+                        SideBarTab:
+                            title: 'Remap Controls'
+                            TabItemContainer:
+                                SideBarTabItem:
+                                    text: 'Select'
+                                SideBarTabItem:
+                                    text: 'Back'
+                                SideBarTabItem:
+                                    text: 'Quick Favorite'
+                                SideBarTabItem:
+                                    text: 'BTN1'
+                                SideBarTabItem:
+                                    text: 'BTN2'
+                                SideBarTabItem:
+                                    text: 'BTN3'
+                        SideBarTab:
+                            title: 'Turbo Button'
+                            TabItemContainer:
+                                SideBarTabItem:
+                                    text: 'ON'
+                                SideBarTabItem:
+                                    text: 'OFF'
+
+                                
             GameCarousel:
                 id: games
                 orientation: 'vertical'
