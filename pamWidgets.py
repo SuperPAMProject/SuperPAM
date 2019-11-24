@@ -37,7 +37,9 @@ from kivy.core.audio import SoundLoader
 from playsound import playsound
 import includes
     
-#MISC. CLASSES
+# =============================================================================
+# MISC.
+# =============================================================================
 #----VIDEO-  demo video of the currently highlighted game. Autoplays after 2 seconds. 
 class PAMVideo(Video):
     def __init__(self, **kwargs):
@@ -74,7 +76,9 @@ class PAMKeyboardListener(Widget):
     
 
 
-#BUTTON CLASSES
+# =============================================================================
+# Buttons
+# =============================================================================
 #These will be the main interactive widgets. 
 #Each button will have the properties of 'highlighted', 'selected', and 'enabled'
 
@@ -257,11 +261,12 @@ class SaveState(PAMButton):
         self.changeSize()
 
 
-#LABEL CLASSES
-# These classes will be used for non-interactive, dynamic textual elements. 
-# Each label will only change its text under 
+# =============================================================================
+# Labels
+# =============================================================================
+#These classes will be used for non-interactive, dynamic textual elements. 
 
-#----SCALE LABEL - TODO: This class needs a description
+#----SCALE LABEL - Label that is capable of dynamic resizing with the window. 
 class ScaleLabel(Label):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -288,7 +293,9 @@ class GameInfo(ScaleLabel):
         super().__init__(**kwargs)
         
 
-#GROUP CLASSES
+# =============================================================================
+# Groups
+# =============================================================================
 # These classes will act as containers for any of the proceeding classes. 
 # Each container will use the 'children' property to iterate over the widgets inside them and perform operations on them.
 
@@ -445,6 +452,7 @@ class SaveStateGroup(PAMButtonGroup):
         pass
 
 #TESTING AREA
-#if __name__ == "__main__":
+if __name__ == "__main__":
+    pass
 #   Put code to test here
 #   print("SUCCESS")

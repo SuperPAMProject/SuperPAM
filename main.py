@@ -330,6 +330,7 @@ class PAM:
 
                         elif self.MM.currentSection == includes.Section.GAMES:
                             includes.playsound(includes.sounds.getSound("up_carousel"), False)
+                            print(self.MM.currentSection)
                             self.MM.g_i -= 1
                             if self.MM.g_i < 0:
                                 self.MM.g_i =  len(self.MM.gameList) - 1
@@ -459,10 +460,8 @@ class PAM:
             if keycode is None or True:#event.event_type is keyboard.KEY_DOWN:
                 # Undo all selections in the Tabs Section
                 for tab in self.MM.tabsList:
-                    # tab
-                    #tab.highlighted = False
                     #ensure tabs use the current color scheme
-                    tab.h_color = includes.colors.getColorOfScheme('secondary', self.MM.current_color_scheme)
+                    tab.h_color = includes.colors.getColorOfScheme('primary', self.MM.current_color_scheme)
                     tab.s_color = includes.colors.getColorOfScheme('accent', self.MM.current_color_scheme)
                     #with self.layout.ids['controlbar'].canvas.before:
                      #   Color(includes.get_color_from_hex(includes.colors.getColorOfScheme('primary', self.MM.current_color_scheme)))
@@ -476,13 +475,13 @@ class PAM:
                      #   rect = Rectangle(pos=tab.pos, size=tab.size)
 
                     #set tab fonts
-                    tab.font_name = self.MM.current_font
+                    tab.font_name = self.MM.current_font #REWORK FOR NEW ACCORDION
                 
                     # inner tab
                     subTabs = tab.children[0].children[0].children[0].children[0].children
                     
                     for subTab in subTabs:
-                        #subTab.highlighted = False
+                        subTab.font_name = self.MM.current_font
                         subTab.background_color = includes.get_color_from_hex(subTab.d_color)
 
                 for child in self.layout.ids['gameDescArea'].children:
@@ -568,6 +567,7 @@ class PAM:
                     
                     for subTab in subTabs:
                         if subTab.highlighted:
+                            subTab.h_color = includes.colors.getColorOfScheme('primary', self.MM.current_color_scheme)
                             subTab.background_color = includes.get_color_from_hex(subTab.h_color)
                             
                 

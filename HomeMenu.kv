@@ -6,6 +6,9 @@
 #:import w display.Window
 
 MainMenuLayout:
+# =============================================================================
+# Labels
+# =============================================================================
 <PAMAccordionItemTitle@Label>:
     text: ctx.title
     canvas.before:
@@ -38,7 +41,9 @@ MainMenuLayout:
 			y: self._scale or 1.
 	canvas.after:
 		PopMatrix
-
+# =============================================================================
+# Buttons
+# =============================================================================
 <ScaleButton>:
 	state_image: self.background_normal if self.state == 'normal' else self.background_down
 	disabled_image: self.background_disabled_normal if self.state == 'normal' else self.background_disabled_down
@@ -66,12 +71,6 @@ MainMenuLayout:
 		PopMatrix
 <PAMButton>:
     #font: f.getFont("normal")
-
-
-
-# =============================================================================
-# Action Buttons
-# =============================================================================
 <PAMActionButton>:
     size_hint: 0.3, 0.3
     background_color: 0, 0, 0, 0
@@ -564,6 +563,7 @@ MainMenuLayout:
                         h_action: c.getColor('fav-h')
                         s_action: c.getColor('fav-s')
                         action_image: self.d_action
+        
         ControlBar:
             id: controlbar
             ControlBarItem:
@@ -575,6 +575,9 @@ MainMenuLayout:
             ControlBarItem:
                 text: "Favorite: W"
 
+# =============================================================================
+# Popup Layer
+# =============================================================================
     BoxLayout:
         id: dark
         size_hint: None, None
