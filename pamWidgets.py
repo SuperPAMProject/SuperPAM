@@ -133,15 +133,21 @@ class PAMActionButton(PAMButton):
         self.h_action = ''
         self.s_action = ''
         self.d_color = colors.getColor("background")
+        self.scale_factor = 0.2
 
     def on_highlight(self, *args):
         if self.highlighted:
             playsound(self.h_sound, False)
+            anim = includes.Animation(scale_factor=0.25, t='in_out_cubic')
+            print("SF: " + str(self.scale_factor))
+            anim.start(self)
             self.action_image = self.h_action
             print(self.canvas.children[4])
             print(self.canvas.children[4].source)
         else:
             self.action_image=self.d_action
+            anim = includes.Animation(scale_factor=0.2, t='in_out_cubic')
+            anim.start(self)
     
     def on_select(self, *args):
         if self.selected:

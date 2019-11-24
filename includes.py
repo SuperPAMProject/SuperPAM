@@ -44,10 +44,10 @@ BUTTON_5 = 's'
 BUTTON_6 = 'd'
 HOME_BUTTON = 'q'
 COIN_BUTTON = 'w'
-DI_UP = 'numpad8'
-DI_LEFT = 'numpad4'
-DI_RIGHT = 'numpad6'
-DI_DOWN = 'numpad2'
+DI_UP = 'up'
+DI_LEFT = 'left'
+DI_RIGHT = 'right'
+DI_DOWN = 'down'
 
 
 # Global Variables
