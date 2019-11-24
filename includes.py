@@ -26,7 +26,7 @@ import colors
 import fonts
 import controls
 import sounds
-from win32 import win32gui  
+#from win32 import win32gui  
 from kivy.core.audio import SoundLoader
 from playsound import playsound
 

@@ -157,15 +157,15 @@ class PAM:
 
                                     print("PID:")
                                     print(self.runningGame.pid)
-                                    for hwnd in pamFunctions.get_hwnds_for_pid (self.runningGame.pid):
-                                        print(hwnd, "=>", includes.win32gui.GetWindowText (hwnd))
-                                        includes.win32gui.SetForegroundWindow(hwnd)
-                                        FRONT = includes.win32gui.GetWindowRect(hwnd)                 
+                                    #for hwnd in pamFunctions.get_hwnds_for_pid (self.runningGame.pid):
+                                     #   print(hwnd, "=>", includes.win32gui.GetWindowText (hwnd))
+                                      #  includes.win32gui.SetForegroundWindow(hwnd)
+                                       # FRONT = includes.win32gui.GetWindowRect(hwnd)                 
                                     
                                 else: 
                                     pamFunctions.closeGame(self.runningGame)
                                     self.runningGame = pamFunctions.playGame(currentGame.gameName)
-                            includes.playsound(includes.sounds.getSound("exit_menu"), False)
+                            #includes.playsound(includes.sounds.getSound("exit_menu"), False)
                             self.currentState = includes.CurrentState.GAME_STATE
                             
                             
@@ -177,7 +177,7 @@ class PAM:
 
                             if currentOption.func_id == 'play':
                                 self.currentState = includes.CurrentState.GAME_STATE
-                                includes.playsound(includes.sounds.getSound("exit_menu"), False)
+                               # includes.playsound(includes.sounds.getSound("exit_menu"), False)
                     
                 elif keycode[1] == includes.BUTTON_2:
                     if self.currentState == includes.CurrentState.MAIN_MENU_STATE:
@@ -209,19 +209,19 @@ class PAM:
                         if self.runningGame is not None:
                             print("PID:")
                             print(self.runningGame.pid)
-                            for hwnd in pamFunctions.get_hwnds_for_pid (self.runningGame.pid):
-                                print(hwnd, "=>", includes.win32gui.GetWindowText (hwnd))
-                                includes.win32gui.SetForegroundWindow(hwnd)
-                                FRONT = includes.win32gui.GetWindowRect(hwnd)   
+                            #for hwnd in pamFunctions.get_hwnds_for_pid (self.runningGame.pid):
+                             #   print(hwnd, "=>", includes.win32gui.GetWindowText (hwnd))
+                              #  includes.win32gui.SetForegroundWindow(hwnd)
+                               # FRONT = includes.win32gui.GetWindowRect(hwnd)   
                             self.currentState = includes.CurrentState.GAME_STATE
 
                     elif self.currentState == includes.CurrentState.GAME_STATE:
                         self.currentState = includes.CurrentState.MAIN_MENU_STATE
                         #GO BACK TO HOME MENU. NOT LINUX FRIENDLY. REPLACE LATER.
-                        includes.playsound(includes.sounds.getSound("enter_menu"), False)
-                        HWND = includes.win32gui.FindWindow(None, 'HomeMenu') 
-                        includes.win32gui.SetForegroundWindow(HWND)
-                        FRONT = includes.win32gui.GetWindowRect(HWND)
+                        #includes.playsound(includes.sounds.getSound("enter_menu"), False)
+                        #HWND = includes.win32gui.FindWindow(None, 'HomeMenu') 
+                        #includes.win32gui.SetForegroundWindow(HWND)
+                        #FRONT = includes.win32gui.GetWindowRect(HWND)
 
                 elif keycode[1] == includes.COIN_BUTTON:
                     pass
@@ -266,7 +266,7 @@ class PAM:
 
 
                         elif self.MM.currentSection == includes.Section.GAMES:
-                            includes.playsound(includes.sounds.getSound("down_carousel"), False)
+                            #includes.playsound(includes.sounds.getSound("down_carousel"), False)
                             
                             self.MM.g_i += 1
                             if self.MM.g_i >= len(self.MM.gameList):
@@ -329,7 +329,7 @@ class PAM:
 
 
                         elif self.MM.currentSection == includes.Section.GAMES:
-                            includes.playsound(includes.sounds.getSound("up_carousel"), False)
+                           # includes.playsound(includes.sounds.getSound("up_carousel"), False)
                             print(self.MM.currentSection)
                             self.MM.g_i -= 1
                             if self.MM.g_i < 0:

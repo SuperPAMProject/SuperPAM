@@ -106,12 +106,12 @@ class PAMButton(Button):
         if self.highlighted:
             #print("Parent:" + str(self.parent.func_id))
             print("Subtab: " + str(self.func_id) + " highlighted")
-            playsound(self.h_sound, False)
+            #playsound(self.h_sound, False)
 
     def on_select(self, *args):
         if self.selected:
             print(self.func_id + " Selected")
-            playsound(self.s_sound, False)
+            #playsound(self.s_sound, False)
             #trigger = Clock.create_trigger(self.on_press)
             #trigger()
             #Clock.schedule_once(self.on_press, 0.1)
@@ -137,7 +137,7 @@ class PAMActionButton(PAMButton):
 
     def on_highlight(self, *args):
         if self.highlighted:
-            playsound(self.h_sound, False)
+            #playsound(self.h_sound, False)
             anim = includes.Animation(scale_factor=0.25, t='in_out_cubic')
             print("SF: " + str(self.scale_factor))
             anim.start(self)
@@ -152,7 +152,7 @@ class PAMActionButton(PAMButton):
     def on_select(self, *args):
         if self.selected:
             print(self.func_id + " Selected")
-            playsound(self.s_sound, False)
+            #playsound(self.s_sound, False)
             #self.action_image=self.s_action
         else:
             self.action_image=self.d_action
@@ -221,7 +221,7 @@ class SideBarTabButton(SideBarTabItem):
     def on_select(self, *args):
         if self.selected:
             print(self.func_id + " Selected")
-            playsound(self.s_sound, False)
+            #playsound(self.s_sound, False)
 
  
     
@@ -394,7 +394,7 @@ class SideBarTab(AccordionItem):
     def on_highlight(self, *args):
         if self.highlighted:
             print(self.func_id + " highlighted")
-            playsound(self.h_sound, False)
+            #playsound(self.h_sound, False)
 
     def on_select(self, *args):
         if self.selected:
@@ -402,7 +402,7 @@ class SideBarTab(AccordionItem):
             subTabs = self.children[0].children[0].children[0].children[0].children
             subTabs[len(subTabs) - 1].highlighted = True
             print(self.func_id + " selected")
-            playsound(self.s_sound, False)
+            #playsound(self.s_sound, False)
 
 #----SIDE BAR - Group that contains all Sidebar tabs. 
 class SideBar(PAMButtonGroup):
