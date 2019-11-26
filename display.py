@@ -50,15 +50,21 @@ class HomeMenuApp(App):
 
 def SetupDisplay():
     Window.clearcolor = get_color_from_hex(colors.getColor("background"))
-    Window.fullscreen = 'auto'  #dont use when debugging
+    #Window.fullscreen = 'auto'  #dont use when debugging
+
     LabelBase.register(
         name='Roboto',
         fn_regular='fonts/Roboto-Light.ttf',
         fn_bold='fonts/Roboto-Bold.ttf')
     LabelBase.register(
-    name='Arial',
-    fn_regular='fonts/ARIAL.ttf',
-    fn_bold='fonts/ARIALBD.ttf')
+        name='Arial',
+        fn_regular='fonts/ARIAL.ttf',
+        fn_bold='fonts/ARIALBD.ttf')
+    LabelBase.register(
+        name='Verdana',
+        fn_regular='fonts/VERDANA.ttf',
+        fn_bold='fonts/VERDANAB.ttf')
+
     print("Set up")
     return HomeMenuApp()
 

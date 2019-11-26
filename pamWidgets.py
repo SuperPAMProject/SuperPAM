@@ -16,6 +16,7 @@ from kivy.uix.image import Image
 from kivy.uix.button import Button
 from kivy.uix.accordion import Accordion, AccordionItem
 from kivy.uix.behaviors import ButtonBehavior
+from kivy.uix.carousel import Carousel
 from kivy.uix.label import Label
 from kivy.uix.video import Video
 from kivy.uix.slider import Slider
@@ -34,9 +35,11 @@ from enum import Enum
 import pamFunctions
 from kivy.core.audio import SoundLoader
 from playsound import playsound
-
+import includes
     
-#MISC. CLASSES
+# =============================================================================
+# MISC.
+# =============================================================================
 #----VIDEO-  demo video of the currently highlighted game. Autoplays after 2 seconds. 
 class PAMVideo(Video):
     def __init__(self, **kwargs):
@@ -61,8 +64,21 @@ class PAMImage(Image):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
+class PAMKeyboardListener(Widget):
+    def __init__(self, **kwargs):
+        super(PAMKeyboardListener, self).__init__(**kwargs)
+        self._keyboard = Window.request_keyboard(self._keyboard_closed, self)
 
-#BUTTON CLASSES
+    def _keyboard_closed(self, *args):
+        #self._keyboard.unbind(on_key_down=self._on_keyboard_down)
+        self._keyboard = None
+
+    
+
+
+# =============================================================================
+# Buttons
+# =============================================================================
 #These will be the main interactive widgets. 
 #Each button will have the properties of 'highlighted', 'selected', and 'enabled'
 
@@ -77,22 +93,31 @@ class PAMButton(Button):
         self.enabled = BooleanProperty(True)
         self.background_normal = "img/button_bg.png"
         self.d_color = colors.getColor("primary")
-        self.h_color = colors.getColor("secondary")
+        self.h_color = colors.getColor("primary")
         self.s_color = colors.getColor("accent")
         self.h_sound = sounds.getSound("highlight_btn")
         self.s_sound = sounds.getSound("select_btn")
         self.bind(highlighted=self.on_highlight)
         self.bind(selected=self.on_select)
+        #self.bind(selected=self.on_press)
         
         
     def on_highlight(self, *args):
         if self.highlighted:
-            playsound(self.h_sound, False)
+            #print("Parent:" + str(self.parent.func_id))
+            print("Subtab: " + str(self.func_id) + " highlighted")
+            #playsound(self.h_sound, False)
 
     def on_select(self, *args):
         if self.selected:
             print(self.func_id + " Selected")
-            playsound(self.s_sound, False)
+            #playsound(self.s_sound, False)
+            #trigger = Clock.create_trigger(self.on_press)
+            #trigger()
+            #Clock.schedule_once(self.on_press, 0.1)
+    
+    def outputTest(self, *args):
+        print("SUCCESS")
 
 #----SCALE BUTTON - TODO: This class needs a description
 class ScaleButton(PAMButton):
@@ -108,20 +133,26 @@ class PAMActionButton(PAMButton):
         self.h_action = ''
         self.s_action = ''
         self.d_color = colors.getColor("background")
+        self.scale_factor = 0.2
 
     def on_highlight(self, *args):
         if self.highlighted:
-            playsound(self.h_sound, False)
+            #playsound(self.h_sound, False)
+            anim = includes.Animation(scale_factor=0.25, t='in_out_cubic')
+            print("SF: " + str(self.scale_factor))
+            anim.start(self)
             self.action_image = self.h_action
             print(self.canvas.children[4])
             print(self.canvas.children[4].source)
         else:
             self.action_image=self.d_action
+            anim = includes.Animation(scale_factor=0.2, t='in_out_cubic')
+            anim.start(self)
     
     def on_select(self, *args):
         if self.selected:
             print(self.func_id + " Selected")
-            playsound(self.s_sound, False)
+            #playsound(self.s_sound, False)
             #self.action_image=self.s_action
         else:
             self.action_image=self.d_action
@@ -177,7 +208,23 @@ class PopupWindowItem(BoxLayout):
 class SideBarTabItem(ScaleButton):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+        self.d_color = colors.getColor('background')
+        self.sidebar = None
+        #self.h_color = '#FFFFFF'
+
+    def on_select(self, *args):
+        if self.selected:
+            carousel = self.parent.parent.parent.parent.parent.parent.parent.parent
+            self.sidebar = carousel.moveToSidebar(self.func_id)
+
+class SideBarTabButton(SideBarTabItem):
+    def on_select(self, *args):
+        if self.selected:
+            print(self.func_id + " Selected")
+            #playsound(self.s_sound, False)
+
  
+    
 #----CAROUSEL ITEM - A button that interacts with a label. Selecting it will take the user to the Action Button group.
 #   Each CarouselItem will be associated with a unique game and will display that game's title as its text.
 class GameCarouselItem(ScaleButton):  
@@ -220,11 +267,12 @@ class SaveState(PAMButton):
         self.changeSize()
 
 
-#LABEL CLASSES
-# These classes will be used for non-interactive, dynamic textual elements. 
-# Each label will only change its text under 
+# =============================================================================
+# Labels
+# =============================================================================
+#These classes will be used for non-interactive, dynamic textual elements. 
 
-#----SCALE LABEL - TODO: This class needs a description
+#----SCALE LABEL - Label that is capable of dynamic resizing with the window. 
 class ScaleLabel(Label):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -251,7 +299,9 @@ class GameInfo(ScaleLabel):
         super().__init__(**kwargs)
         
 
-#GROUP CLASSES
+# =============================================================================
+# Groups
+# =============================================================================
 # These classes will act as containers for any of the proceeding classes. 
 # Each container will use the 'children' property to iterate over the widgets inside them and perform operations on them.
 
@@ -321,12 +371,38 @@ class PopupWindowLayout(BoxLayout):
 
 #----SIDE BAR TAB - Both a group and an item within a group. The tabs are the items within the sidebar.
 #    And each tab houses several buttons the user can select to access their options.  
-class SideBarTab(PAMButtonGroup, ScaleButton):
+class SideBarTab(AccordionItem):
+    highlighted = BooleanProperty(False)
+    selected = BooleanProperty(False)
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.tab_item_list: SideBarTabItem
         self.collapse = True
-        self.d_color = colors.getColor("background")
+        self.d_color = '#FFFFFF00' #colors.getColor("background")
+        self.func_id = ''
+        self.enabled = BooleanProperty(True)
+        self.background_normal = "img/no_alpha.png"
+        self.background_selected = "img/no_alpha.png"
+        self.h_color = colors.getColor("secondary")
+        self.s_color = colors.getColor("accent")
+        self.h_sound = sounds.getSound("highlight_btn")
+        self.s_sound = sounds.getSound("select_btn")
+        self.bind(highlighted=self.on_highlight)
+        self.bind(selected=self.on_select)
+        
+        
+    def on_highlight(self, *args):
+        if self.highlighted:
+            print(self.func_id + " highlighted")
+            #playsound(self.h_sound, False)
+
+    def on_select(self, *args):
+        if self.selected:
+            self.collapse = not self.collapse
+            subTabs = self.children[0].children[0].children[0].children[0].children
+            subTabs[len(subTabs) - 1].highlighted = True
+            print(self.func_id + " selected")
+            #playsound(self.s_sound, False)
 
 #----SIDE BAR - Group that contains all Sidebar tabs. 
 class SideBar(PAMButtonGroup):
@@ -337,6 +413,38 @@ class SideBar(PAMButtonGroup):
 
     def collapseAll(self):
         pass
+
+class SidebarCarousel(Carousel):
+    def __init__(self, **kwargs):
+        super(SidebarCarousel, self).__init__(**kwargs)
+        self._keyboard = Window.request_keyboard(self._keyboard_closed, self)
+        self._keyboard.bind(on_key_down=self._on_keyboard_down)
+
+    def _keyboard_closed(self):
+        self._keyboard.unbind(on_key_down=self._on_keyboard_down)
+        self._keyboard = None
+
+    def _on_keyboard_down(self, keyboard, keycode, text, modifiers):
+        if keycode[1] == 'a':
+            self.moveToRootSideBar()
+        return True
+
+    def moveToSidebar(self, id):
+        for sidebar in self.slides:
+            if sidebar.bar_id == id:
+                print(sidebar.bar_id)
+                print(id)
+                self.load_slide(sidebar)
+                print(sidebar.children)
+                subTabs = sidebar.children[0].children[0].children[0].children[0].children[0].children
+                for tab in subTabs:
+                    tab.background_color = includes.get_color_from_hex(tab.d_color)
+                return sidebar
+
+    def moveToRootSideBar(self):
+        self.load_slide(self.slides[0])
+        return self.slides[0]
+        print('ROOT')
 
 #----SAVE STATE GROUP- Group within a popup window. Contains save states for the currently selected game.
 class SaveStateGroup(PAMButtonGroup):
@@ -350,6 +458,7 @@ class SaveStateGroup(PAMButtonGroup):
         pass
 
 #TESTING AREA
-#if __name__ == "__main__":
+if __name__ == "__main__":
+    pass
 #   Put code to test here
 #   print("SUCCESS")

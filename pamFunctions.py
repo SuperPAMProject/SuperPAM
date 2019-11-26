@@ -4,9 +4,9 @@ import subprocess
 from subprocess import check_output
 import includes
 import pamWidgets
-import win32con
-import win32gui
-import win32process
+#import win32con
+#import win32gui
+#import win32process
 from kivy.app import App
 from kivy.core.text import LabelBase
 import display
@@ -48,7 +48,7 @@ def playGame(game_path):
         os.chdir('C:/Users/Michael/Documents/Hobbies/Coding/Bob/SuperPAM/emulators')
         process = check_output('C:/Users/Michael/Documents/Hobbies/Coding/Bob/SuperPAM/emulators/mame64.exe ' + game_path , shell=True)
         os.chdir('C:/Users/Michael/Documents/Hobbies/Coding/Bob/SuperPAM')
-        return process
+        return process     
     except subprocess.CalledProcessError as e:
         output = e.output
         print(output)
@@ -107,6 +107,8 @@ def kickClient(client):
 #SORTING FUNCTIONS
 def sortByTitle(lib):
     lib.sort(key=getTitle)
+    for game in lib:
+        print(getTitle(game))
 
 def getTitle(game):
     return game.text 
@@ -114,16 +116,20 @@ def getTitle(game):
 
 def sortByDev(lib):
     lib.sort(key=getDev)
+    for game in lib:
+        print(getDev(game))
 
 def getDev(game):
-    return game.developer
+    return game.gameInfo[1]
 
 
 def sortByPub(lib):
     lib.sort(key=getPub)
+    for game in lib:
+        print(getPub(game))
 
 def getPub(game):
-    return game.publisher
+    return game.gameInfo[2]
 
 
 def sortByGenre(lib):
@@ -135,32 +141,68 @@ def getGenre(game):
 
 def sortByYear(lib):
     lib.sort(key=getYear)
-    pass
+    for game in lib:
+        print(getYear(game))
 
 def getYear(game):
-    return game.year
+    return game.gameInfo[0]
+
+
+def sortByFavorite(lib):
+    lib.sort(key=getFavorite)
+    for game in lib:
+        if getFavorite(game):
+            print(game.gameName)
+
+def getFavorite(game):
+    return game.isFavorite
 
 
 #SOUND FUNCTIONS
 def soundPopup(player):
     pass
 
+def MuteSound(menu, btn):
+    if btn.text == 'Mute Video':
+        menu.videoIsMute = True
+        btn.text = 'Unmute Video'
+
+    elif btn.text == 'Mute SFX':
+        menu.sfxIsMute = True
+        btn.text = 'Unmute SFX'
+
+    elif btn.text == 'Unmute Video':
+        menu.videoIsMute = False
+        btn.text = 'Mute Video'
+
+    elif btn.text == 'Unmute SFX':
+        menu.sfxIsMute = False
+        btn.text = 'Mute SFX'
+
+    print(menu.sfxIsMute)
+    print(menu.videoIsMute)
+    #Store preference in user settings
+
 
 #VISUALS FUNCTIONS
 def visualsPopup(player):
     pass
 
-def setColor(menu):
-    if menu.current_color_scheme == 'watermelon':
-        menu.current_color_scheme = 'waves'
-    else:
-        menu.current_color_scheme = 'watermelon'
+def setColorScheme(menu, scheme):
+    menu.current_color_scheme = scheme.lower()
+    print(scheme)
+    #Store preference in user settings
 
-def setFont(menu):
-    if menu.current_font == 'Roboto':
-        menu.current_font = 'Arial'
-    else:
-        menu.current_font = 'Roboto'
+def setFontType(menu, font):
+    menu.current_font = font
+    print(font)
+    #Store preference in user settings
+
+def setFontSize(menu, size):
+    menu.current_font_size = size.lower()
+    print(size)
+    #Store preference in user settings
+
 
 #USER FUNCTIONS
 def userPopup(player):
@@ -187,17 +229,17 @@ def confirmRemap(player):
 
 
 #MISC. FUNCTIONS
-def get_hwnds_for_pid (pid):
-  def callback (hwnd, hwnds):
-    if win32gui.IsWindowVisible (hwnd) and win32gui.IsWindowEnabled (hwnd):
-      _, found_pid = win32process.GetWindowThreadProcessId (hwnd)
-      if found_pid == pid:
-        hwnds.append (hwnd)
-    return True
+#def get_hwnds_for_pid (pid):
+ # def callback (hwnd, hwnds):
+  #  if win32gui.IsWindowVisible (hwnd) and win32gui.IsWindowEnabled (hwnd):
+   ##   _, found_pid = win32process.GetWindowThreadProcessId (hwnd)
+     # if found_pid == pid:
+      #  hwnds.append (hwnd)
+    #return True
 
-  hwnds = []
-  win32gui.EnumWindows (callback, hwnds)
-  return hwnds
+  #hwnds = []
+  #win32gui.EnumWindows (callback, hwnds)
+  #return hwnds
 
 def setVisibility(wid):
     wid.disabled = not wid.disabled
@@ -253,6 +295,10 @@ def optionsPopup(btn, menu):
     pop.disabled = False
     return True
 
+def sidebarSwitch(btn, menu):
+    #carousel = menu.layout.ids['car']
+    #carousel.moveToSideBar(btn.func_id)
+    pass
 
 #ACTIVATED ON BUTTON SELECTION, TAKES ID OF BUTTON TO DETERMINE FUNCTION
 def getFunction(btn, menu):
@@ -285,13 +331,32 @@ def getFunction(btn, menu):
     elif btn.func_id == 'year':
         return sortByYear(library)
     elif btn.func_id == 'sound':
-        return soundPopup(player)
+        return sidebarSwitch(btn, menu)
     elif btn.func_id == 'visuals':
-        return visualsPopup(player)
+        pass
     elif btn.func_id == 'user':
-        return userPopup(player)
+        pass
     elif btn.func_id == 'controls':
-        return controlsPopup(player)
+        pass
+    elif btn.func_id == 'by_favs':
+        return sortByFavorite(menu.gameList)
+    elif btn.func_id == 'by_title':
+        return sortByTitle(menu.gameList)
+    elif btn.func_id == 'by_dev':
+        return sortByDev(menu.gameList)
+    elif btn.func_id == 'by_yr':
+        return sortByYear(menu.gameList)
+    elif btn.func_id == 'by_pub':
+        return sortByPub(menu.gameList)
+    elif btn.func_id == 'color_scheme':
+        return setColorScheme(menu, btn.text)
+    elif btn.func_id == 'font_type':
+        return setFontType(menu, btn.text)
+    elif btn.func_id == 'font_size':
+        return setFontSize(menu, btn.text)
+    elif btn.func_id == 'mute':
+        return MuteSound(menu, btn)
+
 
 
 if __name__ == "__main__":

@@ -4,7 +4,32 @@
 #:import f fonts
 #:import pf pamFunctions
 #:import w display.Window
+
 MainMenuLayout:
+# =============================================================================
+# Labels
+# =============================================================================
+<PAMAccordionItemTitle@Label>:
+    text: ctx.title
+    canvas.before:
+        Color:
+            rgb: 1, 1, 1
+        BorderImage:
+            source:
+                ctx.item.background_normal                         if ctx.item.collapse                         else ctx.item.background_selected
+            pos: self.pos
+            size: self.size
+        PushMatrix
+        Translate:
+            xy: self.center_x, self.center_y
+        Rotate:
+            angle: 90 if ctx.item.orientation == 'horizontal' else 0
+            axis: 0, 0, 1
+        Translate:
+            xy: -self.center_x, -self.center_y
+    canvas.after:
+        PopMatrix
+
 
 <ScaleLabel>:
 	_scale: 1. if self.texture_size[0] < self.width else float(self.width) / (self.texture_size[0]+0.1)
@@ -16,7 +41,9 @@ MainMenuLayout:
 			y: self._scale or 1.
 	canvas.after:
 		PopMatrix
-
+# =============================================================================
+# Buttons
+# =============================================================================
 <ScaleButton>:
 	state_image: self.background_normal if self.state == 'normal' else self.background_down
 	disabled_image: self.background_disabled_normal if self.state == 'normal' else self.background_disabled_down
@@ -44,19 +71,21 @@ MainMenuLayout:
 		PopMatrix
 <PAMButton>:
     #font: f.getFont("normal")
-
-<ControlBarIcon@Image>:
-
 <PAMActionButton>:
     size_hint: 0.3, 0.3
     background_color: 0, 0, 0, 0
     action_image: self.action_image
     d_color: self.d_color
+    scale_factor: self.scale_factor
     canvas:
         Rectangle:
             source: self.action_image
             pos: (self.pos[0]+self.size[0]/2.0) - 40, (self.pos[1]+self.size[1]/2.0) - 40
-            size: (self.parent.width*0.20, self.parent.width*0.2)
+            size: (self.parent.width*self.scale_factor, self.parent.width*self.scale_factor)
+
+# =============================================================================
+# Game Carousel
+# =============================================================================
 <GameCarousel>:
 <GameCarouselItem>:
     font_size: self.height * 0.5
@@ -68,16 +97,26 @@ MainMenuLayout:
         Rectangle:
             pos: w.width*0.30, w.height*0.576
             size: w.width*0.28, w.height*0.04
-
+# =============================================================================
+# Sidebar
+# =============================================================================
 <SideBar>:
-    size_hint: 0.23, 0.25
+    size_hint: 0.33, 0.8#0.23, 0.25
     pos_hint: {'right':0.4, 'top':0.89}
     on_pos: pos={self.parent.x, self.parent.y}
-
 <SideBarTab>:
-    size_hint: 0.5, 0.12
-    font_size: self.height * 0.5
+    size_hint: 0.6, 0.13
 <SideBarTabItem>:
+    size_hint: 0.6, 0.16
+    pos_hint: {'x': 0.34}
+    #on_select: self.on_select()
+<TabItemContainer@BoxLayout>:
+    orientation: 'vertical'
+    padding: 20
+
+# =============================================================================
+# Game Information
+# =============================================================================
 <GameDescriptionArea>:
     orientation: 'vertical'
     size_hint: 0.86, 0.38
@@ -98,6 +137,9 @@ MainMenuLayout:
     halign: 'left'   
     valign: 'top'
 
+# =============================================================================
+# Popups
+# =============================================================================
 <PAMCheckbox>:
     id: wid
     icon: self.icon
@@ -252,10 +294,16 @@ MainMenuLayout:
     size_hint: 0.5, 0.64
     auto_dismiss: False
 
+# =============================================================================
+# Game Video
+# =============================================================================
 <PAMVideo>:
     size_hint: 0.86, 0.29
     pos_hint: {'right': 1, 'top': 1}
 
+# =============================================================================
+# Control Bar
+# =============================================================================
 <ControlBar>:
     orientation: 'horizontal'
     size_hint: 1, 0.08
@@ -271,60 +319,194 @@ MainMenuLayout:
 
 <ControlBarItem>:
     font_size: self.height * 0.5
+<ControlBarIcon@Image>:
+
+# =============================================================================
+# Home Menu
+# =============================================================================
 <MainMenuLayout>:
     id: main
+    PAMKeyboardListener:
+        id: kListener
+        size_hint: 0, 0
     BoxLayout:
         orientation: 'vertical'    
         BoxLayout:
             orientation:'horizontal'
             size_hint: 1, 0.84
             SideBar:
-                id: sidebar
                 orientation: 'vertical'
-                SideBarTab:
-                    id: sidebartab1
-                    func_id: 'multiplayer'
-                    text: 'MULTIPLAYER'
-                    orientation: 'vertical'
-                    #SideBarTab:
-                    #    text: 'HOST CONNECTION'
-                    #SideBarTab:
-                    #    text: 'ACCEPT CLIENT'
-                    #SideBarTab:
-                    #    text: 'KICK CLIENT'
-                SideBarTab:
-                    id: sidebartab2
-                    func_id: 'sort'
-                    text: 'SORT'
-                    orientation: 'vertical'
-                    #SideBarTab:
-                    #    text: 'BY GENRE'
-                    #SideBarTab:
-                    #    text: 'BY YEAR'
-                    #SideBarTab:
-                    #    text: 'BY DEVELOPER'
-                SideBarTab:
-                    id: sidebartab3
-                    func_id: 'options'
-                    text: 'OPTIONS'
-                    orientation: 'vertical'
-                    #SideBarTab:
-                    #    text: 'VISUAL'
-                    #SideBarTab:
-                    #    text: 'AUDIO'
-                    #SideBarTab:
-                    #    text: 'TEXT'
-                SideBarTab:
-                    id: sidebartab4
-                    func_id: 'power'
-                    text: 'POWER'           
+                SidebarCarousel:
+                    id: car
+                    loop: True
+                    direction: 'right'
+                    size_hint: 1, 1
+                    pos_hint: {'x': -0.3}
+                    Accordion:
+                        id: sidebar
+                        orientation: 'vertical'
+                        bar_id: 'rootSidebar'
+                        SideBarTab:
+                            title: 'MULTIPLAYER'
+                            func_id: 'multi'
+                            orientation: 'vertical'
+                            TabItemContainer:
+                                SideBarTabItem:
+                                    text:'Host Session'
+                                    func_id: 'host'
+                                    on_press: car.moveToSidebar('hostSidebar')
+                                SideBarTabItem:
+                                    text: 'Leave Session'
+                                    func_id: 'leave'
+                        SideBarTab:
+                            title: 'SORT GAMES'
+                            func_id: 'sort'
+                            orientation: 'vertical'
+                            TabItemContainer:
+                                SideBarTabItem:
+                                    text:'By Favorites'
+                                    func_id: 'by_favs'
+                                SideBarTabItem:
+                                    text:'By Title'
+                                    func_id: 'by_title'
+                                SideBarTabItem:
+                                    text: 'By Year'
+                                    func_id: 'by_yr'
+                                SideBarTabItem:
+                                    text:'By Developer'
+                                    func_id: 'by_dev'
+                                SideBarTabItem:
+                                    text: 'By Publisher'
+                                    func_id: 'by_pub'
+                        SideBarTab:
+                            title:'OPTIONS'
+                            func_id: 'op'
+                            TabItemContainer:
+                                SideBarTabItem:
+                                    text: 'Sound'
+                                    func_id: 'sound'
+                                SideBarTabItem:
+                                    text: 'Visuals'
+                                    func_id: 'visuals'
+                                SideBarTabItem:
+                                    text: 'User'
+                                    func_id: 'user'
+                                SideBarTabItem:
+                                    text: 'Inputs'
+                                    func_id: 'inputs'
+
+                        SideBarTab:
+                            title: 'POWER'
+                            func_id: 'power'
+                            BoxLayout:
+                                orientation:'vertical'
+
+                                
+                
+                    Accordion:
+                        id: soundSidebar
+                        orientation: 'vertical'
+                        bar_id: 'sound'
+                        SideBarTab:
+                            title: 'SOUND'
+                            TabItemContainer:
+                                SideBarTabItem:
+                                    text: 'Mute Video'
+                                    func_id: 'mute'
+                                SideBarTabItem:
+                                    text: 'Mute SFX'
+                                    func_id: 'mute'
+                    Accordion:
+                        id: visualsSidebar
+                        orientation: 'vertical'
+                        bar_id: 'visuals'
+                        SideBarTab:
+                            title: 'Color Scheme'
+                            TabItemContainer:
+                                SideBarTabItem:
+                                    text: 'Waves'
+                                    func_id: 'color_scheme'
+                                SideBarTabItem:
+                                    text: 'Watermelon'
+                                    func_id: 'color_scheme'
+                                SideBarTabItem:
+                                    text: 'Burn'
+                                    func_id: 'color_scheme'
+                                SideBarTabItem:
+                                    text: 'Blossom'
+                                    func_id: 'color_scheme'
+                        SideBarTab:
+                            title: 'Font Size'
+                            TabItemContainer:
+                                SideBarTabItem:
+                                    text: 'Small'
+                                    func_id: 'font_size'
+                                SideBarTabItem:
+                                    text: 'Medium'
+                                    func_id: 'font_size'
+                                SideBarTabItem:
+                                    text: 'Large'
+                                    func_id: 'font_size'
+                        SideBarTab:
+                            title: 'Font Type'
+                            TabItemContainer:
+                                SideBarTabItem:
+                                    text: 'Roboto'
+                                    func_id: 'font_type'
+                                SideBarTabItem:
+                                    text: 'Arial'
+                                    func_id: 'font_type'
+                                SideBarTabItem:
+                                    text: 'Verdana'
+                                    func_id: 'font_type'
+                                SideBarTabItem:
+                                    text: 'Helvetica'
+                                    func_id: 'font_type'
+                    Accordion:
+                        id: userSidebar
+                        orientation: 'vertical'
+                        bar_id: 'user'
+                        SideBarTab:
+                            title: 'USER'
+                            TabItemContainer:
+                                SideBarTabItem:
+                                    text: 'User Stats'
+                                SideBarTabItem:
+                                    text: 'Reformat System'
+                    Accordion:
+                        id: inputsSidebar
+                        orientation: 'vertical'
+                        bar_id: 'inputs'
+                        SideBarTab:
+                            title: 'Remap Controls'
+                            TabItemContainer:
+                                SideBarTabItem:
+                                    text: 'Select'
+                                SideBarTabItem:
+                                    text: 'Back'
+                                SideBarTabItem:
+                                    text: 'Quick Favorite'
+                                SideBarTabItem:
+                                    text: 'BTN1'
+                                SideBarTabItem:
+                                    text: 'BTN2'
+                                SideBarTabItem:
+                                    text: 'BTN3'
+                        SideBarTab:
+                            title: 'Turbo Button'
+                            TabItemContainer:
+                                SideBarTabItem:
+                                    text: 'ON'
+                                SideBarTabItem:
+                                    text: 'OFF'
+
+                                
             GameCarousel:
                 id: games
                 orientation: 'vertical'
                 size_hint: 0.28, 1
                 pos_hint: {'center_x': 0.5, 'top': 1}
-                GameCarouselHighlighter:
-                    id: highlighter               
+               
             BoxLayout:
                 id: gameDetails
                 orientation: 'vertical'
@@ -366,14 +548,14 @@ MainMenuLayout:
                         h_action: c.getColor('play-h')
                         s_action: c.getColor('play-s')
                         action_image: self.d_action
-                    PAMActionButton:
-                        id: save
-                        func_id: 'save'
-                        d_color: '#FFFFFF00'
-                        d_action: c.getColor('save-d')
-                        h_action: c.getColor('save-h')
-                        s_action: c.getColor('save-s')
-                        action_image: self.d_action
+                    #PAMActionButton:
+                        #id: save
+                        #func_id: 'save'
+                        #d_color: '#FFFFFF00'
+                        #d_action: c.getColor('save-d')
+                        #h_action: c.getColor('save-h')
+                        #s_action: c.getColor('save-s')
+                        #action_image: self.d_action
                     PAMActionButton:
                         id: fav
                         func_id: 'fav'
@@ -382,6 +564,7 @@ MainMenuLayout:
                         h_action: c.getColor('fav-h')
                         s_action: c.getColor('fav-s')
                         action_image: self.d_action
+        
         ControlBar:
             id: controlbar
             ControlBarItem:
@@ -393,6 +576,9 @@ MainMenuLayout:
             ControlBarItem:
                 text: "Favorite: W"
 
+# =============================================================================
+# Popup Layer
+# =============================================================================
     BoxLayout:
         id: dark
         size_hint: None, None

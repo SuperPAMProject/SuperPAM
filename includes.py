@@ -26,7 +26,7 @@ import colors
 import fonts
 import controls
 import sounds
-from win32 import win32gui  
+#from win32 import win32gui  
 from kivy.core.audio import SoundLoader
 from playsound import playsound
 
@@ -34,21 +34,21 @@ from playsound import playsound
 
 #constants
 HIGHLIGHTER_Y = 0.576
+BUFFER = 150000
 
 BUTTON_1 = 'z'
 BUTTON_2 = 'x'
 BUTTON_3 = 'c'
-BUTTON_4 = 'v'
-BUTTON_5 = 'a'
-BUTTON_6 = 's'
-BUTTON_7 = 'd'
-BUTTON_8 = 'f'
+BUTTON_4 = 'a'
+BUTTON_5 = 's'
+BUTTON_6 = 'd'
 HOME_BUTTON = 'q'
 COIN_BUTTON = 'w'
-DI_UP = '8'
-DI_LEFT = '4'
-DI_RIGHT = '6'
-DI_DOWN = '2'
+DI_UP = 'up'
+DI_LEFT = 'left'
+DI_RIGHT = 'right'
+DI_DOWN = 'down'
+
 
 # Global Variables
 isLoading = False; # may not need this
@@ -76,8 +76,7 @@ class Tabs(IntEnum):
 
 class GameOptions(IntEnum):
     PLAY = 0;
-    SAVES = 1;
-    FAVORITE = 2;
+    FAVORITE = 1;
 
 # This class contains all the data needed to successfully navigate through
 # the main menu options. I MAY ADD A BOOLEAN FOR CHECKING IF THE CURRENT TAB
