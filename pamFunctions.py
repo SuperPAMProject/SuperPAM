@@ -11,7 +11,9 @@ from kivy.app import App
 from kivy.core.text import LabelBase
 import display
 
-#PLACEHOLDER VARIABLES
+# =============================================================================
+# PLACEHOLDER VARIABLES
+# =============================================================================
 player = ''
 session = ''
 current_game = ''
@@ -42,7 +44,9 @@ def populateGameLibrary(self):
             print("Path: " + newGame.gameInfo[3])
 
 
-#ACTON BUTTON FUNCTIONS
+# =============================================================================
+# ACTION BUTTON FUNCTIONS
+# =============================================================================
 def playGame(game_path):
     try:
         os.chdir('C:/Users/Michael/Documents/Hobbies/Coding/Bob/SuperPAM/emulators')
@@ -88,7 +92,9 @@ def favGame(game, menu):
 
     
 
-#MULTIPLAYER FUNCTIONS
+# =============================================================================
+# MULTIPLAYER FUNCTIONS
+# =============================================================================
 def startSession(player):
     #Listen for client signal
     pass
@@ -104,7 +110,9 @@ def kickClient(client):
     pass
 
 
-#SORTING FUNCTIONS
+# =============================================================================
+# SORTING FUNCTIONS
+# =============================================================================
 def sortByTitle(lib):
     lib.sort(key=getTitle)
     for game in lib:
@@ -158,7 +166,9 @@ def getFavorite(game):
     return game.isFavorite
 
 
-#SOUND FUNCTIONS
+# =============================================================================
+# SOUND FUNCTIONS
+# =============================================================================
 def soundPopup(player):
     pass
 
@@ -184,7 +194,9 @@ def MuteSound(menu, btn):
     #Store preference in user settings
 
 
-#VISUALS FUNCTIONS
+# =============================================================================
+# VISUAL FUNCTIONS
+# =============================================================================
 def visualsPopup(player):
     pass
 
@@ -199,12 +211,20 @@ def setFontType(menu, font):
     #Store preference in user settings
 
 def setFontSize(menu, size):
-    menu.current_font_size = size.lower()
+    if size.lower() == 'small':
+        menu.current_font_size = 0.5
+    elif size.lower() == 'medium':
+        menu.current_font_size = 0.8
+    elif size.lower() == 'large':
+        menu.current_font_size = 1.2
     print(size)
+    print(menu.current_font_size)
     #Store preference in user settings
 
 
-#USER FUNCTIONS
+# =============================================================================
+# USER FUNCTIONS
+# =============================================================================
 def userPopup(player):
     pass
 
@@ -217,7 +237,10 @@ def viewStats(player):
 def reformatSystem(player):
     pass
 
-#CONTROLS FUNCTIONS
+# =============================================================================
+# CONTROL FUNCTIONS
+# =============================================================================
+    #On control bar, change control hints to say COnfirm Remap: Home, Cancel Rempa: Coin
 def controlsPopup(player):
     pass
 
@@ -227,8 +250,13 @@ def remapButton(player):
 def confirmRemap(player):
     pass
 
+def cancelRemap(player):
+    pass
 
-#MISC. FUNCTIONS
+
+# =============================================================================
+# MISC. FUNCTIONS
+# =============================================================================
 #def get_hwnds_for_pid (pid):
  # def callback (hwnd, hwnds):
   #  if win32gui.IsWindowVisible (hwnd) and win32gui.IsWindowEnabled (hwnd):
@@ -300,7 +328,10 @@ def sidebarSwitch(btn, menu):
     #carousel.moveToSideBar(btn.func_id)
     pass
 
-#ACTIVATED ON BUTTON SELECTION, TAKES ID OF BUTTON TO DETERMINE FUNCTION
+# =============================================================================
+# FUNCTON IDENTIFIER
+# =============================================================================
+    #ACTIVATED ON BUTTON SELECTION, TAKES ID OF BUTTON TO DETERMINE FUNCTION
 def getFunction(btn, menu):
     if btn.func_id == 'play':
         return playGame(menu.GetGame().gameName)
@@ -339,6 +370,9 @@ def getFunction(btn, menu):
     elif btn.func_id == 'controls':
         pass
     elif btn.func_id == 'by_favs':
+        menu.favoriteSort = not menu.favoriteSort
+        btn.isToggled = not btn.isToggled
+        print("Get 'Em!")
         return sortByFavorite(menu.gameList)
     elif btn.func_id == 'by_title':
         return sortByTitle(menu.gameList)

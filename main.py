@@ -1,3 +1,8 @@
+#TO-DO:
+#Implement multiplayer
+#Add videos (code, vid editing)
+#Add control remap
+
 import threading
 import sys
 from datetime import datetime
@@ -18,6 +23,7 @@ from kivy.core.window import Window
 
 
 
+
 # Our own on_resize function so that we can ensure the games animate properly
 def on_resize(one, two, three):
     if pam.selectedY is not 0 and pam.selectedY is not None:
@@ -35,16 +41,16 @@ class PAM:
     # initialization of the PAM
     def __init__(self):
         self.currentState = includes.CurrentState.MAIN_MENU_STATE; 
-        self.Display = display.SetupDisplay();
+        self.Display = display.SetupDisplay()
         self.Display.load_kv("HomeMenu.kv")
         self.layout = self.Display.build()
         self.Display.built = True
         self.Display.root = self.layout
-        self.MM = mainMenu.mainMenu(self.layout.ids["sidebar"], self.layout.ids["games"], self.layout.ids["actionbtns"]);
+        self.MM = mainMenu.mainMenu(self.layout.ids["sidebar"], self.layout.ids["games"], self.layout.ids["actionbtns"])
         #self.layout.ids["games"].children[3].bind(pos=self.on_resize)
         #self.inputHook = keyboard.hook(self.readInputs)
-        self.currentInputs = [];
-        self.comp_anims = [False, False, False, False, False, False, False];
+        self.currentInputs = []
+        self.comp_anims = [False, False, False, False, False, False, False]
         self.anim0 = None
         self.anim1 = None
         self.anim2 = None
@@ -54,10 +60,11 @@ class PAM:
         self.anim6 = None
         self.currentAnimEvent = None
         self.selectedY = None
-        self.updateState(None);
+        pamFunctions.sortByTitle(self.MM.gameList)
+        self.updateState(None)
         self.runningGame = None
         self.lastSelectedGame = None
-        self.setGames();
+        self.setGames()
         self.window = EventLoop.window
         self.window.bind(on_resize=on_resize)
         #self.inputClock = Clock()
@@ -79,8 +86,8 @@ class PAM:
         self.kListener  = self.layout.ids['kListener']
         self.kListener.keyboard = Window.request_keyboard(self._keyboard_closed, self.kListener)
         self.kListener.keyboard.bind(on_key_down=self.readInputs)
-        print(self.kListener)
         
+
         
         #self.Display.bind(on_start=setup)
         
@@ -97,7 +104,7 @@ class PAM:
     # editing of the emulator's input reading may be necessary.
     def readInputs(self, keyboard, keycode, text, modifiers):
 
-        if keycode[1] == 'alt' or keycode[1] == 'tab' or keycode[1] == 'escape':
+        if keycode[1] not in self.eventDict:
             return
 
         newTime = datetime.now()
@@ -142,31 +149,12 @@ class PAM:
                                 currentSubTab.selected = False
                                 if currentSubTab.sidebar is not None:
                                     self.MM.CurrentTab().collapse = True
+                                    currentSubTab.highlighted = False
                                     self.switchToSidebar(currentSubTab.sidebar)
                                     
 
                         elif self.MM.currentSection == includes.Section.GAMES:
-                            currentGame = self.MM.GetGame()     
-                            if self.runningGame is None:
-                                self.runningGame = pamFunctions.playGame(currentGame.gameName)
-                                self.lastSelectedGame = currentGame
-                            else:
-                                if currentGame == self.lastSelectedGame:
-                                    pass #add in check for if lastSelectedGame is still running
-                                    #GO BACK TO GAME. NOT LINUX FRIENDLY. REPLACE LATER.
-
-                                    print("PID:")
-                                    print(self.runningGame.pid)
-                                    #for hwnd in pamFunctions.get_hwnds_for_pid (self.runningGame.pid):
-                                     #   print(hwnd, "=>", includes.win32gui.GetWindowText (hwnd))
-                                      #  includes.win32gui.SetForegroundWindow(hwnd)
-                                       # FRONT = includes.win32gui.GetWindowRect(hwnd)                 
-                                    
-                                else: 
-                                    pamFunctions.closeGame(self.runningGame)
-                                    self.runningGame = pamFunctions.playGame(currentGame.gameName)
-                            #includes.playsound(includes.sounds.getSound("exit_menu"), False)
-                            self.currentState = includes.CurrentState.GAME_STATE
+                            pass # For now
                             
                             
                         elif self.MM.currentSection == includes.Section.GAME_OPTIONS:
@@ -241,7 +229,6 @@ class PAM:
                                 self.MM.CurrentTab().highlighted = True
                                 subTabs = self.MM.CurrentTab().children[0].children[0].children[0].children[0].children
                                 self.MM.s_t_i = len(subTabs) - 1
-                                print("Current Tab Index: " + str(self.MM.t_i))
 
                             #If tab is open
                             else:
@@ -251,7 +238,6 @@ class PAM:
                                     self.MM.CurrentSubTab(subTabs).highlighted = False
                                 
                                 self.MM.s_t_i -= 1
-                                print("Current SubTab Index: " + str(self.MM.s_t_i))
 
                                 #Progress downward in sub tabs until at end. Close current major tab
                                 if self.MM.s_t_i < 0:
@@ -330,7 +316,6 @@ class PAM:
 
                         elif self.MM.currentSection == includes.Section.GAMES:
                            # includes.playsound(includes.sounds.getSound("up_carousel"), False)
-                            print(self.MM.currentSection)
                             self.MM.g_i -= 1
                             if self.MM.g_i < 0:
                                 self.MM.g_i =  len(self.MM.gameList) - 1
@@ -409,11 +394,6 @@ class PAM:
             games = self.layout.ids["games"].children
             height = games[0].height
 
-
-            for game in games:
-               # print(game.y)
-               # print(game.text)
-               pass
             # reset widget locations starting with the current game widget's known base location
             games[3].y = self.selectedY
 
@@ -425,12 +405,6 @@ class PAM:
             games[2].y = games[3].y - height * 1
             games[1].y = games[3].y - height * 2
             games[0].y = games[3].y - height * 3
-
-
-            for game in games:
-                #print(game.y)
-                #print(game.text)
-                pass
 
             # reset the game list
             self.setGames()
@@ -453,7 +427,7 @@ class PAM:
         if self.currentState == includes.CurrentState.MAIN_MENU_STATE:
             # DEBUG SETTING
             if keycode is None:
-                self.MM.currentSection = includes.Section.GAME_OPTIONS
+                self.MM.currentSection = includes.Section.GAMES
                 print("DEBUG: The PAM is starting in: " + str(self.MM.currentSection))
             ############################
 
@@ -462,36 +436,39 @@ class PAM:
                 for tab in self.MM.tabsList:
                     #ensure tabs use the current color scheme
                     tab.h_color = includes.colors.getColorOfScheme('primary', self.MM.current_color_scheme)
-                    tab.s_color = includes.colors.getColorOfScheme('accent', self.MM.current_color_scheme)
-                    #with self.layout.ids['controlbar'].canvas.before:
-                     #   Color(includes.get_color_from_hex(includes.colors.getColorOfScheme('primary', self.MM.current_color_scheme)))
-                      #  self.rect = Rectangle(pos=self.layout.ids['controlbar'].pos, size=self.layout.ids['controlbar'].size)
+                    tab.s_color = includes.colors.getColorOfScheme('secondary', self.MM.current_color_scheme)
                     tab.background_color = includes.get_color_from_hex(tab.d_color)
                     tab.background_normal = 'img/no_alpha.png'
                     tab.background_selected = 'img/no_alpha.png'
+
+                    subTabs = tab.children[0].children[0].children[0].children[0].children
+                    for subtab in subTabs:
+                        subtab.h_color = includes.colors.getColorOfScheme('primary', self.MM.current_color_scheme)
+                        subtab.s_color = includes.colors.getColorOfScheme('secondary', self.MM.current_color_scheme)
+                        subtab.bold = False
+                        subtab.setFontSize(self.MM.current_font_size)
+                        subtab.font_name = self.MM.current_font
+                        subtab.background_color = includes.get_color_from_hex(subtab.d_color)
+                        if subtab.isToggled:
+                            subtab.bold = True
+                            subtab.background_color = includes.get_color_from_hex(subtab.s_color)
                     
-                   # with tab.canvas.before:
-                    #    color = Color(rgba=includes.get_color_from_hex(tab.d_color))
-                     #   rect = Rectangle(pos=tab.pos, size=tab.size)
 
                     #set tab fonts
                     tab.font_name = self.MM.current_font #REWORK FOR NEW ACCORDION
-                
-                    # inner tab
-                    subTabs = tab.children[0].children[0].children[0].children[0].children
-                    
-                    for subTab in subTabs:
-                        subTab.font_name = self.MM.current_font
-                        subTab.background_color = includes.get_color_from_hex(subTab.d_color)
-
+ 
                 for child in self.layout.ids['gameDescArea'].children:
                     child.font_name = self.MM.current_font
+                    child.setFontSize(self.MM.current_font_size)
 
                 for child in self.layout.ids['games'].children:
                     child.font_name = self.MM.current_font
+                    child.setFontSize(self.MM.current_font_size)
 
+                #Update colors of control bar
+                self.layout.ids['controlbar'].bg_color = includes.get_color_from_hex(includes.colors.getColorOfScheme('primary', self.MM.current_color_scheme))
+                
                 # Stop all animations in the Games Section
-                #print(self.selectedY)
                 if keycode is None or self.selectedY is None or self.selectedY is 0:
                     self.selectedY = self.layout.ids["games"].children[3].y
 
@@ -552,18 +529,12 @@ class PAM:
 
                 # Then set new selection
                 if self.MM.currentSection == includes.Section.TABS:
+                    self.setGames()
                     subTabs = self.MM.CurrentTab().children[0].children[0].children[0].children[0].children
                     if self.MM.CurrentTab().highlighted:
-                        self.MM.CurrentTab().background_normal = 'img/button_waves.png'
-                        self.MM.CurrentTab().background_selected = 'img/button_waves.png'
+                        self.MM.CurrentTab().background_normal = includes.colors.getColorOfScheme('tab-d', self.MM.current_color_scheme)
+                        self.MM.CurrentTab().background_selected = includes.colors.getColorOfScheme('tab-d', self.MM.current_color_scheme)
                         self.MM.CurrentTab().background_color = includes.get_color_from_hex(self.MM.CurrentTab().h_color)
-
-                        #self.MM.CurrentTab().background_color = includes.get_color_from_hex(self.MM.CurrentTab().h_color)
-                        #with self.MM.CurrentTab().canvas.before:
-                         #   color = Color(rgba=includes.get_color_from_hex(self.MM.CurrentTab().h_color))
-                          #  rect = Rectangle(pos=self.MM.CurrentTab().pos, size=self.MM.CurrentTab().size)
-                            #Get access to whatever widget displays the accordion title. Change its BG color
-                           # print(self.MM.CurrentTab().title_template)
                     
                     for subTab in subTabs:
                         if subTab.highlighted:
@@ -575,13 +546,16 @@ class PAM:
 
                     # the game section doesn't need to be updated at the start of the program
                     if keycode is not None:
+                        # Edge case
+                        if keycode[1] == includes.DI_LEFT or keycode[1] == includes.DI_RIGHT:
+                            self.setGames()
 
                         # Initialization
                         carousel = self.layout.ids["games"]
                         games = carousel.children
                         anim_x = carousel.x
                         anim_height = games[0].height
-                        #print("Height: " + str(anim_height))
+                        
                         y0 = games[6].y
                         y1 = games[5].y
                         y2 = games[4].y
@@ -590,13 +564,6 @@ class PAM:
                         y5 = games[1].y
                         y6 = games[0].y
                         
-                        #set game info to match selected game
-                        #print(self.MM.GetGame().gameImage)
-                        self.layout.ids['gameImage'].background_normal = self.MM.GetGame().gameImage
-                        self.layout.ids['year'].text = 'Year: ' +self.MM.GetGame().gameInfo[0]
-                        self.layout.ids['dev'].text = 'Developer: ' +self.MM.GetGame().gameInfo[1]
-                        self.layout.ids['pub'].text = 'Publisher: ' +self.MM.GetGame().gameInfo[2]
-
                         # animate carousel downwards
                         if keycode[1] == includes.DI_UP:
 
@@ -612,20 +579,6 @@ class PAM:
                             self.anim5 = includes.Animation(x=anim_x, y=y5 - anim_height, color = (1,1,1,0.00), t='in_out_cubic')
                             self.anim6 = includes.Animation(x=anim_x, y=y6 - anim_height, color = (1,1,1,0.00), t='in_out_cubic')
 
-                            #print('Y0: ' + str(y0))
-                            #print("Adjusted: " + str(y0 - anim_height))
-                            #print('Y1: ' + str(y1))
-                            #print("Adjusted: " + str(y1 - anim_height))
-                            #print('Y2: ' + str(y2))
-                            #print("Adjusted: " + str(y2 - anim_height))
-                            #print('Y3: ' + str(y3))
-                            #print("Adjusted: " + str(y3 - anim_height))
-                            #print('Y4: ' + str(y4))
-                            #print("Adjusted: " + str(y4 - anim_height))
-                            #print('Y5: ' + str(y5))
-                            #print("Adjusted: " + str(y5 - anim_height))
-                            #print('Y6: ' + str(y6))
-                            #print("Adjusted: " + str(y6 - anim_height))
                             # bind the completion function
                             self.anim0.bind(on_complete=self.completeAnim)
                             self.anim1.bind(on_complete=self.completeAnim)
@@ -677,7 +630,11 @@ class PAM:
                             self.anim5.start(games[1])
                             self.anim6.start(games[0])
 
+                        elif keycode[1] == includes.BUTTON_1:
+                            self.startGame()
+
                 elif self.MM.currentSection == includes.Section.GAME_OPTIONS:
+                    self.setGames()
                     self.MM.CurrentOption().highlighted = True
 
         elif self.currentState == includes.CurrentState.GAME_STATE:
@@ -697,41 +654,52 @@ class PAM:
         games[5].color[3] = 0.33
         games[4].color[3] = 0.66
         games[3].color[3] = 1
+        if self.MM.currentSection != includes.Section.GAMES:
+            games[3].color[3] = 0.75
         games[2].color[3] = 0.66
         games[1].color[3] = 0.33
         games[0].color[3] = 0.00
 
+        # DEBUG VALUES
+        self.layout.ids['gameImage'].bg_image = "./img/no_alpha.png"
+        self.layout.ids['year'].text = 'Year: ' + "ERROR"
+        self.layout.ids['dev'].text = 'Developer: ' + "Error"
+        self.layout.ids['pub'].text = 'Publisher: ' + "ErRoR"
         
-        
-        #set images
-        games[6].gameImage = self.MM.GetGame(-3).gameImage
-        games[5].gameImage = self.MM.GetGame(-2).gameImage
-        games[4].gameImage = self.MM.GetGame(-1).gameImage
-        games[3].gameImage = self.MM.GetGame().gameImage
-        games[2].gameImage = self.MM.GetGame(+1).gameImage
-        games[1].gameImage = self.MM.GetGame(+2).gameImage
-        games[0].gameImage = self.MM.GetGame(+3).gameImage
+        # Normal
+        if not self.MM.favoriteSort:
+            #set extra data
+            self.layout.ids['gameImage'].bg_image = self.MM.GetGame().gameImage
+            self.layout.ids['year'].text = 'Year: ' + self.MM.GetGame().gameInfo[0]
+            self.layout.ids['dev'].text = 'Developer: ' + self.MM.GetGame().gameInfo[1]
+            self.layout.ids['pub'].text = 'Publisher: ' + self.MM.GetGame().gameInfo[2]
+            games[3].gameName = self.MM.GetGame().gameName
 
-        # set names
-        games[6].text = self.MM.GetGame(-3).text
-        games[5].text = self.MM.GetGame(-2).text
-        games[4].text = self.MM.GetGame(-1).text
-        games[3].text = self.MM.GetGame().text
-        games[2].text = self.MM.GetGame(+1).text
-        games[1].text = self.MM.GetGame(+2).text
-        games[0].text = self.MM.GetGame(+3).text
-
-
-
-        #Set a game as a favorite if its name is in the favorite.txt
-        #print("Favorites:")
-        #with open('user/favorites.txt', 'r') as favTxt:
-        #    for game in games:
-        #        for line in favTxt:
-        #            if game.gameName == line:
-        #                game.isFavorite = True
-        #                print(game.gameName)
-
+            # set names
+            games[6].text = self.MM.GetGame(-3).text
+            games[5].text = self.MM.GetGame(-2).text
+            games[4].text = self.MM.GetGame(-1).text
+            games[3].text = self.MM.GetGame().text
+            games[2].text = self.MM.GetGame(+1).text
+            games[1].text = self.MM.GetGame(+2).text
+            games[0].text = self.MM.GetGame(+3).text
+        # Favorites
+        else:
+            #set extra data
+            self.layout.ids['gameImage'].bg_image = self.MM.GetFavorite().gameImage
+            self.layout.ids['year'].text = 'Year: ' + self.MM.GetFavorite().gameInfo[0]
+            self.layout.ids['dev'].text = 'Developer: ' + self.MM.GetFavorite().gameInfo[1]
+            self.layout.ids['pub'].text = 'Publisher: ' + self.MM.GetFavorite().gameInfo[2]
+            games[3].gameName = self.MM.GetFavorite().gameName
+            
+            # set names
+            games[6].text = self.MM.GetFavorite(-3).text
+            games[5].text = self.MM.GetFavorite(-2).text
+            games[4].text = self.MM.GetFavorite(-1).text
+            games[3].text = self.MM.GetFavorite().text
+            games[2].text = self.MM.GetFavorite(+1).text
+            games[1].text = self.MM.GetFavorite(+2).text
+            games[0].text = self.MM.GetFavorite(+3).text
 
     def switchToSidebar(self, sidebar):
         self.MM.tabsList = []
@@ -748,6 +716,33 @@ class PAM:
     def _keyboard_closed(self):
         self.kListener.keyboard.unbind(on_key_down=self.readInputs)
         self.kListener.keyboard = None
+
+    def startGame(self):
+        currentGame = self.layout.ids["games"].children[3]
+        print("GAME = " + currentGame.gameName)
+        if currentGame.gameName is "DummyPath":
+            print("There's no game dummy!")
+            return
+        if self.runningGame is None:
+            self.runningGame = pamFunctions.playGame(currentGame.gameName)
+            self.lastSelectedGame = currentGame
+        else:
+            if currentGame == self.lastSelectedGame:
+                pass #add in check for if lastSelectedGame is still running
+                #GO BACK TO GAME. NOT LINUX FRIENDLY. REPLACE LATER.
+
+                print("PID:")
+                print(self.runningGame.pid)
+                #for hwnd in pamFunctions.get_hwnds_for_pid (self.runningGame.pid):
+                    #   print(hwnd, "=>", includes.win32gui.GetWindowText (hwnd))
+                    #  includes.win32gui.SetForegroundWindow(hwnd)
+                    # FRONT = includes.win32gui.GetWindowRect(hwnd)                 
+                
+            else: 
+                pamFunctions.closeGame(self.runningGame)
+                self.runningGame = pamFunctions.playGame(currentGame.gameName)
+        #includes.playsound(includes.sounds.getSound("exit_menu"), False)
+        self.currentState = includes.CurrentState.GAME_STATE
 
 pam = PAM();
 

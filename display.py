@@ -64,7 +64,10 @@ def SetupDisplay():
         name='Verdana',
         fn_regular='fonts/VERDANA.ttf',
         fn_bold='fonts/VERDANAB.ttf')
-
+    LabelBase.register(
+        name="OpenDyslexic", 
+        fn_regular="fonts/OPENDYSLEXIC-REGULAR.OTF", 
+        fn_bold="fonts/OPENDYSLEXIC-BOLD.OTF")
     print("Set up")
     return HomeMenuApp()
 

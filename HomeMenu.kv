@@ -71,6 +71,8 @@ MainMenuLayout:
 		PopMatrix
 <PAMButton>:
     #font: f.getFont("normal")
+    font_scale: self.font_scale
+    font_size: self.width * 0.1 * self.font_scale
 <PAMActionButton>:
     size_hint: 0.3, 0.3
     background_color: 0, 0, 0, 0
@@ -88,7 +90,8 @@ MainMenuLayout:
 # =============================================================================
 <GameCarousel>:
 <GameCarouselItem>:
-    font_size: self.height * 0.5
+    font_scale: self.font_scale
+    font_size: self.height * 0.5 * self.font_scale
 <GameCarouselHighlighter>:
     opacity: 0
     canvas.before:
@@ -106,12 +109,18 @@ MainMenuLayout:
     on_pos: pos={self.parent.x, self.parent.y}
 <SideBarTab>:
     size_hint: 0.6, 0.13
+    text_size: self.width, self.height
+    halign: 'left' 
 <SideBarTabItem>:
     size_hint: 0.6, 0.16
-    pos_hint: {'x': 0.34}
-    #on_select: self.on_select()
+    pos_hint: {'x': 0.54, 'top': 0.5}
+    text_size: self.width, self.height
+    halign: 'left' 
+    valign: 'center'
+    padding: 20, 20
 <TabItemContainer@BoxLayout>:
     orientation: 'vertical'
+    size_hint: 1, 1
     padding: 20
 
 # =============================================================================
@@ -124,7 +133,8 @@ MainMenuLayout:
 
 <GameTitle>:
     text_size: self.size
-    font_size: self.height * 0.5
+    font_scale: self.font_scale
+    font_size: self.height * 0.5 * self.font_scale
     bold: True
     halign: 'center'
     valign: 'top'
@@ -132,8 +142,9 @@ MainMenuLayout:
 
 <GameInfo>:
     size_hint: 1, 0.2
+    font_scale: self.font_scale
     text_size: self.size
-    font_size: self.height * 0.5
+    font_size: self.height * 0.5 * self.font_scale
     halign: 'left'   
     valign: 'top'
 
@@ -308,13 +319,7 @@ MainMenuLayout:
     orientation: 'horizontal'
     size_hint: 1, 0.08
     barcolor: self.barcolor
-    canvas.before:
-        Color:
-            rgb: utils.get_color_from_hex(c.getColor("primary"))
-            
-        Rectangle:
-            pos: self.pos
-            size: self.size 
+
 
 
 <ControlBarItem>:
@@ -350,6 +355,7 @@ MainMenuLayout:
                             title: 'MULTIPLAYER'
                             func_id: 'multi'
                             orientation: 'vertical'
+                            highlighted: True
                             TabItemContainer:
                                 SideBarTabItem:
                                     text:'Host Session'
@@ -460,7 +466,7 @@ MainMenuLayout:
                                     text: 'Verdana'
                                     func_id: 'font_type'
                                 SideBarTabItem:
-                                    text: 'Helvetica'
+                                    text: 'OpenDyslexic'
                                     func_id: 'font_type'
                     Accordion:
                         id: userSidebar
@@ -481,17 +487,17 @@ MainMenuLayout:
                             title: 'Remap Controls'
                             TabItemContainer:
                                 SideBarTabItem:
-                                    text: 'Select'
+                                    text: 'Button 1'
                                 SideBarTabItem:
-                                    text: 'Back'
+                                    text: 'Button 2'
                                 SideBarTabItem:
-                                    text: 'Quick Favorite'
+                                    text: 'Button 3'
                                 SideBarTabItem:
-                                    text: 'BTN1'
+                                    text: 'Button 4'
                                 SideBarTabItem:
-                                    text: 'BTN2'
+                                    text: 'Button 5'
                                 SideBarTabItem:
-                                    text: 'BTN3'
+                                    text: 'Button 6'
                         SideBarTab:
                             title: 'Turbo Button'
                             TabItemContainer:
@@ -513,9 +519,9 @@ MainMenuLayout:
                 size_hint: 0.33, 0.84
                 pos_hint: {'right': 1, 'top': 0.93}
                 spacing: 30
-                Button:
+                PAMImage:
                     id: gameImage
-                    background_normal: 'img/no_alpha.png'
+                    source: self.bg_image
                     size_hint: 0.78, 0.50
                     pos_hint: {'right': 0.93}
                     canvas.before:
@@ -567,6 +573,13 @@ MainMenuLayout:
         
         ControlBar:
             id: controlbar
+            canvas.before:
+                Color:
+                    rgb: self.bg_color#utils.get_color_from_hex(c.getColor("primary"))
+                    
+                Rectangle:
+                    pos: self.pos
+                    size: self.width, self.height
             ControlBarItem:
                 text:"Select: Z"
             ControlBarItem:

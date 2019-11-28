@@ -30,7 +30,8 @@ color_schemes = {
         "save-s":'img/Save_Waves_Select.png',
         'fav-d':'img/Fav_Waves_Default.png',
         'fav-h':'img/Fav_Waves_Highlight.png',
-        'fav-s':'img/Fav_Waves_Select.png'
+        'fav-s':'img/Fav_Waves_Select.png',
+        'tab-d': 'img/button_waves.png'
     },
     "watermelon" : {
         "background": "#101216",
@@ -48,7 +49,8 @@ color_schemes = {
         "save-s":'img/Save_Watermelon_Select.png',
         'fav-d':'img/Fav_Watermelon_Default.png',
         'fav-h':'img/Fav_Watermelon_Highlight.png',
-        'fav-s':'img/Fav_Watermelon_Select.png'
+        'fav-s':'img/Fav_Watermelon_Select.png',
+        'tab-d': 'img/button_watermelon.png'
     }, 
     "burn" : {
         "background": "#101216",
@@ -66,11 +68,12 @@ color_schemes = {
         "save-s":'img/Save_Burn_Select.png',
         'fav-d':'img/Fav_Burn_Default.png',
         'fav-h':'img/Fav_Burn_Highlight.png',
-        'fav-s':'img/Fav_Burn_Select.png'
+        'fav-s':'img/Fav_Burn_Select.png',
+        'tab-d': 'img/button_burn.png'
     },
     "blossom": {
         "background": "#101216",
-        "primary": "#F991CC",
+        "primary": "#f03524",
         "secondary": "#E2AFDE",
         "accent": "#7E5A9B",
         "warning": "#FF3300",
@@ -84,7 +87,8 @@ color_schemes = {
         "save-s":'img/Save_Waves_Select.png',
         'fav-d':'img/Fav_Waves_Default.png',
         'fav-h':'img/Fav_Waves_Highlight.png',
-        'fav-s':'img/Fav_Waves_Select.png'
+        'fav-s':'img/Fav_Waves_Select.png',
+        'tab-d': 'img/button_blossom.png'
     }
 }
 

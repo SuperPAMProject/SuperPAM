@@ -3,7 +3,8 @@
 #The purpose of this module is to help the user check a user's input against the currently assigned keys. 
 #The user can check this association by calling the getInput function. The function requires the player'a id and the 
 #input to be checked. The function will then return the key name as a string.
-import keyboard
+
+
 
 player = "player1"
 
@@ -13,16 +14,14 @@ inputs = {
         "down": 'down',
         "left": 'left',
         "right": 'right',
-        "select": 'enter',
-        "reject": 'backspace',
-        "home": 'spacebar',
-        "coin": 'shift',
-        "btn1": 'w',
-        "btn2": 'a',
-        "btn3": 's',
-        "btn4": 'd',
-        "btn5": 'q',
-        "btn6": 'e'
+        "btn1": 'z',
+        "btn2": 'x',
+        "btn3": 'c',
+        "btn4": 'a',
+        "btn5": 's',
+        "btn6": 'd',
+        "home": 'q',
+        "coin": 'w',
     },
 
     "player2": {
@@ -30,52 +29,50 @@ inputs = {
         "down": '2',
         "left": '4',
         "right": '6',
-        "select": 'z',
-        "reject": 'x',
-        "home": 'spacebar',
-        "coin": '/',
-        "btn1": 'r',
-        "btn2": 't',
+        "btn1": 'z',
+        "btn2": 'x',
         "btn3": 'y',
         "btn4": 'f',
         "btn5": 'g',
-        "btn6": 'h'
+        "btn6": 'h',
+        "home": 'spacebar',
+        "coin": '/',
     },
 
     "player3": {
-        "up": 'up',
-        "down": 'down',
-        "left": 'left',
-        "right": 'right',
-        "select": 'enter',
-        "reject": 'backspace',
+        "up": '8',
+        "down": '2',
+        "left": '4',
+        "right": '6',
+        "btn1": 'z',
+        "btn2": 'x',
+        "btn3": 'y',
+        "btn4": 'f',
+        "btn5": 'g',
+        "btn6": 'h',
         "home": 'spacebar',
-        "coin": 'shift',
-        "btn1": 'w',
-        "btn2": 'a',
-        "btn3": 's',
-        "btn4": 'd',
-        "btn5": 'q',
-        "btn6": 'e'
+        "coin": '/',
     },
 
     "player4": {
-        "up": 'up',
-        "down": 'down',
-        "left": 'left',
-        "right": 'right',
-        "select": 'enter',
-        "reject": 'backspace',
+        "up": '8',
+        "down": '2',
+        "left": '4',
+        "right": '6',
+        "btn1": 'z',
+        "btn2": 'x',
+        "btn3": 'y',
+        "btn4": 'f',
+        "btn5": 'g',
+        "btn6": 'h',
         "home": 'spacebar',
-        "coin": 'shift',
-        "btn1": 'w',
-        "btn2": 'a',
-        "btn3": 's',
-        "btn4": 'd',
-        "btn5": 'q',
-        "btn6": 'e'
+        "coin": '/',
     } 
 }
+
+def mapControl(player_id, key, value):
+    inputs[player_id][key] = value
+
 
 def getInput(player, input):
     return inputs[player].get(input)
@@ -84,4 +81,6 @@ def getPlayer():
     return player
 
 if __name__ == "__main__":
-    print(getInput(player, "select"))
+    mapControl('player1', 'up', 'w')
+
+    print(getInput('player2', "up"))

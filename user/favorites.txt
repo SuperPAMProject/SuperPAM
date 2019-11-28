@@ -6,3 +6,6 @@ Galaga
 Galaga
 Galaga
 Pacman
+Pacman
+Galaga
+Galaga

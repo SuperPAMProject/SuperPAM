@@ -5,6 +5,8 @@
 
 font_mode = "standard"
 
+font_scale = 1
+
 fonts = {
     "standard": {
         "normal": "fonts/Roboto-Light.ttf",

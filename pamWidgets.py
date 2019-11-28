@@ -87,6 +87,7 @@ class PAMKeyboardListener(Widget):
 class PAMButton(Button):
     highlighted = BooleanProperty(False)
     selected = BooleanProperty(False)
+    font_scale = 0.8
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.func_id = ''
@@ -105,12 +106,14 @@ class PAMButton(Button):
     def on_highlight(self, *args):
         if self.highlighted:
             #print("Parent:" + str(self.parent.func_id))
-            print("Subtab: " + str(self.func_id) + " highlighted")
+            #print("Subtab: " + str(self.func_id) + " highlighted")
+            pass
             #playsound(self.h_sound, False)
 
     def on_select(self, *args):
         if self.selected:
-            print(self.func_id + " Selected")
+            pass
+            #print(self.func_id + " Selected")
             #playsound(self.s_sound, False)
             #trigger = Clock.create_trigger(self.on_press)
             #trigger()
@@ -119,10 +122,22 @@ class PAMButton(Button):
     def outputTest(self, *args):
         print("SUCCESS")
 
+    def setFontSize(self, scale):
+        self.font_scale = scale
+        self.font_size = self.height * 0.1 * self.font_scale
+        #print(self.font_scale)
+
 #----SCALE BUTTON - TODO: This class needs a description
 class ScaleButton(PAMButton):
+    
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+
+    def setFontSize(self, scale):
+        self.font_scale = scale
+        self.font_size = self.height * 0.5 * self.font_scale
+        #print(self.font_scale)
+        
 
 #----PAM ACTION BUTTON - base for the action buttons. Action buttons have their own icons.
 #    Their default color is set to the background, so that there is no colored block around the icons.
@@ -139,11 +154,9 @@ class PAMActionButton(PAMButton):
         if self.highlighted:
             #playsound(self.h_sound, False)
             anim = includes.Animation(scale_factor=0.25, t='in_out_cubic')
-            print("SF: " + str(self.scale_factor))
+            #print("SF: " + str(self.scale_factor))
             anim.start(self)
             self.action_image = self.h_action
-            print(self.canvas.children[4])
-            print(self.canvas.children[4].source)
         else:
             self.action_image=self.d_action
             anim = includes.Animation(scale_factor=0.2, t='in_out_cubic')
@@ -210,12 +223,19 @@ class SideBarTabItem(ScaleButton):
         super().__init__(**kwargs)
         self.d_color = colors.getColor('background')
         self.sidebar = None
+        self.isToggled = False
         #self.h_color = '#FFFFFF'
 
     def on_select(self, *args):
         if self.selected:
             carousel = self.parent.parent.parent.parent.parent.parent.parent.parent
             self.sidebar = carousel.moveToSidebar(self.func_id)
+    
+    def setFontSize(self, scale):
+        self.font_scale = scale
+        self.font_size = 27 * self.font_scale
+        self.text_size = (self.width, self.height)
+        #print(self.font_scale)
 
 class SideBarTabButton(SideBarTabItem):
     def on_select(self, *args):
@@ -274,8 +294,14 @@ class SaveState(PAMButton):
 
 #----SCALE LABEL - Label that is capable of dynamic resizing with the window. 
 class ScaleLabel(Label):
+    font_scale = 0.8
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+    
+    def setFontSize(self, scale):
+        self.font_scale = scale
+        self.font_size = self.height * 0.5 * self.font_scale
+        #print(self.font_scale)
 
 #----CONTROL BAR ITEM - part of the control bar at the bottom of the screen
 #    Each item has both text and an image indicating which control maps to a given command.
@@ -320,6 +346,7 @@ class PAMLabelGroup(BoxLayout):
 
 #----CONTROL BAR - Displays controls at the bottom of the screen.
 class ControlBar(BoxLayout):
+    bg_color = ListProperty([0, 0, 0])
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.context = ''

@@ -1,5 +1,6 @@
 import includes
 import pamWidgets
+import kivy.resources
 import os
 
 # This class will contain all the data needed to write to all the labels
@@ -25,9 +26,10 @@ class mainMenu:
         self.populateGameOptions(actionbtns)
         self.current_color_scheme = includes.colors.current_scheme
         self.current_font = 'Roboto'
-        self.current_font_size = 'medium'
+        self.current_font_size = 0.8
         self.videoIsMute = False
         self.sfxIsMute = False
+        self.favoriteSort = False
         
     # sets up the menus labels so that they can be displayed
     def populateMenus(self, sidebar):
@@ -57,14 +59,14 @@ class mainMenu:
                 if len(info) < 5:
                     print("ERROR IN READING GAME")
                     continue
-                info[4] = info[4].strip("\n")
+                
                 newGame = pamWidgets.GameCarouselItem()
                 newGame.gameName = info[0]
                 newGame.gameInfo.append(info[1])
                 newGame.gameInfo.append(info[2])
                 newGame.gameInfo.append(info[3])
                 newGame.gameInfo.append(info[4])
-                newGame.gameImage = info[5]
+                newGame.gameImage = info[5].strip("\n")
                 newGame.gamePath = info[0]
                 newGame.text = newGame.gameName
                 newGame.index = index
@@ -114,13 +116,23 @@ class mainMenu:
 
         while gameId >= len(self.gameList):
             gameId -= len(self.gameList)
-            
+
         return self.gameList[gameId]
 
     # Favorites
     def GetFavorite(self, offset = 0):
         if len(self.favoriteList) is 0:
-            return None
+            emptyGame = pamWidgets.GameCarouselItem()
+            emptyGame.gameName = "DummyPath"
+            emptyGame.gameInfo.append(" ")
+            emptyGame.gameInfo.append(" ")
+            emptyGame.gameInfo.append(" ")
+            emptyGame.gameInfo.append(" ")
+            emptyGame.gameImage = "./img/no_alpha.png"
+            emptyGame.gamePath = "DummyPath"
+            emptyGame.text = " "
+            emptyGame.index = 0
+            return emptyGame
         
         favoriteId = self.f_i + offset
         while favoriteId < 0:
