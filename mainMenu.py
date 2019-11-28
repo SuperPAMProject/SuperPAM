@@ -82,7 +82,19 @@ class mainMenu:
     # and compares it to the game list. If the game
     # is on the list, then it adds it to the favorite list
     def populateFavorites(self):
-        pass
+        f = open('user/favorites.txt', 'r')
+        lines = f.readlines()
+        game_titles = []
+
+        for game in self.gameList: game_titles.append(game.gameName + '\n')
+        matches = set(lines).intersection(game_titles)
+
+        for game in self.gameList: 
+            if (game.gameName + '\n') in matches:
+                game.isFavorite = True
+                self.favoriteList.append(game)
+                
+        f.close()
 
     # sets up the game options so that they can be displayed
     def populateGameOptions(self, actionbtns):

@@ -2,7 +2,6 @@
 #Implement multiplayer
 #Add videos (code, vid editing)
 #Add control remap
-#Make user data persistent
 #Add final UI animations
 #Add OS checks
 

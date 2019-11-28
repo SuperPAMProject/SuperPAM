@@ -70,25 +70,32 @@ def saveGame(game):
     pass
 
 def favGame(game, menu):
+    print("Game Name: " + game.gameName)
+
     game.isFavorite = not game.isFavorite
+    game_title = game.gameName + '\n'
 
-    if game.isFavorite:
-        menu.favoriteList.append(game)
-        with open('user/favorites.txt', 'a') as favTxt:
-            favTxt.write(game.gameName + "\n")
-        favTxt.close()
-    else:
+    f = open('user/favorites.txt', 'r')
+    lines = f.readlines()
+    if (game_title) in lines:
+        lines.remove(game_title)
         menu.favoriteList.remove(game)
-        with open("user/favorites.txt", "r") as favTxt:
-            lines = favTxt.readlines()
-        with open("user/favorites.txt", "w") as favTxt:
-            for line in lines:
-                if line.strip("\n") != game.gameName:
-                    favTxt.write(line)
-        favTxt.close()
+    else:
+        lines.append(game_title)
+        menu.favoriteList.append(game)
+    f.close()
 
-    for g in menu.favoriteList:
-        print(g.gameName)
+    f = open('user/favorites.txt', 'w')
+    for line in lines:
+        f.write(line)
+    f.close()
+
+    print("Favorites Data:")
+    print(lines)
+            
+        
+    #for g in menu.favoriteList:
+        #print(g.gameName)
     
 
 # =============================================================================
