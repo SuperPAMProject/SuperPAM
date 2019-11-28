@@ -37,6 +37,7 @@ from kivy.core.audio import SoundLoader
 from playsound import playsound
 import includes
     
+
 # =============================================================================
 # MISC.
 # =============================================================================
@@ -79,8 +80,8 @@ class PAMKeyboardListener(Widget):
 # =============================================================================
 # Buttons
 # =============================================================================
-#These will be the main interactive widgets. 
-#Each button will have the properties of 'highlighted', 'selected', and 'enabled'
+    #These will be the main interactive widgets. 
+    #Each button will have the properties of 'highlighted', 'selected', and 'enabled'
 
 #----PAM BUTTON - The base for all other buttons. The button's colors are organized by
 #    d for default, h for highlight and s for selected
@@ -290,7 +291,7 @@ class SaveState(PAMButton):
 # =============================================================================
 # Labels
 # =============================================================================
-#These classes will be used for non-interactive, dynamic textual elements. 
+    #These classes will be used for non-interactive, dynamic textual elements. 
 
 #----SCALE LABEL - Label that is capable of dynamic resizing with the window. 
 class ScaleLabel(Label):
@@ -328,8 +329,8 @@ class GameInfo(ScaleLabel):
 # =============================================================================
 # Groups
 # =============================================================================
-# These classes will act as containers for any of the proceeding classes. 
-# Each container will use the 'children' property to iterate over the widgets inside them and perform operations on them.
+    # These classes will act as containers for any of the proceeding classes. 
+    # Each container will use the 'children' property to iterate over the widgets inside them and perform operations on them.
 
 #----PAM BUTTON GROUP - Base for other button groups, such as the PopUp window and SideBar
 class PAMButtonGroup(BoxLayout):

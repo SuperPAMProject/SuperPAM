@@ -1,0 +1,6 @@
+color_scheme:burn
+font_size:0.8
+font_type:OpenDyslexic
+mute_sfx:0
+mute_video:0
+turbo_on:0

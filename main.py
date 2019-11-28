@@ -2,6 +2,10 @@
 #Implement multiplayer
 #Add videos (code, vid editing)
 #Add control remap
+#Make user data persistent
+#Add final UI animations
+#Add OS checks
+
 
 import threading
 import sys
@@ -20,8 +24,6 @@ from kivy.graphics.vertex_instructions import Rectangle
 from kivy.graphics import Color
 from kivy.clock import Clock
 from kivy.core.window import Window
-
-
 
 
 # Our own on_resize function so that we can ensure the games animate properly
@@ -701,6 +703,7 @@ class PAM:
             games[1].text = self.MM.GetFavorite(+2).text
             games[0].text = self.MM.GetFavorite(+3).text
 
+    # Switches the sidebar to one of its sub-menus
     def switchToSidebar(self, sidebar):
         self.MM.tabsList = []
         self.MM.populateMenus(sidebar)

@@ -10,6 +10,7 @@ import pamWidgets
 from kivy.app import App
 from kivy.core.text import LabelBase
 import display
+import fileinput
 
 # =============================================================================
 # PLACEHOLDER VARIABLES
@@ -88,8 +89,6 @@ def favGame(game, menu):
 
     for g in menu.favoriteList:
         print(g.gameName)
-    
-
     
 
 # =============================================================================
@@ -173,25 +172,17 @@ def soundPopup(player):
     pass
 
 def MuteSound(menu, btn):
-    if btn.text == 'Mute Video':
-        menu.videoIsMute = True
-        btn.text = 'Unmute Video'
+   
+    if 'Video' in btn.text:
+        menu.videoIsMute = not menu.videoIsMute
+        btn.text = 'Unmute Video' if menu.videoIsMute else 'Mute Video'
 
-    elif btn.text == 'Mute SFX':
-        menu.sfxIsMute = True
-        btn.text = 'Unmute SFX'
+    if 'SFX' in btn.text:
+        menu.sfxIsMute = not menu.sfxIsMute
+        btn.text = 'Unmute SFX' if menu.sfxIsMute else 'Mute SFX'
 
-    elif btn.text == 'Unmute Video':
-        menu.videoIsMute = False
-        btn.text = 'Mute Video'
-
-    elif btn.text == 'Unmute SFX':
-        menu.sfxIsMute = False
-        btn.text = 'Mute SFX'
-
-    print(menu.sfxIsMute)
-    print(menu.videoIsMute)
-    #Store preference in user settings
+    editUserSettings('mute_sfx:', str(int(menu.sfxIsMute)))
+    editUserSettings('mute_video:', str(int(menu.videoIsMute)))
 
 
 # =============================================================================
@@ -202,13 +193,13 @@ def visualsPopup(player):
 
 def setColorScheme(menu, scheme):
     menu.current_color_scheme = scheme.lower()
-    print(scheme)
-    #Store preference in user settings
+    editUserSettings('color_scheme:', scheme.lower())
+
 
 def setFontType(menu, font):
     menu.current_font = font
-    print(font)
-    #Store preference in user settings
+    editUserSettings('font_type:', font)
+
 
 def setFontSize(menu, size):
     if size.lower() == 'small':
@@ -217,14 +208,34 @@ def setFontSize(menu, size):
         menu.current_font_size = 0.8
     elif size.lower() == 'large':
         menu.current_font_size = 1.2
-    print(size)
-    print(menu.current_font_size)
-    #Store preference in user settings
+    editUserSettings('font_size:', str(menu.current_font_size))
 
 
 # =============================================================================
 # USER FUNCTIONS
 # =============================================================================
+def editUserSettings(field, value):
+    f = open('user/settings.txt', 'r')
+    lines = f.readlines()
+    for i in range(len(lines)):
+        if field in lines[i]:
+            lines[i] = field + value + '\n'
+    f.close()
+
+    f = open('user/settings.txt', 'w')
+    for line in lines:
+        f.write(line)
+    f.close()
+
+def getUserSettings(field):
+    f = open('user/settings.txt', 'r')
+    lines = f.readlines()
+    for line in lines:
+        if field in line:
+            return line.replace(field, '').strip('\n')
+    f.close()
+    return 'n/a'
+
 def userPopup(player):
     pass
 
@@ -234,13 +245,28 @@ def setUsername(player):
 def viewStats(player):
     pass
 
-def reformatSystem(player):
-    pass
+def revertToDefaults(menu):
+    f = open('user/default_settings.txt', 'r')
+    lines = f.readlines()
+    f.close()
+
+    f = open('user/settings.txt', 'w')
+    for line in lines:
+        f.write(line)
+
+    #menu.current_color_scheme = getUserSettings('color_scheme:')
+    #menu.current_font = getUserSettings('font_type:')
+    #menu.current_font_size = float(getUserSettings('font_size:')) #ERROR HERE
+    #menu.videoIsMute = bool(int(getUserSettings('mute_sfx:')))
+    #menu.sfxIsMute = bool(int(getUserSettings('mute_video:')))
+    #menu.turbo_on = bool(int(getUserSettings('turbo_on:')))
+
+
 
 # =============================================================================
 # CONTROL FUNCTIONS
 # =============================================================================
-    #On control bar, change control hints to say COnfirm Remap: Home, Cancel Rempa: Coin
+    #On control bar, change control hints to say Confirm Remap: Home, Cancel Rempa: Coin
 def controlsPopup(player):
     pass
 
@@ -253,6 +279,9 @@ def confirmRemap(player):
 def cancelRemap(player):
     pass
 
+def setTurbo(menu):
+    menu.turbo_on = not menu.turbo_on
+    editUserSettings('turbo_on:', str(int(menu.turbo_on)))
 
 # =============================================================================
 # MISC. FUNCTIONS
@@ -328,6 +357,7 @@ def sidebarSwitch(btn, menu):
     #carousel.moveToSideBar(btn.func_id)
     pass
 
+
 # =============================================================================
 # FUNCTON IDENTIFIER
 # =============================================================================
@@ -390,6 +420,10 @@ def getFunction(btn, menu):
         return setFontSize(menu, btn.text)
     elif btn.func_id == 'mute':
         return MuteSound(menu, btn)
+    elif btn.func_id == 'stats':
+        pass
+    elif btn.func_id == 'default':
+        return revertToDefaults(menu)
 
 
 

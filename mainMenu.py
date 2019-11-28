@@ -2,6 +2,7 @@ import includes
 import pamWidgets
 import kivy.resources
 import os
+import pamFunctions as pf
 
 # This class will contain all the data needed to write to all the labels
 # in order to display everything
@@ -24,11 +25,15 @@ class mainMenu:
         self.populateGameLibrary(games)
         self.populateFavorites()
         self.populateGameOptions(actionbtns)
-        self.current_color_scheme = includes.colors.current_scheme
-        self.current_font = 'Roboto'
-        self.current_font_size = 0.8
-        self.videoIsMute = False
-        self.sfxIsMute = False
+        self.current_color_scheme = pf.getUserSettings('color_scheme:')
+        self.current_font = pf.getUserSettings('font_type:')
+        self.current_font_size = float(pf.getUserSettings('font_size:'))
+        self.videoIsMute = bool(int(pf.getUserSettings('mute_sfx:')))
+        self.sfxIsMute = bool(int(pf.getUserSettings('mute_video:')))
+        self.turbo_on = bool(int(pf.getUserSettings('turbo_on:')))
+
+        print(self.sfxIsMute)
+        print(self.videoIsMute)
         self.favoriteSort = False
         
     # sets up the menus labels so that they can be displayed
