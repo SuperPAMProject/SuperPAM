@@ -3,11 +3,11 @@
 #Add videos (code, vid editing)
 #Add control remap
 #Add final UI animations
-#Add OS checks
 
 
 import threading
-import sys
+import sys, os
+import platform
 from datetime import datetime
 #import keyboard # This import requires a pip install. It will also require a
                 # sudo for Linux machines (i.e. Raspbian)
@@ -87,9 +87,8 @@ class PAM:
         self.kListener  = self.layout.ids['kListener']
         self.kListener.keyboard = Window.request_keyboard(self._keyboard_closed, self.kListener)
         self.kListener.keyboard.bind(on_key_down=self.readInputs)
-        
-
-        
+        self.system = platform.system()
+ 
         #self.Display.bind(on_start=setup)
         
     # check currentState and if program is loading
@@ -253,7 +252,7 @@ class PAM:
 
 
                         elif self.MM.currentSection == includes.Section.GAMES:
-                            #includes.playsound(includes.sounds.getSound("down_carousel"), False)
+                            self.play_sound(includes.sounds.getSound("down_carousel"))
                             
                             self.MM.g_i += 1
                             if self.MM.g_i >= len(self.MM.gameList):
@@ -316,7 +315,7 @@ class PAM:
 
 
                         elif self.MM.currentSection == includes.Section.GAMES:
-                           # includes.playsound(includes.sounds.getSound("up_carousel"), False)
+                            self.play_sound(includes.sounds.getSound("up_carousel"))
                             self.MM.g_i -= 1
                             if self.MM.g_i < 0:
                                 self.MM.g_i =  len(self.MM.gameList) - 1
@@ -433,6 +432,7 @@ class PAM:
             ############################
 
             if keycode is None or True:#event.event_type is keyboard.KEY_DOWN:
+
                 # Undo all selections in the Tabs Section
                 for tab in self.MM.tabsList:
                     #ensure tabs use the current color scheme
@@ -528,8 +528,10 @@ class PAM:
 
                     #option.background_color = includes.get_color_from_hex(option.d_color)
 
+
                 # Then set new selection
                 if self.MM.currentSection == includes.Section.TABS:
+                    self.transition_to_section('sidebarSection')
                     self.setGames()
                     subTabs = self.MM.CurrentTab().children[0].children[0].children[0].children[0].children
                     if self.MM.CurrentTab().highlighted:
@@ -541,10 +543,9 @@ class PAM:
                         if subTab.highlighted:
                             subTab.h_color = includes.colors.getColorOfScheme('primary', self.MM.current_color_scheme)
                             subTab.background_color = includes.get_color_from_hex(subTab.h_color)
-                            
-                
+                                                                    
                 elif self.MM.currentSection == includes.Section.GAMES:
-
+                    self.transition_to_section('games')
                     # the game section doesn't need to be updated at the start of the program
                     if keycode is not None:
                         # Edge case
@@ -552,6 +553,7 @@ class PAM:
                             self.setGames()
 
                         # Initialization
+                        
                         carousel = self.layout.ids["games"]
                         games = carousel.children
                         anim_x = carousel.x
@@ -635,6 +637,7 @@ class PAM:
                             self.startGame()
 
                 elif self.MM.currentSection == includes.Section.GAME_OPTIONS:
+                    self.transition_to_section('gameDetails')
                     self.setGames()
                     self.MM.CurrentOption().highlighted = True
 
@@ -745,6 +748,23 @@ class PAM:
                 self.runningGame = pamFunctions.playGame(currentGame.gameName)
         #includes.playsound(includes.sounds.getSound("exit_menu"), False)
         self.currentState = includes.CurrentState.GAME_STATE
+
+    def play_sound(self, sound):
+        if self.system == 'Windows':
+            includes.playsound(sound, False)
+        elif self.system == 'Linux':
+            pass
+
+    def transition_to_section(self, current_section):
+        #Reduce opacity of other sections
+        sections = ['sidebarSection', 'games', 'gameDetails']
+        sections.remove(current_section)
+        for section in sections: self.layout.ids[section].opacity = 0.5
+
+        #Increase opacity of current section
+        opacity_anim = includes.Animation(opacity=1, t='in_out_cubic', duration=0.3)
+        opacity_anim.start(self.layout.ids[current_section])
+        self.layout.ids[current_section].opacity = 1
 
 pam = PAM();
 

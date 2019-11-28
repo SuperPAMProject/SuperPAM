@@ -8,6 +8,7 @@
 #GROUPS - containers of other widgets. Used to iterate over groups and issue commands to them
 
 import kivy
+import platform
 from kivy.app import App
 from kivy.core.window import Window
 from kivy.clock import Clock
@@ -37,7 +38,7 @@ from kivy.core.audio import SoundLoader
 from playsound import playsound
 import includes
     
-
+system = platform.system()
 # =============================================================================
 # MISC.
 # =============================================================================
@@ -102,20 +103,14 @@ class PAMButton(Button):
         self.bind(highlighted=self.on_highlight)
         self.bind(selected=self.on_select)
         #self.bind(selected=self.on_press)
-        
-        
+                
     def on_highlight(self, *args):
         if self.highlighted:
-            #print("Parent:" + str(self.parent.func_id))
-            #print("Subtab: " + str(self.func_id) + " highlighted")
-            pass
-            #playsound(self.h_sound, False)
+            self.play_sound(self.h_sound)
 
     def on_select(self, *args):
         if self.selected:
-            pass
-            #print(self.func_id + " Selected")
-            #playsound(self.s_sound, False)
+            self.play_sound(self.s_sound)
             #trigger = Clock.create_trigger(self.on_press)
             #trigger()
             #Clock.schedule_once(self.on_press, 0.1)
@@ -126,8 +121,17 @@ class PAMButton(Button):
     def setFontSize(self, scale):
         self.font_scale = scale
         self.font_size = self.height * 0.1 * self.font_scale
-        #print(self.font_scale)
 
+    def play_sound(self, sound):
+        if system == 'Windows':
+            playsound(sound, False)
+        elif system == 'Linux':
+            pass
+
+    def color_transition(self, color):
+        anim = includes.Animation(background_color=includes.get_color_from_hex(color), t='in_out_cubic')
+        anim.start(self)
+        return includes.get_color_from_hex(color)
 #----SCALE BUTTON - TODO: This class needs a description
 class ScaleButton(PAMButton):
     
@@ -153,7 +157,7 @@ class PAMActionButton(PAMButton):
 
     def on_highlight(self, *args):
         if self.highlighted:
-            #playsound(self.h_sound, False)
+            self.play_sound(self.h_sound)
             anim = includes.Animation(scale_factor=0.25, t='in_out_cubic')
             #print("SF: " + str(self.scale_factor))
             anim.start(self)
@@ -165,8 +169,7 @@ class PAMActionButton(PAMButton):
     
     def on_select(self, *args):
         if self.selected:
-            print(self.func_id + " Selected")
-            #playsound(self.s_sound, False)
+            self.play_sound(self.s_sound)
             #self.action_image=self.s_action
         else:
             self.action_image=self.d_action
@@ -229,6 +232,7 @@ class SideBarTabItem(ScaleButton):
 
     def on_select(self, *args):
         if self.selected:
+            self.play_sound(self.s_sound)
             carousel = self.parent.parent.parent.parent.parent.parent.parent.parent
             self.sidebar = carousel.moveToSidebar(self.func_id)
     
@@ -241,8 +245,7 @@ class SideBarTabItem(ScaleButton):
 class SideBarTabButton(SideBarTabItem):
     def on_select(self, *args):
         if self.selected:
-            print(self.func_id + " Selected")
-            #playsound(self.s_sound, False)
+            self.play_sound(self.s_sound)
 
  
     
@@ -421,17 +424,20 @@ class SideBarTab(AccordionItem):
         
     def on_highlight(self, *args):
         if self.highlighted:
-            print(self.func_id + " highlighted")
-            #playsound(self.h_sound, False)
+            self.play_sound(self.h_sound)
 
     def on_select(self, *args):
         if self.selected:
             self.collapse = not self.collapse
             subTabs = self.children[0].children[0].children[0].children[0].children
             subTabs[len(subTabs) - 1].highlighted = True
-            print(self.func_id + " selected")
-            #playsound(self.s_sound, False)
+            self.play_sound(self.s_sound)
 
+    def play_sound(self, sound):
+        if system == 'Windows':
+            playsound(sound, False)
+        elif system == 'Linux':
+            pass
 #----SIDE BAR - Group that contains all Sidebar tabs. 
 class SideBar(PAMButtonGroup):
     def __init__(self, **kwargs):

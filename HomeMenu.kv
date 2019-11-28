@@ -340,7 +340,9 @@ MainMenuLayout:
             orientation:'horizontal'
             size_hint: 1, 0.84
             SideBar:
+                id: sidebarSection
                 orientation: 'vertical'
+                opacity: 0.5
                 SidebarCarousel:
                     id: car
                     loop: True
@@ -514,9 +516,10 @@ MainMenuLayout:
                 orientation: 'vertical'
                 size_hint: 0.28, 1
                 pos_hint: {'center_x': 0.5, 'top': 1}
-               
+                        
             BoxLayout:
                 id: gameDetails
+                opacity: 0.5
                 orientation: 'vertical'
                 size_hint: 0.33, 0.84
                 pos_hint: {'right': 1, 'top': 0.93}
