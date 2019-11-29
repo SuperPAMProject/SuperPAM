@@ -277,8 +277,9 @@ def revertToDefaults(menu):
 def controlsPopup(player):
     pass
 
-def remapButton(player):
+def remapButton(btn, menu):
     pass
+   # menu.layout.ids['controlbar'].context_switch('remap')
 
 def confirmRemap(player):
     pass
@@ -431,6 +432,8 @@ def getFunction(btn, menu, *largs):
         pass
     elif btn.func_id == 'default':
         return revertToDefaults(menu)
+    elif btn.func_id == 'remap':
+        return remapButton(btn, menu)
 
 
 

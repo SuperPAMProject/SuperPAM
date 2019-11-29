@@ -150,6 +150,8 @@ class PAM:
                                 currentSubTab = self.MM.CurrentSubTab(subTabs)
                                 currentSubTab.selected = True
                                 pamFunctions.getFunction(currentSubTab, self.MM)
+                                if currentSubTab.func_id == 'remap':
+                                    self.layout.ids['controlbar'].context_switch('remap')
                                 currentSubTab.selected = False
                                 if currentSubTab.sidebar is not None:
                                     self.MM.CurrentTab().collapse = True
@@ -545,6 +547,7 @@ class PAM:
                 # Then set new selection
                 if self.MM.currentSection == includes.Section.TABS:
                     self.transition_to_section('sidebarSection')
+                    self.layout.ids['controlbar'].context_switch('sidebarSection')
                     self.setGames()
                     subTabs = self.MM.CurrentTab().children[0].children[0].children[0].children[0].children
                     if self.MM.CurrentTab().highlighted:
@@ -559,6 +562,7 @@ class PAM:
                                                                     
                 elif self.MM.currentSection == includes.Section.GAMES:
                     self.transition_to_section('games')
+                    self.layout.ids['controlbar'].context_switch('games')
                     # the game section doesn't need to be updated at the start of the program
                     if keycode is not None:
                         # Edge case
@@ -652,6 +656,7 @@ class PAM:
 
                 elif self.MM.currentSection == includes.Section.GAME_OPTIONS:
                     self.transition_to_section('actionbtns')
+                    self.layout.ids['controlbar'].context_switch('actionbtns')
                     self.setGames()
                     self.MM.CurrentOption().highlighted = True
 

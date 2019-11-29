@@ -381,8 +381,27 @@ class ControlBar(BoxLayout):
 
     #Called when the user enters another section (Options, Games, Action buttons) 
     # will display controls relevant to that context
-    def on_context_switch(self):
-        pass
+    def context_switch(self, context):
+        btn3 = self.children[0]
+        btn2 = self.children[1]
+        btn1 = self.children[2]
+
+        if context == 'sidebarSection':
+            btn1.text = 'Select: '
+            btn2.text = 'Back: '
+            btn3.text = ''
+        elif context == 'games':
+            btn1.text = 'Play: '
+            btn2.text = 'Close: '
+            btn3.text = 'Favorite: '
+        elif context == 'actionbtns':
+            btn1.text = 'Select: '
+            btn2.text = 'To Sidebar: '
+            btn3.text = 'To Games: '
+        elif context == 'remap':
+            btn1.text = 'Confirm: '
+            btn2.text = 'Back: '
+            btn3.text = ''
 
     def on_remap(self):
         pass
