@@ -102,15 +102,18 @@ class PAMButton(Button):
         self.s_sound = sounds.getSound("select_btn")
         self.bind(highlighted=self.on_highlight)
         self.bind(selected=self.on_select)
+        self.sound_mute = False
         #self.bind(selected=self.on_press)
                 
     def on_highlight(self, *args):
         if self.highlighted:
-            self.play_sound(self.h_sound)
+            if not self.sound_mute:
+                self.play_sound(self.h_sound)
 
     def on_select(self, *args):
         if self.selected:
-            self.play_sound(self.s_sound)
+            if not self.sound_mute:
+                self.play_sound(self.s_sound)
             #trigger = Clock.create_trigger(self.on_press)
             #trigger()
             #Clock.schedule_once(self.on_press, 0.1)
@@ -147,29 +150,37 @@ class ScaleButton(PAMButton):
 #----PAM ACTION BUTTON - base for the action buttons. Action buttons have their own icons.
 #    Their default color is set to the background, so that there is no colored block around the icons.
 class PAMActionButton(PAMButton):
+    scale_factor = NumericProperty(0.2)
+    select_scale = NumericProperty(1)
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.d_action = ''
         self.h_action = ''
         self.s_action = ''
-        self.d_color = colors.getColor("background")
-        self.scale_factor = 0.2
+        self.d_color = colors.getColor("background")   
+        self.highlight_anim = includes.Animation(scale_factor=0.25, t='in_out_cubic', duration=0.3)
+        self.unhighlight_anim = includes.Animation(scale_factor=0.2, t='in_out_cubic', duration=0.3)
+        self.select_anim = includes.Animation(
+                    select_scale=1.2, t='in_out_cubic', duration=0.1
+                    ) + includes.Animation(
+                    select_scale=1, t='in_out_cubic', duration=0.1
+                    )
 
     def on_highlight(self, *args):
-        if self.highlighted:
-            self.play_sound(self.h_sound)
-            anim = includes.Animation(scale_factor=0.25, t='in_out_cubic')
-            #print("SF: " + str(self.scale_factor))
-            anim.start(self)
+        if self.highlighted and not self.selected:
+            if not self.sound_mute:
+                self.play_sound(self.h_sound)
+            self.highlight_anim.start(self)
             self.action_image = self.h_action
-        else:
+        elif not self.highlighted:
             self.action_image=self.d_action
-            anim = includes.Animation(scale_factor=0.2, t='in_out_cubic')
-            anim.start(self)
+            self.unhighlight_anim.start(self)
     
     def on_select(self, *args):
         if self.selected:
-            self.play_sound(self.s_sound)
+            if not self.sound_mute:
+                self.play_sound(self.s_sound)
+            #self.select_anim.start(self)
             #self.action_image=self.s_action
         else:
             self.action_image=self.d_action
@@ -232,7 +243,8 @@ class SideBarTabItem(ScaleButton):
 
     def on_select(self, *args):
         if self.selected:
-            self.play_sound(self.s_sound)
+            if not self.sound_mute:
+                self.play_sound(self.s_sound)
             carousel = self.parent.parent.parent.parent.parent.parent.parent.parent
             self.sidebar = carousel.moveToSidebar(self.func_id)
     
@@ -420,18 +432,21 @@ class SideBarTab(AccordionItem):
         self.s_sound = sounds.getSound("select_btn")
         self.bind(highlighted=self.on_highlight)
         self.bind(selected=self.on_select)
+        self.sound_mute = False
         
         
     def on_highlight(self, *args):
         if self.highlighted:
-            self.play_sound(self.h_sound)
+            if not self.sound_mute:
+                self.play_sound(self.h_sound)
 
     def on_select(self, *args):
         if self.selected:
             self.collapse = not self.collapse
             subTabs = self.children[0].children[0].children[0].children[0].children
             subTabs[len(subTabs) - 1].highlighted = True
-            self.play_sound(self.s_sound)
+            if not self.sound_mute:
+                self.play_sound(self.s_sound)
 
     def play_sound(self, sound):
         if system == 'Windows':

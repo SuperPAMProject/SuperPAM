@@ -369,7 +369,7 @@ def sidebarSwitch(btn, menu):
 # FUNCTON IDENTIFIER
 # =============================================================================
     #ACTIVATED ON BUTTON SELECTION, TAKES ID OF BUTTON TO DETERMINE FUNCTION
-def getFunction(btn, menu):
+def getFunction(btn, menu, *largs):
     if btn.func_id == 'play':
         return playGame(menu.GetGame().gameName)
     elif btn.func_id == 'save':

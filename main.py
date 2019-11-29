@@ -3,6 +3,10 @@
 #Add videos (code, vid editing)
 #Add control remap
 #Add final UI animations
+#Add final game images/info
+#Add final UI icons
+#Bugfix
+#Change controlbar context
 
 
 import threading
@@ -16,6 +20,7 @@ import mainMenu
 import display
 import pamWidgets
 import pamFunctions
+import functools
 from kivy.base import EventLoop
 from kivy.uix.boxlayout import BoxLayout
 from kivy.core.text import LabelBase
@@ -160,7 +165,8 @@ class PAM:
                         elif self.MM.currentSection == includes.Section.GAME_OPTIONS:
                             currentOption = self.MM.CurrentOption()
                             currentOption.selected = True
-                            pamFunctions.getFunction(currentOption, self.MM)
+                            currentOption.select_anim.start(currentOption)
+                            Clock.schedule_once(functools.partial(pamFunctions.getFunction, currentOption, self.MM), 0.8)
                             currentOption.selected = False
 
                             if currentOption.func_id == 'play':
@@ -252,7 +258,8 @@ class PAM:
 
 
                         elif self.MM.currentSection == includes.Section.GAMES:
-                            self.play_sound(includes.sounds.getSound("down_carousel"))
+                            if not self.MM.sfxIsMute:
+                                self.play_sound(includes.sounds.getSound("down_carousel"))
                             
                             self.MM.g_i += 1
                             if self.MM.g_i >= len(self.MM.gameList):
@@ -315,7 +322,8 @@ class PAM:
 
 
                         elif self.MM.currentSection == includes.Section.GAMES:
-                            self.play_sound(includes.sounds.getSound("up_carousel"))
+                            if not self.MM.sfxIsMute:
+                                self.play_sound(includes.sounds.getSound("up_carousel"))
                             self.MM.g_i -= 1
                             if self.MM.g_i < 0:
                                 self.MM.g_i =  len(self.MM.gameList) - 1
@@ -441,6 +449,7 @@ class PAM:
                     tab.background_color = includes.get_color_from_hex(tab.d_color)
                     tab.background_normal = 'img/no_alpha.png'
                     tab.background_selected = 'img/no_alpha.png'
+                    tab.sound_mute = self.MM.sfxIsMute
 
                     subTabs = tab.children[0].children[0].children[0].children[0].children
                     for subtab in subTabs:
@@ -450,6 +459,9 @@ class PAM:
                         subtab.setFontSize(self.MM.current_font_size)
                         subtab.font_name = self.MM.current_font
                         subtab.background_color = includes.get_color_from_hex(subtab.d_color)
+
+                        subtab.sound_mute = self.MM.sfxIsMute
+
                         if subtab.isToggled:
                             subtab.bold = True
                             subtab.background_color = includes.get_color_from_hex(subtab.s_color)
@@ -462,6 +474,9 @@ class PAM:
                     child.font_name = self.MM.current_font
                     child.setFontSize(self.MM.current_font_size)
 
+                for child in self.layout.ids['actionbtns'].children:
+                    child.sound_mute = self.MM.sfxIsMute
+                
                 for child in self.layout.ids['games'].children:
                     child.font_name = self.MM.current_font
                     child.setFontSize(self.MM.current_font_size)
@@ -527,7 +542,6 @@ class PAM:
                     self.layout.ids['fav'].action_image = self.layout.ids['fav'].d_action
 
                     #option.background_color = includes.get_color_from_hex(option.d_color)
-
 
                 # Then set new selection
                 if self.MM.currentSection == includes.Section.TABS:
@@ -637,7 +651,7 @@ class PAM:
                             self.startGame()
 
                 elif self.MM.currentSection == includes.Section.GAME_OPTIONS:
-                    self.transition_to_section('gameDetails')
+                    self.transition_to_section('actionbtns')
                     self.setGames()
                     self.MM.CurrentOption().highlighted = True
 
@@ -757,7 +771,7 @@ class PAM:
 
     def transition_to_section(self, current_section):
         #Reduce opacity of other sections
-        sections = ['sidebarSection', 'games', 'gameDetails']
+        sections = ['sidebarSection', 'games', 'actionbtns']
         sections.remove(current_section)
         for section in sections: self.layout.ids[section].opacity = 0.5
 

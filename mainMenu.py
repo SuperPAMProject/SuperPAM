@@ -28,13 +28,11 @@ class mainMenu:
         self.current_color_scheme = pf.getUserSettings('color_scheme:')
         self.current_font = pf.getUserSettings('font_type:')
         self.current_font_size = float(pf.getUserSettings('font_size:'))
-        self.videoIsMute = bool(int(pf.getUserSettings('mute_sfx:')))
-        self.sfxIsMute = bool(int(pf.getUserSettings('mute_video:')))
         self.turbo_on = bool(int(pf.getUserSettings('turbo_on:')))
-
-        print(self.sfxIsMute)
-        print(self.videoIsMute)
+        self.videoIsMute = bool(int(pf.getUserSettings('mute_video:')))
+        self.sfxIsMute = bool(int(pf.getUserSettings('mute_sfx:')))
         self.favoriteSort = False
+        
         
     # sets up the menus labels so that they can be displayed
     def populateMenus(self, sidebar):

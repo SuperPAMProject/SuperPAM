@@ -83,7 +83,7 @@ MainMenuLayout:
         Rectangle:
             source: self.action_image
             pos: (self.pos[0]+self.size[0]/2.0) - 40, (self.pos[1]+self.size[1]/2.0) - 40
-            size: (self.parent.width*self.scale_factor, self.parent.width*self.scale_factor)
+            size: (self.parent.width*self.scale_factor*self.select_scale, self.parent.width*self.scale_factor*self.select_scale)
 
 # =============================================================================
 # Game Carousel
@@ -519,7 +519,6 @@ MainMenuLayout:
                         
             BoxLayout:
                 id: gameDetails
-                opacity: 0.5
                 orientation: 'vertical'
                 size_hint: 0.33, 0.84
                 pos_hint: {'right': 1, 'top': 0.93}
@@ -548,6 +547,7 @@ MainMenuLayout:
                         text: "Year:"
                 PAMButtonGroup:
                     id: actionbtns
+                    opacity: 0.5
                     orientation: 'horizontal'
                     size_hint: 1, 0.19
                     pos_hint: {'right': 1, 'top': 1}
