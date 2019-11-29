@@ -92,6 +92,8 @@ MainMenuLayout:
 <GameCarouselItem>:
     font_scale: self.font_scale
     font_size: self.height * 0.5 * self.font_scale
+    size_hint: 1, 1
+    
 <GameCarouselHighlighter>:
     opacity: 0
     canvas.before:
@@ -527,6 +529,7 @@ MainMenuLayout:
                     id: gameImage
                     source: self.bg_image
                     size_hint: 0.78, 0.50
+                    stretch: True
                     pos_hint: {'right': 0.93}
                     canvas.before:
                         Color:
@@ -586,13 +589,14 @@ MainMenuLayout:
                     pos: self.pos
                     size: self.width, self.height
             ControlBarItem:
-                text:"Select: Z"
+                id: btn1
+                text:"Select: "
             ControlBarItem:
-                text: "Back: X"
+                id: btn2
+                text: "Back: "
             ControlBarItem:
-                text: "Home: Q"
-            ControlBarItem:
-                text: "Favorite: W"
+                id: btn3
+                text: "Favorite: "
 
 # =============================================================================
 # Popup Layer

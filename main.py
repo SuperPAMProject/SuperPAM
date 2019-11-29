@@ -2,7 +2,6 @@
 #Implement multiplayer
 #Add videos (code, vid editing)
 #Add control remap
-#Add final UI animations
 #Add final game images/info
 #Add final UI icons
 #Bugfix
@@ -648,7 +647,8 @@ class PAM:
                             self.anim6.start(games[0])
 
                         elif keycode[1] == includes.BUTTON_1:
-                            self.startGame()
+                            games[3].select_anim(includes.colors.getColorOfScheme('accent', self.MM.current_color_scheme))
+                            Clock.schedule_once(self.startGame, 0.8)
 
                 elif self.MM.currentSection == includes.Section.GAME_OPTIONS:
                     self.transition_to_section('actionbtns')
@@ -736,7 +736,7 @@ class PAM:
         self.kListener.keyboard.unbind(on_key_down=self.readInputs)
         self.kListener.keyboard = None
 
-    def startGame(self):
+    def startGame(self, *largs):
         currentGame = self.layout.ids["games"].children[3]
         print("GAME = " + currentGame.gameName)
         if currentGame.gameName is "DummyPath":

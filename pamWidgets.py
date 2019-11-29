@@ -239,12 +239,16 @@ class SideBarTabItem(ScaleButton):
         self.d_color = colors.getColor('background')
         self.sidebar = None
         self.isToggled = False
-        #self.h_color = '#FFFFFF'
+        self.select_anim = includes.Animation(
+              pos_hint={'x':0.44}, t='in_out_cubic', duration=0.3
+            ) + includes.Animation(
+                pos_hint={'x':0.54}, t='in_out_cubic', duration=0.3)
 
     def on_select(self, *args):
         if self.selected:
             if not self.sound_mute:
                 self.play_sound(self.s_sound)
+            self.select_anim.start(self)
             carousel = self.parent.parent.parent.parent.parent.parent.parent.parent
             self.sidebar = carousel.moveToSidebar(self.func_id)
     
@@ -266,19 +270,27 @@ class SideBarTabButton(SideBarTabItem):
 class GameCarouselItem(ScaleButton):  
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.gameName = "";
-        self.gameInfo = [];
+        self.gameName = ""
+        self.gameInfo = []
         self.gamePath = ""
-        self.gameImage = "";
-        self.gameVideo = "";
-        self.gameDesc = "";
-        self.isFavorite = False;
+        self.gameImage = ""
+        self.gameVideo = ""
+        self.gameDesc = ""
+        self.isFavorite = False
         self.d_color = colors.getColor("background")
         self.index = 0
 
 
+
     def on_carousel_move(self):
         pass
+
+    def select_anim(self, color):
+        anim = includes.Animation(
+                    color=(includes.get_color_from_hex(color)), t='in_out_cubic', duration=0.3
+                ) + includes.Animation(
+                    color=(1, 1, 1, 1), t='in_out_cubic', duration=0.3)
+        anim.start(self)
 
 #----SAVE STATE- Button associated with the one of the currently selected game's save states
 class SaveState(PAMButton):
