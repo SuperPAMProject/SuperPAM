@@ -5,7 +5,6 @@
 #Add final game images/info
 #Add final UI icons
 #Bugfix
-#Change controlbar context
 
 
 import threading

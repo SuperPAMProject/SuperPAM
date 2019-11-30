@@ -321,9 +321,6 @@ MainMenuLayout:
     orientation: 'horizontal'
     size_hint: 1, 0.08
     barcolor: self.barcolor
-
-
-
 <ControlBarItem>:
     font_size: self.height * 0.5
 <ControlBarIcon@Image>:
@@ -440,10 +437,10 @@ MainMenuLayout:
                                     text: 'Watermelon'
                                     func_id: 'color_scheme'
                                 SideBarTabItem:
-                                    text: 'Burn'
+                                    text: 'Pumpkin'
                                     func_id: 'color_scheme'
                                 SideBarTabItem:
-                                    text: 'Blossom'
+                                    text: 'Rose'
                                     func_id: 'color_scheme'
                         SideBarTab:
                             title: 'Font Size'
@@ -589,20 +586,40 @@ MainMenuLayout:
             id: controlbar
             canvas.before:
                 Color:
-                    rgb: self.bg_color#utils.get_color_from_hex(c.getColor("primary"))
-                    
+                    rgb: self.bg_color#utils.get_color_from_hex(c.getColor("primary"))           
                 Rectangle:
                     pos: self.pos
                     size: self.width, self.height
+
             ControlBarItem:
                 id: btn1
-                text:"Play: "
+                text:"Play:"
+                text_size: self.size
+                halign: 'right'
+                valign: 'middle'
+            Image:
+                source: 'img/ControlBar1.png'
+                halign: 'left'
+                valign: 'middle'
+                
             ControlBarItem:
                 id: btn2
-                text: "Close: "
+                text: "Close:"
+                text_size: self.size
+                halign: 'right'
+                valign: 'middle'
+            Image:
+                source: 'img/ControlBar2.png'
+
             ControlBarItem:
                 id: btn3
-                text: "Favorite: "
+                text: "Favorite:"
+                text_size: self.size
+                halign: 'right'
+                valign: 'middle'
+            Image:
+                source: 'img/ControlBar3.png'
+
 
 # =============================================================================
 # Popup Layer
