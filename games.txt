@@ -1,3 +1,5 @@
 Galaga, 1981, Namco, Namco, roms/Galaga, ./img/galaga1.png
 Starfire, 1979, Exidy, Xidy, roms/Starfire, ./img/starfire.png
 Pacman, 1980, Namco, Namco, roms/Pacman, ./img/pacman.png
+Street Fighter II, 1991, Capcom, Capcom, roms/SF2, ./img/sf2.png
+Simpsons, 1991, Konami, Konami, roms/Simpsons, ./img/simpsons.png

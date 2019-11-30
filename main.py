@@ -1,9 +1,8 @@
 #TO-DO:
 #Implement multiplayer
-#Add videos (code, vid editing)
 #Add control remap
-#Add final game images/info
-#Add final UI icons
+
+#Add videos (code, vid editing)
 #Bugfix
 
 

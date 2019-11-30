@@ -528,18 +528,18 @@ MainMenuLayout:
                 size_hint: 0.33, 0.84
                 pos_hint: {'right': 1, 'top': 0.93}
                 spacing: 30
-                PAMImage:
-                    id: gameImage
-                    source: self.bg_image
-                    size_hint: 0.78, 0.50
-                    stretch: True
+                BoxLayout:
+                    id: imageArea
+                    orientation:'horizontal'
+                    size_hint: 0.84, 0.50
                     pos_hint: {'right': 0.93}
-                    canvas.before:
-                        Color:
-                            rgba: 1, 1, 1, 1
-                        Line:
-                            width: 2
-                            rectangle: self.x, self.y, self.width, self.height
+
+                    PAMImage:
+                        id: gameImage
+                        source: self.bg_image
+                        stretch: True
+                        allow_stretch: True
+
                 GameDescriptionArea:
                     id: gameDescArea
                     GameInfo:
