@@ -49,6 +49,9 @@ def populateGameLibrary(self):
 # ACTION BUTTON FUNCTIONS
 # =============================================================================
 def playGame(game_path):
+    if game_path is "DummyPath":
+        print("There's no game dummy!")
+        return None
     try:
         os.chdir('C:/Users/Michael/Documents/Hobbies/Coding/Bob/SuperPAM/emulators')
         process = check_output('C:/Users/Michael/Documents/Hobbies/Coding/Bob/SuperPAM/emulators/mame64.exe ' + game_path , shell=True)
@@ -70,9 +73,11 @@ def saveGame(game):
     pass
 
 def favGame(game, menu):
-    print("Game Name: " + game.gameName)
+    if game.gameName is "DummyPath":
+        return
 
     game.isFavorite = not game.isFavorite
+    
     game_title = game.gameName + '\n'
 
     f = open('user/favorites.txt', 'r')
@@ -372,10 +377,14 @@ def sidebarSwitch(btn, menu):
     #ACTIVATED ON BUTTON SELECTION, TAKES ID OF BUTTON TO DETERMINE FUNCTION
 def getFunction(btn, menu, *largs):
     if btn.func_id == 'play':
-        return playGame(menu.GetGame().gameName)
+        if menu.favoriteSort:
+            return playGame(menu.GetFavorite(), menu)    
+        return playGame(menu.GetGame(), menu)
     elif btn.func_id == 'save':
         return saveGame(current_game)
     elif btn.func_id == 'fav':
+        if menu.favoriteSort:
+            return favGame(menu.GetFavorite(), menu)    
         return favGame(menu.GetGame(), menu)
     elif btn.func_id == 'host':
         return startSession(player)

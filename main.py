@@ -165,12 +165,13 @@ class PAM:
                             currentOption = self.MM.CurrentOption()
                             currentOption.selected = True
                             currentOption.select_anim.start(currentOption)
-                            Clock.schedule_once(functools.partial(pamFunctions.getFunction, currentOption, self.MM), 0.8)
                             currentOption.selected = False
 
                             if currentOption.func_id == 'play':
-                                self.currentState = includes.CurrentState.GAME_STATE
-                               # includes.playsound(includes.sounds.getSound("exit_menu"), False)
+                                Clock.schedule_once(self.startGame, 0.8)
+                            if currentOption.func_id == 'fav':
+                                pamFunctions.getFunction(currentOption, self.MM)
+                                self.setGames()
                     
                 elif keycode[1] == includes.BUTTON_2:
                     if self.currentState == includes.CurrentState.MAIN_MENU_STATE:
@@ -263,6 +264,9 @@ class PAM:
                             self.MM.g_i += 1
                             if self.MM.g_i >= len(self.MM.gameList):
                                 self.MM.g_i = 0
+                            self.MM.f_i += 1
+                            if self.MM.f_i >= len(self.MM.favoriteList):
+                                self.MM.f_i = 0
                             # Cycle through games
 
                         else:
@@ -326,6 +330,9 @@ class PAM:
                             self.MM.g_i -= 1
                             if self.MM.g_i < 0:
                                 self.MM.g_i =  len(self.MM.gameList) - 1
+                            self.MM.f_i -= 1
+                            if self.MM.f_i < 0:
+                                self.MM.f_i =  len(self.MM.favoriteList) - 1
                             # Cycle through games
 
                         else:
@@ -499,11 +506,17 @@ class PAM:
                                 self.MM.g_i += 1
                                 if self.MM.g_i >= len(self.MM.gameList):
                                     self.MM.g_i = 0
+                                self.MM.f_i += 1
+                                if self.MM.f_i >= len(self.MM.favoriteList):
+                                    self.MM.f_i = 0
 
                             elif keycode[1] == includes.DI_DOWN:
                                 self.MM.g_i -= 1
                                 if self.MM.g_i < 0:
                                     self.MM.g_i =  len(self.MM.gameList) - 1
+                                self.MM.f_i -= 1
+                                if self.MM.f_i < 0:
+                                    self.MM.f_i =  len(self.MM.favoriteList) - 1
 
                             carousel = self.layout.ids["games"]
                             games = carousel.children
@@ -520,11 +533,17 @@ class PAM:
                                 self.MM.g_i -= 1
                                 if self.MM.g_i < 0:
                                     self.MM.g_i =  len(self.MM.gameList) - 1
+                                self.MM.f_i -= 1
+                                if self.MM.f_i < 0:
+                                    self.MM.f_i =  len(self.MM.favoriteList) - 1
 
                             elif keycode[1] == includes.DI_DOWN:
                                 self.MM.g_i += 1
                                 if self.MM.g_i >= len(self.MM.gameList):
                                     self.MM.g_i = 0
+                                self.MM.f_i += 1
+                                if self.MM.f_i >= len(self.MM.favoriteList):
+                                    self.MM.f_i = 0
 
                 # Undo all selections in the Game Options Section
                 for option in self.MM.optionsList:
@@ -658,6 +677,7 @@ class PAM:
                     self.setGames()
                     self.MM.CurrentOption().highlighted = True
 
+
         elif self.currentState == includes.CurrentState.GAME_STATE:
                 print("You have started a game")
 
@@ -666,7 +686,7 @@ class PAM:
 
     # This function sets the games in the carousel based on where the user is in the list of games
     def setGames(self):
-
+        
         # Grab the carousel
         games = self.layout.ids["games"].children
 
@@ -712,7 +732,6 @@ class PAM:
             self.layout.ids['dev'].text = 'Developer: ' + self.MM.GetFavorite().gameInfo[1]
             self.layout.ids['pub'].text = 'Publisher: ' + self.MM.GetFavorite().gameInfo[2]
             games[3].gameName = self.MM.GetFavorite().gameName
-            
             # set names
             games[6].text = self.MM.GetFavorite(-3).text
             games[5].text = self.MM.GetFavorite(-2).text
@@ -742,12 +761,10 @@ class PAM:
     def startGame(self, *largs):
         currentGame = self.layout.ids["games"].children[3]
         print("GAME = " + currentGame.gameName)
-        if currentGame.gameName is "DummyPath":
-            print("There's no game dummy!")
-            return
         if self.runningGame is None:
             self.runningGame = pamFunctions.playGame(currentGame.gameName)
-            self.lastSelectedGame = currentGame
+            if self.runningGame is not None:
+                self.lastSelectedGame = currentGame
         else:
             if currentGame == self.lastSelectedGame:
                 pass #add in check for if lastSelectedGame is still running
@@ -764,7 +781,8 @@ class PAM:
                 pamFunctions.closeGame(self.runningGame)
                 self.runningGame = pamFunctions.playGame(currentGame.gameName)
         #includes.playsound(includes.sounds.getSound("exit_menu"), False)
-        self.currentState = includes.CurrentState.GAME_STATE
+        if self.runningGame is not None:
+            self.currentState = includes.CurrentState.GAME_STATE
 
     def play_sound(self, sound):
         if self.system == 'Windows':
