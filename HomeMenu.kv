@@ -5,6 +5,18 @@
 #:import pf pamFunctions
 #:import w display.Window
 
+#Authored and refactored by Michael Tanner
+# =============================================================================
+#-----GUI MARKUP FOR THE HOME MENU-----
+# =============================================================================
+
+#This module contains the kivy markup language for the Super PAM Home Menu
+#Each section covers the style rules for a different component of the menu.
+#Toward the end of the module lies the style rules for the MainMenuLayout, which will contain 
+#the arrangement of all other PAM components.
+
+#For more information on the behavior of these components, refer to the PAM Widgets module
+
 MainMenuLayout:
 # =============================================================================
 # Labels
@@ -70,7 +82,6 @@ MainMenuLayout:
 			pos: int(self.center_x - self.texture_size[0] / 2.), int(self.center_y - self.texture_size[1] / 2.)
 		PopMatrix
 <PAMButton>:
-    #font: f.getFont("normal")
     font_scale: self.font_scale
     font_size: self.width * 0.1 * self.font_scale
 <PAMActionButton>:
@@ -93,15 +104,6 @@ MainMenuLayout:
     font_scale: self.font_scale
     font_size: self.height * 0.5 * self.font_scale
     size_hint: 1, 1
-    
-<GameCarouselHighlighter>:
-    opacity: 0
-    canvas.before:
-        Color:
-            rgba: utils.get_color_from_hex(c.getColor("secondary"))
-        Rectangle:
-            pos: w.width*0.30, w.height*0.576
-            size: w.width*0.28, w.height*0.04
 # =============================================================================
 # Sidebar
 # =============================================================================
@@ -150,162 +152,6 @@ MainMenuLayout:
     halign: 'left'   
     valign: 'top'
 
-# =============================================================================
-# Popups
-# =============================================================================
-<PAMCheckbox>:
-    id: wid
-    icon: self.icon
-    background_color: 0, 0, 0, 0
-    background_normal: ''
-    background_down:''
-    size_hint: 0.16, 1
-    canvas:
-        Rectangle:
-            source: self.icon
-            pos: (self.pos[0]-20, self.pos[1])
-            size: (self.parent.width*0.16, self.parent.height)
-<PAMIcon@PAMButton>:
-    id: icon
-    icon: self.icon
-    background_color: 0, 0, 0, 0
-    background_normal: ''
-    background_down: ''
-    size_hint: 0.16, 1
-    canvas:
-        Rectangle:
-            source: self.icon
-            pos: self.pos
-            size: (self.parent.width*0.14, self.parent.height)
-
-<PopupHeader@BoxLayout>:
-    id: header
-    orientation:'horizontal'
-    size_hint: 1, 0.12
-    padding: 20
-    canvas:
-        Color:
-            rgba: utils.get_color_from_hex(c.getColor("primary"))                      
-        Rectangle:
-            pos: self.pos
-            size: self.size
-    ScaleLabel: 
-        id: title
-        text: 'TITLE'
-        halign: 'left'
-        font_size: (self.height + self.width) * 0.09
-        bold: True
-        
-
-<PopupWindowContent@BoxLayout>:
-    id: content
-    orientation:'vertical'
-    size_hint: 0.77, 0.75
-    spacing: 10
-    padding: 20
-    
-<PopupFooter@BoxLayout>:
-    id: footer
-    orientation:'horizontal'
-    size_hint: 1, 0.12
-    canvas:
-        Color:
-            rgba: utils.get_color_from_hex(c.getColor("primary"))                      
-        Rectangle:
-            pos: self.pos
-            size: self.size
-<PopupButtonGroup@BoxLayout>:
-    orientation: 'horizontal'
-    size_hint: 0.43, 1
-<PopupWindowButton>:
-    size_hint: 0.19, 1
-    background_color: 0, 0, 0, 0
-    font_size: self.height * 0.5
-    background_normal: ''
-    background_down: ''
-<PopupWindowItem>:
-    size_hint: 1, 0.40
-    orientation:'horizontal'
-    canvas.before:
-        Color:
-            rgba: utils.get_color_from_hex(c.getColor("primary"))
-        Rectangle:
-            size: self.size
-            pos: self.pos          
-    PAMIcon:
-        id: icon
-        icon: 'img/SFX_ON.png'
-    PAMIcon:
-        id: divider
-        icon: 'img/divider.png'
-    ScaleLabel:
-        id: optionName
-        text: 'MUTE SFX'
-        font_size: self.height * 0.5
-    PamCheckbox:
-        icon: 'img/unchecked.png'
-
-<PopupWindowLayout>:
-    id: popup
-    size_hint: 0.6, 0.74 
-    orientation:'vertical'
-    spacing: 20
-    pos_hint: {'top': 0.9, 'x': 0.2}
-    canvas:
-        Color:
-            rgba: utils.get_color_from_hex(c.getColor("secondary"))
-        Rectangle:
-            size: self.size
-            pos:self.pos
-    PopupHeader:
-        id: header
-    PopupWindowContent:
-        id: content
-        PopupWindowItem:
-            id: item1
-            #size_hint: None, None
-            opacity: 0
-            disabled: True
-        PopupWindowItem:
-            id: item2
-            #size_hint: None, None
-            opacity: 0
-            disabled: True
-        PopupWindowItem:
-            id: item3
-            #size_hint: None, None
-            opacity: 0
-            disabled: True
-        PopupWindowItem:
-            id: item4
-            #size_hint: None, None
-            opacity: 0
-            disabled: True
-    PopupFooter:
-        id: footer
-
-        PopupButtonGroup:
-            id: popupbtns
-            pos_hint: {'center_x': 1}
-            spacing: 10
-            padding: 5
-            PopupWindowButton:
-                text: 'CONFIRM'
-                bold: True
-                background_color: utils.get_color_from_hex(c.getColor("primary"))
-            PopupWindowButton:
-                text: 'EXIT'
-                bold: True
-                background_color: utils.get_color_from_hex(c.getColor("secondary"))
-
-
-<PopupWindow>:
-    id: pop
-    title: ''
-    background: 'img/no_alpha.png'
-    separator_color: 0, 0, 0, 0
-    size_hint: 0.5, 0.64
-    auto_dismiss: False
 
 # =============================================================================
 # Game Video
@@ -347,44 +193,36 @@ MainMenuLayout:
                     loop: True
                     direction: 'right'
                     size_hint: 1, 1
-                    pos_hint: {'x': -0.3}
+                    pos_hint: {'x': -0.1}
                     Accordion:
                         id: sidebar
                         orientation: 'vertical'
                         bar_id: 'rootSidebar'
-                        SideBarTab:
-                            title: 'MULTIPLAYER'
-                            func_id: 'multi'
-                            orientation: 'vertical'
-                            highlighted: True
-                            TabItemContainer:
-                                SideBarTabItem:
-                                    text:'Host Session'
-                                    func_id: 'host'
-                                    on_press: car.moveToSidebar('hostSidebar')
-                                SideBarTabItem:
-                                    text: 'Leave Session'
-                                    func_id: 'leave'
+                        
+                       
                         SideBarTab:
                             title: 'SORT GAMES'
+                            font_name: 'Roboto'
+                            font: self.font_name
                             func_id: 'sort'
+                            highlighted: True
                             orientation: 'vertical'
                             TabItemContainer:
                                 SideBarTabItem:
                                     text:'By Favorites'
-                                    func_id: 'by_favs'
+                                    command: lambda menu, *args: pf.sortByFavorite(menu.game_list, menu)
                                 SideBarTabItem:
                                     text:'By Title'
-                                    func_id: 'by_title'
+                                    command: lambda menu, *args: pf.sortByTitle(menu.game_list)
                                 SideBarTabItem:
                                     text: 'By Year'
-                                    func_id: 'by_yr'
+                                    command: lambda menu, *args: pf.sortByYear(menu.game_list)
                                 SideBarTabItem:
                                     text:'By Developer'
-                                    func_id: 'by_dev'
+                                    command: lambda menu, *args: pf.sortByDev(menu.game_list)
                                 SideBarTabItem:
                                     text: 'By Publisher'
-                                    func_id: 'by_pub'
+                                    command: lambda menu, *args: pf.sortByPub(menu.game_list)
                         SideBarTab:
                             title:'OPTIONS'
                             func_id: 'op'
@@ -396,7 +234,7 @@ MainMenuLayout:
                                     text: 'Visuals'
                                     func_id: 'visuals'
                                 SideBarTabItem:
-                                    text: 'User'
+                                    text: 'Data'
                                     func_id: 'user'
                                 SideBarTabItem:
                                     text: 'Inputs'
@@ -419,10 +257,9 @@ MainMenuLayout:
                             TabItemContainer:
                                 SideBarTabItem:
                                     text: 'Mute Video'
-                                    func_id: 'mute'
                                 SideBarTabItem:
                                     text: 'Mute SFX'
-                                    func_id: 'mute'
+                                    command: lambda menu, *args: pf.muteSound(menu, self)
                     Accordion:
                         id: visualsSidebar
                         orientation: 'vertical'
@@ -432,81 +269,60 @@ MainMenuLayout:
                             TabItemContainer:
                                 SideBarTabItem:
                                     text: 'Waves'
-                                    func_id: 'color_scheme'
+                                    command: lambda menu, *args: pf.setColorScheme(menu, self.text)
                                 SideBarTabItem:
                                     text: 'Watermelon'
-                                    func_id: 'color_scheme'
+                                    command: lambda menu, *args: pf.setColorScheme(menu, self.text)
                                 SideBarTabItem:
                                     text: 'Pumpkin'
-                                    func_id: 'color_scheme'
+                                    command: lambda menu, *args: pf.setColorScheme(menu, self.text)
                                 SideBarTabItem:
                                     text: 'Rose'
-                                    func_id: 'color_scheme'
+                                    command: lambda menu, *args: pf.setColorScheme(menu, self.text)
                         SideBarTab:
                             title: 'Font Size'
                             TabItemContainer:
                                 SideBarTabItem:
                                     text: 'Small'
-                                    func_id: 'font_size'
+                                    command: lambda menu, *args: pf.setFontSize(menu, self.text)
                                 SideBarTabItem:
                                     text: 'Medium'
-                                    func_id: 'font_size'
+                                    command: lambda menu, *args: pf.setFontSize(menu, self.text)
                                 SideBarTabItem:
                                     text: 'Large'
-                                    func_id: 'font_size'
+                                    command: lambda menu, *args: pf.setFontSize(menu, self.text)
                         SideBarTab:
                             title: 'Font Type'
                             TabItemContainer:
                                 SideBarTabItem:
                                     text: 'Roboto'
-                                    func_id: 'font_type'
+                                    command: lambda menu, *args: pf.setFontType(menu, self.text)
                                 SideBarTabItem:
                                     text: 'Arial'
-                                    func_id: 'font_type'
+                                    command: lambda menu, *args: pf.setFontType(menu, self.text)
                                 SideBarTabItem:
                                     text: 'Verdana'
-                                    func_id: 'font_type'
+                                    command: lambda menu, *args: pf.setFontType(menu, self.text)
                                 SideBarTabItem:
                                     text: 'OpenDyslexic'
-                                    func_id: 'font_type'
+                                    command: lambda menu, *args: pf.setFontType(menu, self.text)
                     Accordion:
                         id: userSidebar
                         orientation: 'vertical'
                         bar_id: 'user'
                         SideBarTab:
-                            title: 'USER'
+                            title: 'DATA'
                             TabItemContainer:
                                 SideBarTabItem:
-                                    text: 'User Stats'
-                                    func_id: 'stats'
+                                    text: 'Empty Favorites'
+                                    command: lambda menu, *args: pf.emptyFavorites(menu)
                                 SideBarTabItem:
-                                    text: 'Reformat System'
-                                    func_id: 'default'
+                                    text: 'Defaults'
+                                    command: lambda menu, *args: pf.revertToDefaults(menu)
                     Accordion:
                         id: inputsSidebar
                         orientation: 'vertical'
                         bar_id: 'inputs'
-                        SideBarTab:
-                            title: 'Remap Controls'
-                            TabItemContainer:
-                                SideBarTabItem:
-                                    text: 'Button 1'
-                                    func_id: 'remap'
-                                SideBarTabItem:
-                                    text: 'Button 2'
-                                    func_id: 'remap'
-                                SideBarTabItem:
-                                    text: 'Button 3'
-                                    func_id: 'remap'
-                                SideBarTabItem:
-                                    text: 'Button 4'
-                                    func_id: 'remap'
-                                SideBarTabItem:
-                                    text: 'Button 5'
-                                    func_id: 'remap'
-                                SideBarTabItem:
-                                    text: 'Button 6'
-                                    func_id: 'remap'
                         SideBarTab:
                             title: 'Turbo Button'
                             TabItemContainer:
@@ -514,7 +330,6 @@ MainMenuLayout:
                                     text: 'ON'
                                 SideBarTabItem:
                                     text: 'OFF'
-
                                 
             GameCarousel:
                 id: games
@@ -565,14 +380,6 @@ MainMenuLayout:
                         h_action: c.getColor('play-h')
                         s_action: c.getColor('play-s')
                         action_image: self.d_action
-                    #PAMActionButton:
-                        #id: save
-                        #func_id: 'save'
-                        #d_color: '#FFFFFF00'
-                        #d_action: c.getColor('save-d')
-                        #h_action: c.getColor('save-h')
-                        #s_action: c.getColor('save-s')
-                        #action_image: self.d_action
                     PAMActionButton:
                         id: fav
                         func_id: 'fav'
@@ -586,7 +393,7 @@ MainMenuLayout:
             id: controlbar
             canvas.before:
                 Color:
-                    rgb: self.bg_color#utils.get_color_from_hex(c.getColor("primary"))           
+                    rgb: self.bg_color         
                 Rectangle:
                     pos: self.pos
                     size: self.width, self.height
@@ -622,7 +429,7 @@ MainMenuLayout:
 
 
 # =============================================================================
-# Popup Layer
+# Overlay Layer
 # =============================================================================
     BoxLayout:
         id: dark
@@ -637,20 +444,26 @@ MainMenuLayout:
             Rectangle:
                 size: self.size
                 pos: self.pos
-    PopupWindowLayout:
-        id: multiplayerPop
+    BoxLayout:
+        id: load
         size_hint: None, None
-        opacity: 0
-        disabled: True
-    PopupWindowLayout:
-        id: sortPop
-        size_hint: None, None
-        opacity: 0
-        disabled: True
-    PopupWindowLayout:
-        id: optionsPop
-        size_hint: None, None
-        opacity: 0
-        disabled: True
+        opacity: 1
+        orientation:'horizontal'
+        size_hint: 1, 1
+        disabled: False
+        canvas:
+            Color: 
+                rgba: utils.get_color_from_hex('#101216FF')
+            Rectangle:
+                size: self.size
+                pos: self.pos
+        Label:
+            id: logo
+            markup: True
+            opacity: 0
+            text: 'Super[b]PAM[/b]'
+            size_hint: 1, 1
+            font_size: 60
+            color: utils.get_color_from_hex('#FFFFFFFF')
 
         

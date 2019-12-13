@@ -1,3 +1,13 @@
+#Authored and refactored by Michael Tanner
+
+# =============================================================================
+#-----SOUND EFFECTS MODULE-----
+# =============================================================================
+
+#This module serves as dictionary to map sound effect files to a given identifier.
+#The user must call the getSound function and pass it an identifer to retrive 
+#the sound effect file that they require. 
+
 sounds = {
     "highlight_btn":"sounds/select_1.wav",
     "select_btn":"sounds/select_3.wav",

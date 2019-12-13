@@ -1,5 +1,10 @@
 
+#Authored and refactored by Michael Tanner
+
+# =============================================================================
 #-----COLOR SCHEME MODULE-----
+# =============================================================================
+
 #This module is a simple color scheme dictionary. The user will select a color scheme name through the 'current_scheme'
 #variable. Based on that chosen scheme, the getColor function will retrieve a color fitting the category given by
 #the user. The categories are: background, primary, secondary, accent, warning, font-light, and font-dark.
@@ -7,7 +12,7 @@
 #Primary will be used as default for most button widgets, with secondary used as their highlight color, 
 #and accent as a selection color. Warning is used only in critical decisions for the user.
 #Font-light is the font-color for lighter backgrounds, and font-dark is for darker ones. 
-#Each action button (Play, Save, Favorite) all have their default, highlight, and selection images for every color scheme.
+#Each action button (Play, Favorite) all have their default, highlight, and selection images for every color scheme.
 
 with open('user/color_scheme.txt', 'r') as cs:
     for line in cs:
@@ -81,13 +86,13 @@ color_schemes = {
         "font_dark": "#63458A",
         "play-d":'img/Play_Rose_Default.png',
         "play-h":'img/Play_Rose_Highlight.png',
-        "play-s":'img/Play_Waves_Select.png',
-        "save-d":'img/Save_Waves_Default.png',
-        "save-h":'img/Save_Waves_Highlight.png',
-        "save-s":'img/Save_Waves_Select.png',
+        "play-s":'img/Play_Rose_Select.png',
+        "save-d":'img/Save_Rose_Default.png',
+        "save-h":'img/Save_Rose_Highlight.png',
+        "save-s":'img/Save_Rose_Select.png',
         'fav-d':'img/Fav_Rose_Default.png',
         'fav-h':'img/Fav_Rose_Highlight.png',
-        'fav-s':'img/Fav_Waves_Select.png',
+        'fav-s':'img/Fav_Rose_Select.png',
         'tab-d': 'img/button_blossom.png'
     }
 }

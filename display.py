@@ -1,45 +1,28 @@
-import keyboard
-from kivy.uix.popup import Popup
-from kivy.core.window import Window
-from kivy.utils import get_color_from_hex
-from kivy.properties import ObjectProperty
-from kivy.uix.boxlayout import BoxLayout
-from kivy.uix.floatlayout import FloatLayout
-from kivy.uix.carousel import Carousel
-from kivy.uix.scrollview import ScrollView
-from kivy.uix.recycleview import RecycleView
-from kivy.uix.label import Label
-from kivy.app import App
-from kivy.clock import Clock
-from kivy.uix.gridlayout import GridLayout
-from kivy.uix.widget import Widget
-from kivy.core.text import LabelBase
+
+#Authored by Steven Quast
+#Refactored by Michael Tanner
+
+# =============================================================================
+#-----DISPLAY MODULE-----
+# =============================================================================
+
+# This module is responsible for constructing the SuperPAM GUI.
+# On startup, the module will build the GUI based on the style rules
+# in the HomeMenu markup module. The module will also set the default
+# background color and fonts.
 
 import kivy
 kivy.require("1.9.0")
-import includes
-import pamWidgets
-import pamFunctions
-import colors
+from kivy.core.window import Window
+from kivy.utils import get_color_from_hex
+from kivy.uix.floatlayout import FloatLayout
+from kivy.app import App
+from kivy.core.text import LabelBase
+from colors import getColor
 
 
-
-
-class GameItem(Label):
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-        self.font_size = 24
-        self.color = (1, 1, 1, 1)
-
+#This class is further defined in the HomeMenu GUI markup module
 class MainMenuLayout(FloatLayout):
-    game_select = ObjectProperty(None)
-    game_plus_1 = ObjectProperty(None)
-    game_plus_2 = ObjectProperty(None)
-    game_minus_1 = ObjectProperty(None)
-    game_minus_2 = ObjectProperty(None)
-    game_titles = "games.txt"
-
-
     def __init__(self, **kwargs):
         super(MainMenuLayout, self).__init__(**kwargs)
 
@@ -48,10 +31,13 @@ class HomeMenuApp(App):
     def build(self):
         return MainMenuLayout()
 
+# Sets the basic parameters of the display window. 
+# Calls the HomeMenuApp constructor to begin building the GUI.
 def SetupDisplay():
-    Window.clearcolor = get_color_from_hex(colors.getColor("background"))
+    Window.clearcolor = get_color_from_hex(getColor("background"))
     Window.fullscreen = 'auto'  #dont use when debugging
 
+    # Include the standard Super PAM fonts
     LabelBase.register(
         name='Roboto',
         fn_regular='fonts/Roboto-Light.ttf',
@@ -68,10 +54,8 @@ def SetupDisplay():
         name="OpenDyslexic", 
         fn_regular="fonts/OPENDYSLEXIC-REGULAR.OTF", 
         fn_bold="fonts/OPENDYSLEXIC-BOLD.OTF")
-    print("Set up")
     return HomeMenuApp()
 
 if __name__ == "__main__":
     menu_app = HomeMenuApp()
-    Window.clearcolor = get_color_from_hex(colors.getColor("background"))
     menu_app.run()
